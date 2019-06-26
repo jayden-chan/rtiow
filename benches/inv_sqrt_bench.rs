@@ -2,8 +2,8 @@
 extern crate criterion;
 extern crate raytracer_lib;
 
-use criterion::Criterion;
 use criterion::black_box;
+use criterion::Criterion;
 
 use raytracer_lib::util::fast_inv_sqrt;
 

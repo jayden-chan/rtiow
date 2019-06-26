@@ -1,5 +1,5 @@
-mod vector3;
 mod util;
+mod vector3;
 
 use vector3::Vector3;
 
