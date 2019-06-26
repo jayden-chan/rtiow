@@ -1,4 +1,4 @@
-#[inline]
+#[inline(always)]
 pub fn fast_inv_sqrt(x: f32) -> f32 {
     let i: u32 = unsafe {
         std::mem::transmute(x)

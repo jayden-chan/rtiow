@@ -4,6 +4,16 @@ version = "0.1.0"
 authors = ["Jayden Chan <jaydencn7@gmail.com>"]
 edition = "2018"
 
+[lib]
+name = "raytracer"
+path = "src/main.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "inv_sqrt_bench"
+harness = false
 
 [dependencies]
