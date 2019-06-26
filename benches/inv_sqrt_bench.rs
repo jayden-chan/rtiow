@@ -1,11 +1,11 @@
 #[macro_use]
 extern crate criterion;
-extern crate raytracer;
+extern crate raytracer_lib;
 
 use criterion::Criterion;
 use criterion::black_box;
 
-use raytracer::util::fast_inv_sqrt;
+use raytracer_lib::util::fast_inv_sqrt;
 
 fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("inv_sqrt 20", |b| b.iter(|| fast_inv_sqrt(black_box(20.0))));

@@ -1,4 +1,5 @@
 #[inline(always)]
+#[allow(clippy::all)] // Pointer casts in here cause warnings
 pub fn fast_inv_sqrt(x: f32) -> f32 {
     let i: u32 = unsafe {
         std::mem::transmute(x)
@@ -12,7 +13,5 @@ pub fn fast_inv_sqrt(x: f32) -> f32 {
 
     // Two iterations of Newton's method for now
     let y = y * (1.5 - 0.5 * x * y * y);
-    let y = y * (1.5 - 0.5 * x * y * y);
-
-    y
+    y * (1.5 - 0.5 * x * y * y)
 }
