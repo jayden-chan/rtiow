@@ -10,7 +10,7 @@ pub struct Pixel {
 }
 
 pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
-    let path = Path::new("image.ppm");
+    let path = Path::new("out/image.ppm");
     let display = path.display();
 
     let mut file = match File::create(&path) {

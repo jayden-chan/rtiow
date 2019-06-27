@@ -5,7 +5,7 @@ mod vector3;
 use image::{gen_ppm, Pixel};
 use vector3::Vector;
 
-const IMG_SIZE: usize = 4096;
+const IMG_SIZE: usize = 255;
 
 fn main() {
     let mut image = Vec::new();
@@ -19,12 +19,10 @@ fn main() {
         );
 
         for w in 0..IMG_SIZE {
-            let c = ((h as f32 / IMG_SIZE as f32) * 255 as f32) as u8;
-            let c2 = ((w as f32 / IMG_SIZE as f32) * 255 as f32) as u8;
             image[h].push(Pixel {
-                r: c,
-                g: 255 - c,
-                b: c2,
+                r: h as u8,
+                g: 255 - (h as u8),
+                b: w as u8,
             });
         }
     }
