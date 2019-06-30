@@ -10,13 +10,9 @@ pub struct Camera {
 impl Camera {
     pub fn new(width: f32, height: f32) -> Self {
         Self {
-            lower_left_corner: Vector::new(
-                -width / 100.0,
-                -height / 100.0,
-                -1.0,
-            ),
-            horizontal: Vector::new(width / 50.0, 0.0, 0.0),
-            vertical: Vector::new(0.0, height / 50.0, 0.0),
+            lower_left_corner: Vector::new(-2.0, -1.0, -1.0),
+            horizontal: Vector::new(4.0, 0.0, 0.0),
+            vertical: Vector::new(0.0, 2.0, 0.0),
             origin: Vector::new(0.0, 0.0, 0.0),
         }
     }

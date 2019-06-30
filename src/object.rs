@@ -41,6 +41,10 @@ impl<T: Hittable> ObjectList<T> {
             objects: Vec::new(),
         }
     }
+
+    pub fn push(&mut self, object: T) {
+        self.objects.push(object);
+    }
 }
 
 impl<T: Hittable> Hittable for ObjectList<T> {

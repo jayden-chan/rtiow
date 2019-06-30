@@ -9,6 +9,7 @@ mod util;
 mod vector3;
 
 use std::f32;
+use std::io::{self, Write};
 
 use rand::prelude::*;
 
@@ -21,7 +22,7 @@ use vector3::Vector;
 
 const IMG_WIDTH: usize = 200;
 const IMG_HEIGHT: usize = 100;
-const SAMPLES: usize = 100;
+const SAMPLES: usize = 200;
 
 fn main() {
     let mut image = Vec::new();
@@ -36,11 +37,6 @@ fn main() {
     for j in (0..IMG_HEIGHT).rev() {
         image.push(Vec::new());
 
-        print!(
-            "Rendering... {:4.1}%\r",
-            (image.len() as f32 / IMG_HEIGHT as f32) * 100.0
-        );
-
         for i in 0..IMG_WIDTH {
             let mut pixel = Vector::zero();
             for _ in 0..SAMPLES {
@@ -50,6 +46,16 @@ fn main() {
                 let r = camera.get_ray(u, v);
 
                 pixel += color(r, &world);
+            }
+
+            let done_pixels = image.len() * IMG_WIDTH + i;
+            if done_pixels % 1000 == 0 {
+                print!(
+                    "Rendering... {:4.1}%\r",
+                    (done_pixels as f32 / (IMG_HEIGHT * IMG_WIDTH) as f32)
+                        * 100.0
+                );
+                io::stdout().flush().unwrap();
             }
 
             pixel /= SAMPLES as f32;
