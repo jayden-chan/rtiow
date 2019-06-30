@@ -81,6 +81,19 @@ impl ops::Add<Vector> for Vector {
     }
 }
 
+/// Add a float to all fields in vector
+impl ops::Add<f32> for Vector {
+    type Output = Vector;
+
+    fn add(self, rhs: f32) -> Vector {
+        Vector {
+            x: self.x + rhs,
+            y: self.y + rhs,
+            z: self.z + rhs,
+        }
+    }
+}
+
 /// Subtract two vectors
 impl ops::Sub<Vector> for Vector {
     type Output = Vector;

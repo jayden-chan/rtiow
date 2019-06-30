@@ -5,10 +5,11 @@ mod ray;
 mod util;
 mod vector3;
 
-use image::{gen_ppm, Pixel};
-use vector3::Vector;
+use std::f32;
 
+use image::{gen_ppm, Pixel};
 use ray::Ray;
+use vector3::Vector;
 
 const IMG_WIDTH: usize = 200;
 const IMG_HEIGHT: usize = 100;
@@ -45,22 +46,34 @@ fn main() {
 }
 
 fn color(r: Ray) -> Vector {
-    if ray_intersects_sphere(Vector::new(0.0, 0.0, -1.0), 0.5, r) {
-        return Vector::new(1.0, 0.0, 0.0);
+    let t = ray_intersects_sphere(Vector::new(0.0, 0.0, -1.0), 0.5, r);
+    match t {
+        Some(t) => {
+            let N = (r.point_at_parameter(t) - Vector::new(0.0, 0.0, -1.0))
+                .normalize();
+
+            return 0.5 * (N + 1.0);
+        }
+        None => {
+            let unit_direction = r.dir().normalize();
+            let t = 0.5 * (unit_direction.y + 1.0);
+
+            return Vector::unit() * (1.0 - t) + Vector::new(0.5, 0.7, 1.0) * t;
+        }
     }
-
-    let unit_direction = r.dir().normalize();
-    let t = 0.5 * (unit_direction.y + 1.0);
-
-    Vector::unit() * (1.0 - t) + Vector::new(0.5, 0.7, 1.0) * t
 }
 
-fn ray_intersects_sphere(center: Vector, radius: f32, r: Ray) -> bool {
+fn ray_intersects_sphere(center: Vector, radius: f32, r: Ray) -> Option<f32> {
     let oc = r.origin() - center;
 
     let a = Vector::dot(r.dir(), r.dir());
     let b = Vector::dot(oc, r.dir()) * 2.0;
     let c = Vector::dot(oc, oc) - radius * radius;
+    let discriminant = b * b - 4.0 * a * c;
 
-    b * b - 4.0 * a * c > 0.0
+    if discriminant < 0.0 {
+        None
+    } else {
+        return Some((-b - f32::sqrt(discriminant)) / (2.0 * a));
+    }
 }
