@@ -44,7 +44,6 @@ pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
         }
     }
 
-    // Write the `LOREM_IPSUM` string to `file`, returns `io::Result<()>`
     match file.write_all(&img_buffer) {
         Err(why) => {
             panic!("\nCouldn't write to {}: {}", display, why.description())

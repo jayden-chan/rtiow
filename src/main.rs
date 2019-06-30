@@ -1,3 +1,5 @@
+extern crate rand;
+
 mod image;
 mod util;
 mod vector3;
