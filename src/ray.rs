@@ -1,5 +1,6 @@
 use crate::Vector;
 
+#[derive(Debug, Copy, Clone)]
 pub struct Ray {
     A: Vector,
     B: Vector,

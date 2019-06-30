@@ -10,8 +10,8 @@ use vector3::Vector;
 
 use ray::Ray;
 
-const IMG_HEIGHT: usize = 100;
 const IMG_WIDTH: usize = 200;
+const IMG_HEIGHT: usize = 100;
 
 fn main() {
     let mut image = Vec::new();
@@ -29,7 +29,7 @@ fn main() {
 
             let r = Ray::new(
                 origin,
-                lower_left_corner + (vertical * u) + (horizontal * v),
+                lower_left_corner + (horizontal * u) + (vertical * v),
             );
 
             let color = color(r);
@@ -45,7 +45,22 @@ fn main() {
 }
 
 fn color(r: Ray) -> Vector {
+    if ray_intersects_sphere(Vector::new(0.0, 0.0, -1.0), 0.5, r) {
+        return Vector::new(1.0, 0.0, 0.0);
+    }
+
     let unit_direction = r.dir().normalize();
     let t = 0.5 * (unit_direction.y + 1.0);
-    return Vector::unit() * (1.0 - t) + Vector::new(0.5, 0.7, 1.0) * t;
+
+    Vector::unit() * (1.0 - t) + Vector::new(0.5, 0.7, 1.0) * t
+}
+
+fn ray_intersects_sphere(center: Vector, radius: f32, r: Ray) -> bool {
+    let oc = r.origin() - center;
+
+    let a = Vector::dot(r.dir(), r.dir());
+    let b = Vector::dot(oc, r.dir()) * 2.0;
+    let c = Vector::dot(oc, oc) - radius * radius;
+
+    b * b - 4.0 * a * c > 0.0
 }
