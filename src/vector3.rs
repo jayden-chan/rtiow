@@ -24,7 +24,7 @@ impl Vector {
         }
     }
 
-    pub fn unit() -> Self {
+    pub fn ones() -> Self {
         Self {
             x: 1.0,
             y: 1.0,
@@ -139,5 +139,18 @@ impl ops::MulAssign<f32> for Vector {
         self.x *= rhs;
         self.y *= rhs;
         self.z *= rhs;
+    }
+}
+
+/// Divide all fields by a float
+impl ops::Div<f32> for Vector {
+    type Output = Vector;
+
+    fn div(self, rhs: f32) -> Vector {
+        Vector {
+            x: self.x / rhs,
+            y: self.y / rhs,
+            z: self.z / rhs,
+        }
     }
 }
