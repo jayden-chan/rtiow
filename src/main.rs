@@ -1,5 +1,6 @@
 extern crate rand;
 
+mod camera;
 mod image;
 mod object;
 mod objects;
@@ -9,6 +10,7 @@ mod vector3;
 
 use std::f32;
 
+use camera::Camera;
 use image::{gen_ppm, Pixel};
 use object::{HitRecord, Hittable, ObjectList};
 use objects::Sphere;
@@ -21,19 +23,12 @@ const IMG_HEIGHT: usize = 100;
 fn main() {
     let mut image = Vec::new();
 
-    let lower_left_corner = Vector::new(
-        -(IMG_WIDTH as f32 / 100.0),
-        -(IMG_HEIGHT as f32 / 100.0),
-        -1.0,
-    );
-    let horizontal = Vector::new(IMG_WIDTH as f32 / 50.0, 0.0, 0.0);
-    let vertical = Vector::new(0.0, IMG_HEIGHT as f32 / 50.0, 0.0);
-    let origin = Vector::zero();
-
     let world = ObjectList::from_objects(vec![
         Sphere::new(Vector::new(0.0, 0.0, -1.0), 0.5),
         Sphere::new(Vector::new(0.0, -100.5, -1.0), 100.0),
     ]);
+
+    let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
 
     for j in (0..IMG_HEIGHT).rev() {
         image.push(Vec::new());
@@ -41,10 +36,7 @@ fn main() {
             let u = i as f32 / IMG_WIDTH as f32;
             let v = j as f32 / IMG_HEIGHT as f32;
 
-            let r = Ray::new(
-                origin,
-                lower_left_corner + (horizontal * u) + (vertical * v),
-            );
+            let r = camera.get_ray(u, v);
 
             let color = color(r, &world);
             image[(IMG_HEIGHT - 1) - j].push(Pixel {
