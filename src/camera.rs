@@ -17,7 +17,7 @@ impl Camera {
             ),
             horizontal: Vector::new(width / 50.0, 0.0, 0.0),
             vertical: Vector::new(0.0, height / 50.0, 0.0),
-            origin: Vector::zero(),
+            origin: Vector::new(0.0, 0.0, 0.0),
         }
     }
 }

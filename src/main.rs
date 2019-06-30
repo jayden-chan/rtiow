@@ -10,6 +10,8 @@ mod vector3;
 
 use std::f32;
 
+use rand::prelude::*;
+
 use camera::Camera;
 use image::{gen_ppm, Pixel};
 use object::{HitRecord, Hittable, ObjectList};
@@ -19,6 +21,7 @@ use vector3::Vector;
 
 const IMG_WIDTH: usize = 200;
 const IMG_HEIGHT: usize = 100;
+const SAMPLES: usize = 100;
 
 fn main() {
     let mut image = Vec::new();
@@ -32,20 +35,33 @@ fn main() {
 
     for j in (0..IMG_HEIGHT).rev() {
         image.push(Vec::new());
+
+        print!(
+            "Rendering... {:4.1}%\r",
+            (image.len() as f32 / IMG_HEIGHT as f32) * 100.0
+        );
+
         for i in 0..IMG_WIDTH {
-            let u = i as f32 / IMG_WIDTH as f32;
-            let v = j as f32 / IMG_HEIGHT as f32;
+            let mut pixel = Vector::zero();
+            for _ in 0..SAMPLES {
+                let u = (i as f32 + random::<f32>()) / IMG_WIDTH as f32;
+                let v = (j as f32 + random::<f32>()) / IMG_HEIGHT as f32;
 
-            let r = camera.get_ray(u, v);
+                let r = camera.get_ray(u, v);
 
-            let color = color(r, &world);
+                pixel += color(r, &world);
+            }
+
+            pixel /= SAMPLES as f32;
             image[(IMG_HEIGHT - 1) - j].push(Pixel {
-                r: (255 as f32 * color.x) as u8,
-                g: (255 as f32 * color.y) as u8,
-                b: (255 as f32 * color.z) as u8,
+                r: (255 as f32 * pixel.x) as u8,
+                g: (255 as f32 * pixel.y) as u8,
+                b: (255 as f32 * pixel.z) as u8,
             });
         }
     }
+
+    println!();
 
     gen_ppm(image);
 }

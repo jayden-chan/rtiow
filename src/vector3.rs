@@ -81,6 +81,15 @@ impl ops::Add<Vector> for Vector {
     }
 }
 
+/// Add-assign two vectors together
+impl ops::AddAssign<Vector> for Vector {
+    fn add_assign(&mut self, rhs: Vector) {
+        self.x += rhs.x;
+        self.y += rhs.y;
+        self.z += rhs.z;
+    }
+}
+
 /// Add a float to all fields in vector
 impl ops::Add<f32> for Vector {
     type Output = Vector;
@@ -152,5 +161,14 @@ impl ops::Div<f32> for Vector {
             y: self.y / rhs,
             z: self.z / rhs,
         }
+    }
+}
+
+/// Divide-assign all fields by a float
+impl ops::DivAssign<f32> for Vector {
+    fn div_assign(&mut self, rhs: f32) {
+        self.x /= rhs;
+        self.y /= rhs;
+        self.z /= rhs;
     }
 }
