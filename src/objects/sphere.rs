@@ -1,4 +1,4 @@
-use crate::object::{HitRecord, Object};
+use crate::object::{HitRecord, Hittable};
 use crate::{Ray, Vector};
 use std::f32;
 
@@ -8,9 +8,9 @@ pub struct Sphere {
     radius: f32,
 }
 
-impl Object for Sphere {
+impl Hittable for Sphere {
     fn hit(
-        self,
+        &self,
         r: Ray,
         t_min: f32,
         t_max: f32,

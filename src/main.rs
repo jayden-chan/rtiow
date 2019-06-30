@@ -10,7 +10,7 @@ mod vector3;
 use std::f32;
 
 use image::{gen_ppm, Pixel};
-use object::{HitRecord, Object};
+use object::{HitRecord, Hittable, ObjectList};
 use objects::Sphere;
 use ray::Ray;
 use vector3::Vector;
@@ -30,6 +30,11 @@ fn main() {
     let vertical = Vector::new(0.0, IMG_HEIGHT as f32 / 50.0, 0.0);
     let origin = Vector::zero();
 
+    let world = ObjectList::from_objects(vec![
+        Sphere::new(Vector::new(0.0, 0.0, -1.0), 0.5),
+        Sphere::new(Vector::new(0.0, -100.5, -1.0), 100.0),
+    ]);
+
     for j in (0..IMG_HEIGHT).rev() {
         image.push(Vec::new());
         for i in 0..IMG_WIDTH {
@@ -41,7 +46,7 @@ fn main() {
                 lower_left_corner + (horizontal * u) + (vertical * v),
             );
 
-            let color = color(r);
+            let color = color(r, &world);
             image[(IMG_HEIGHT - 1) - j].push(Pixel {
                 r: (255 as f32 * color.x) as u8,
                 g: (255 as f32 * color.y) as u8,
@@ -53,10 +58,9 @@ fn main() {
     gen_ppm(image);
 }
 
-fn color(r: Ray) -> Vector {
-    let sphere = Sphere::new(Vector::new(0.0, 0.0, -1.0), 0.5);
+fn color<T: Hittable>(r: Ray, world: &ObjectList<T>) -> Vector {
     let mut rec = HitRecord::empty();
-    let hit = sphere.hit(r, 0.0, f32::MAX, &mut rec);
+    let hit = world.hit(r, 0.0, f32::MAX, &mut rec);
 
     if hit {
         return 0.5 * (rec.normal.unwrap() + 1.0);
