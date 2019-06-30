@@ -3,17 +3,25 @@ use std::ops;
 use crate::util::fast_inv_sqrt;
 use rand::prelude::*;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Vector {
-    x: f32,
-    y: f32,
-    z: f32,
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
 }
 
 /// Constructor-like
 impl Vector {
     pub fn new(x: f32, y: f32, z: f32) -> Self {
         Self { x, y, z }
+    }
+
+    pub fn zero() -> Self {
+        Self {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        }
     }
 
     pub fn unit() -> Self {
@@ -35,7 +43,6 @@ impl Vector {
 
 /// Vector math implementations
 impl Vector {
-    /// Set the length of the vector to 1, maintaining its direction
     pub fn normalize(self) -> Self {
         let mag_inv = fast_inv_sqrt(
             (self.x * self.x) + (self.y * self.y) + (self.z * self.z),
@@ -48,12 +55,10 @@ impl Vector {
         }
     }
 
-    /// Compute the dot product of two vectors
     pub fn dot(lhs: Vector, rhs: Vector) -> f32 {
         lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
     }
 
-    /// Compute the cross product of two vectors
     pub fn cross(lhs: Vector, rhs: Vector) -> Self {
         Self {
             x: lhs.y * rhs.z - lhs.z * rhs.y,
