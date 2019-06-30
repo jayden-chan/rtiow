@@ -107,6 +107,19 @@ impl ops::Mul<f32> for Vector {
     }
 }
 
+/// Commutative property for Vector * f32
+impl ops::Mul<Vector> for f32 {
+    type Output = Vector;
+
+    fn mul(self, rhs: Vector) -> Vector {
+        Vector {
+            x: rhs.x * self,
+            y: rhs.y * self,
+            z: rhs.z * self,
+        }
+    }
+}
+
 /// Multiply-asign each element of a vector by a float
 impl ops::MulAssign<f32> for Vector {
     fn mul_assign(&mut self, rhs: f32) {
