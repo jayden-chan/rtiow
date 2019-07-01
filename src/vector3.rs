@@ -1,6 +1,7 @@
 use std::ops;
 
 use crate::util::fast_inv_sqrt;
+
 use rand::prelude::*;
 
 #[derive(Debug, Copy, Clone)]

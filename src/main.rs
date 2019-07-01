@@ -17,7 +17,7 @@ use rayon::prelude::*;
 use camera::Camera;
 use image::{gen_ppm, Pixel};
 use materials::{Lambertian, Metal};
-use objects::{HitRecord, Hittable, ObjectList, Sphere};
+use objects::{HitRecord, Hittable, Sphere, World};
 use ray::Ray;
 use vector3::Vector;
 
@@ -43,7 +43,7 @@ fn main() {
         }
     }
 
-    let world = ObjectList::from_objects(vec![
+    let world = World::from_objects(vec![
         Box::new(Sphere::new(
             Vector::new(0.0, 0.0, -1.0),
             0.5,
@@ -91,7 +91,7 @@ fn main() {
     gen_ppm(image);
 }
 
-fn color(r: Ray, world: &ObjectList, depth: usize) -> Vector {
+fn color(r: Ray, world: &World, depth: usize) -> Vector {
     let (hit, result) = world.hit(r, 0.00001, f32::MAX);
 
     if hit {

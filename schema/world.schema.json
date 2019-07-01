@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "material": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "Metal"
+            },
+            "albedo": {
+              "$ref": "#/definitions/vector"
+            },
+            "fuzz": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "name",
+            "albedo",
+            "fuzz"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "Lambertian"
+            },
+            "albedo": {
+              "$ref": "#/definitions/vector"
+            }
+          },
+          "required": ["name", "albedo"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "materialTypes": {
+      "type": "string",
+      "enum": [
+        "Metal",
+        "Lambertian"
+      ]
+    },
+    "vector": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "title": "World Schema",
+  "type": "object",
+  "properties": {
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+                "const": "Sphere"
+              },
+              "center": {
+                "$ref": "#/definitions/vector"
+              },
+              "radius": {
+                "type": "number"
+              },
+              "material": {
+                "$ref": "#/definitions/material"
+              }
+            },
+            "required": [
+              "name",
+              "center",
+              "radius",
+              "material"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
