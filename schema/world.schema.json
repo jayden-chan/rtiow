@@ -1,5 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "World Schema",
+  "type": "object",
+  "properties": {
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+                "const": "Sphere"
+              },
+              "center": {
+                "$ref": "#/definitions/vector"
+              },
+              "radius": {
+                "type": "number"
+              },
+              "material": {
+                "$ref": "#/definitions/material"
+              }
+            },
+            "required": [
+              "name",
+              "center",
+              "radius",
+              "material"
+            ]
+          }
+        ]
+      }
+    }
+  },
   "definitions": {
     "material": {
       "type": "object",
@@ -58,41 +93,6 @@
         "z": {
           "type": "number"
         }
-      }
-    }
-  },
-  "title": "World Schema",
-  "type": "object",
-  "properties": {
-    "objects": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "oneOf": [
-          {
-            "properties": {
-              "name": {
-                "type": "string",
-                "const": "Sphere"
-              },
-              "center": {
-                "$ref": "#/definitions/vector"
-              },
-              "radius": {
-                "type": "number"
-              },
-              "material": {
-                "$ref": "#/definitions/material"
-              }
-            },
-            "required": [
-              "name",
-              "center",
-              "radius",
-              "material"
-            ]
-          }
-        ]
       }
     }
   }
