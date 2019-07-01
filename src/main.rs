@@ -20,35 +20,35 @@ use objects::{HitRecord, Hittable, ObjectList, Sphere};
 use ray::Ray;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 800;
-const IMG_HEIGHT: usize = 400;
-const SAMPLES: usize = 1000;
+const IMG_WIDTH: usize = 400;
+const IMG_HEIGHT: usize = 200;
+const SAMPLES: usize = 500;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
 fn main() {
     let mut image = Vec::with_capacity(IMG_HEIGHT);
 
     let world = ObjectList::from_objects(vec![
-        Sphere::new(
+        Box::new(Sphere::new(
             Vector::new(0.0, 0.0, -1.0),
             0.5,
             Box::new(Lambertian::new(0.8, 0.3, 0.3)),
-        ),
-        Sphere::new(
+        )),
+        Box::new(Sphere::new(
             Vector::new(0.0, -100.5, -1.0),
             100.0,
             Box::new(Lambertian::new(0.5, 0.5, 0.5)),
-        ),
-        Sphere::new(
+        )),
+        Box::new(Sphere::new(
             Vector::new(1.0, 0.0, -1.0),
             0.5,
             Box::new(Metal::new(0.8, 0.6, 0.2)),
-        ),
-        Sphere::new(
+        )),
+        Box::new(Sphere::new(
             Vector::new(-1.0, 0.0, -1.0),
             0.5,
             Box::new(Metal::new(0.8, 0.8, 0.8)),
-        ),
+        )),
     ]);
 
     let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
@@ -91,7 +91,7 @@ fn main() {
     gen_ppm(image);
 }
 
-fn color<T: Hittable>(r: Ray, world: &ObjectList<T>, depth: usize) -> Vector {
+fn color(r: Ray, world: &ObjectList, depth: usize) -> Vector {
     let (hit, result) = world.hit(r, 0.00001, f32::MAX);
 
     if hit {

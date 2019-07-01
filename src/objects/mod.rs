@@ -26,12 +26,12 @@ pub trait Hittable {
     ) -> (bool, Option<(HitRecord, &Box<Material>)>);
 }
 
-pub struct ObjectList<T: Hittable> {
-    objects: Vec<T>,
+pub struct ObjectList {
+    objects: Vec<Box<Hittable>>,
 }
 
-impl<T: Hittable> ObjectList<T> {
-    pub fn from_objects(objects: Vec<T>) -> Self {
+impl ObjectList {
+    pub fn from_objects(objects: Vec<Box<Hittable>>) -> Self {
         Self { objects }
     }
 
@@ -41,12 +41,12 @@ impl<T: Hittable> ObjectList<T> {
         }
     }
 
-    pub fn push(&mut self, object: T) {
+    pub fn push(&mut self, object: Box<Hittable>) {
         self.objects.push(object);
     }
 }
 
-impl<T: Hittable> Hittable for ObjectList<T> {
+impl Hittable for ObjectList {
     fn hit(
         &self,
         r: Ray,

@@ -34,7 +34,7 @@ pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
 
         print!(
             "Writing file... {}%\r",
-            ((idx as f32 / height as f32) * 100.0) as u8
+            (((idx + 1) as f32 / height as f32) * 100.0) as u8
         );
 
         for pixel in row {
