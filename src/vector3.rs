@@ -116,6 +116,19 @@ impl ops::Sub<Vector> for Vector {
     }
 }
 
+/// Multiply two vectors together element-wise (NOT dot product OR cross product)
+impl ops::Mul<Vector> for Vector {
+    type Output = Vector;
+
+    fn mul(self, rhs: Vector) -> Vector {
+        Vector {
+            x: self.x * rhs.x,
+            y: self.y * rhs.y,
+            z: self.z * rhs.z,
+        }
+    }
+}
+
 /// Multiply each element of a vector by a float
 impl ops::Mul<f32> for Vector {
     type Output = Vector;

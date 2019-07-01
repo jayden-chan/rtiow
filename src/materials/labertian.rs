@@ -3,13 +3,16 @@ use crate::{HitRecord, Ray, Vector};
 
 use super::Material;
 
+#[derive(Debug, Copy, Clone)]
 pub struct Lambertian {
     albedo: Vector,
 }
 
 impl Lambertian {
-    pub fn new(albedo: Vector) -> Self {
-        Self { albedo }
+    pub fn new(r: f32, g: f32, b: f32) -> Self {
+        Self {
+            albedo: Vector::new(r, g, b),
+        }
     }
 }
 

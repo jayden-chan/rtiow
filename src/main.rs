@@ -15,20 +15,40 @@ use rand::prelude::*;
 
 use camera::Camera;
 use image::{gen_ppm, Pixel};
+use materials::{Lambertian, Metal};
 use objects::{HitRecord, Hittable, ObjectList, Sphere};
 use ray::Ray;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 200;
-const IMG_HEIGHT: usize = 100;
-const SAMPLES: usize = 100;
+const IMG_WIDTH: usize = 800;
+const IMG_HEIGHT: usize = 400;
+const SAMPLES: usize = 1000;
+const MAX_RECURSIVE_DEPTH: usize = 50;
 
 fn main() {
     let mut image = Vec::with_capacity(IMG_HEIGHT);
 
     let world = ObjectList::from_objects(vec![
-        Sphere::new(Vector::new(0.0, 0.0, -1.0), 0.5),
-        Sphere::new(Vector::new(0.0, -100.5, -1.0), 100.0),
+        Sphere::new(
+            Vector::new(0.0, 0.0, -1.0),
+            0.5,
+            Box::new(Lambertian::new(0.8, 0.3, 0.3)),
+        ),
+        Sphere::new(
+            Vector::new(0.0, -100.5, -1.0),
+            100.0,
+            Box::new(Lambertian::new(0.5, 0.5, 0.5)),
+        ),
+        Sphere::new(
+            Vector::new(1.0, 0.0, -1.0),
+            0.5,
+            Box::new(Metal::new(0.8, 0.6, 0.2)),
+        ),
+        Sphere::new(
+            Vector::new(-1.0, 0.0, -1.0),
+            0.5,
+            Box::new(Metal::new(0.8, 0.8, 0.8)),
+        ),
     ]);
 
     let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
@@ -44,7 +64,7 @@ fn main() {
 
                 let r = camera.get_ray(u, v);
 
-                pixel += color(r, &world);
+                pixel += color(r, &world, 0);
             }
 
             let done_pixels = image.len() * IMG_WIDTH + i;
@@ -71,15 +91,19 @@ fn main() {
     gen_ppm(image);
 }
 
-fn color<T: Hittable>(r: Ray, world: &ObjectList<T>) -> Vector {
-    let (hit, hr) = world.hit(r, 0.00001, f32::MAX);
+fn color<T: Hittable>(r: Ray, world: &ObjectList<T>, depth: usize) -> Vector {
+    let (hit, result) = world.hit(r, 0.00001, f32::MAX);
 
     if hit {
-        let hit_record = hr.unwrap();
-        let target =
-            hit_record.p + hit_record.normal + util::random_in_unit_sphere();
-        0.5 * color(Ray::new(hit_record.p, target - hit_record.p), world)
-    // 0.5 * (rec.normal.unwrap() + 1.0)
+        let (hit_record, material) = result.unwrap();
+        let (did_scatter, attenuation, scattered) =
+            material.scatter(r, hit_record);
+
+        if depth < MAX_RECURSIVE_DEPTH && did_scatter {
+            return attenuation * color(scattered, world, depth + 1);
+        } else {
+            return Vector::zero();
+        }
     } else {
         let unit_direction = r.dir().normalize();
         let t = 0.5 * (unit_direction.y + 1.0);
