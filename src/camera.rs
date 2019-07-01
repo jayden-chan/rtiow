@@ -8,7 +8,7 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn new(width: f32, height: f32) -> Self {
+    pub fn new() -> Self {
         Self {
             lower_left_corner: Vector::new(-2.0, -1.0, -1.0),
             horizontal: Vector::new(4.0, 0.0, 0.0),

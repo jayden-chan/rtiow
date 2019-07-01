@@ -49,7 +49,7 @@ impl Hittable for Sphere {
             }
         }
 
-        return false;
+        false
     }
 }
 

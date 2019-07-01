@@ -67,6 +67,6 @@ impl<T: Hittable> Hittable for ObjectList<T> {
             }
         }
 
-        return hit_anything;
+        hit_anything
     }
 }

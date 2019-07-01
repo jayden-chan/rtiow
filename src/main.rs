@@ -32,7 +32,7 @@ fn main() {
         Sphere::new(Vector::new(0.0, -100.5, -1.0), 100.0),
     ]);
 
-    let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
+    let camera = Camera::new();
 
     for j in (0..IMG_HEIGHT).rev() {
         image.push(Vec::new());
@@ -60,9 +60,9 @@ fn main() {
 
             pixel /= SAMPLES as f32;
             image[(IMG_HEIGHT - 1) - j].push(Pixel {
-                r: (255 as f32 * pixel.x) as u8,
-                g: (255 as f32 * pixel.y) as u8,
-                b: (255 as f32 * pixel.z) as u8,
+                r: (255.0 * pixel.x) as u8,
+                g: (255.0 * pixel.y) as u8,
+                b: (255.0 * pixel.z) as u8,
             });
         }
     }
@@ -77,11 +77,11 @@ fn color<T: Hittable>(r: Ray, world: &ObjectList<T>) -> Vector {
     let hit = world.hit(r, 0.0, f32::MAX, &mut rec);
 
     if hit {
-        return 0.5 * (rec.normal.unwrap() + 1.0);
+        0.5 * (rec.normal.unwrap() + 1.0)
     } else {
         let unit_direction = r.dir().normalize();
         let t = 0.5 * (unit_direction.y + 1.0);
 
-        return Vector::ones() * (1.0 - t) + Vector::new(0.5, 0.7, 1.0) * t;
+        Vector::ones() * (1.0 - t) + Vector::new(0.5, 0.7, 1.0) * t
     }
 }
