@@ -20,9 +20,9 @@ use objects::{HitRecord, Hittable, ObjectList, Sphere};
 use ray::Ray;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 400;
-const IMG_HEIGHT: usize = 200;
-const SAMPLES: usize = 500;
+const IMG_WIDTH: usize = 200;
+const IMG_HEIGHT: usize = 100;
+const SAMPLES: usize = 100;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
 fn main() {
@@ -42,12 +42,12 @@ fn main() {
         Box::new(Sphere::new(
             Vector::new(1.0, 0.0, -1.0),
             0.5,
-            Box::new(Metal::new(0.8, 0.6, 0.2)),
+            Box::new(Metal::new(0.8, 0.6, 0.2, 1.0)),
         )),
         Box::new(Sphere::new(
             Vector::new(-1.0, 0.0, -1.0),
             0.5,
-            Box::new(Metal::new(0.8, 0.8, 0.8)),
+            Box::new(Metal::new(0.8, 0.8, 0.8, 0.3)),
         )),
     ]);
 
@@ -79,9 +79,9 @@ fn main() {
 
             pixel /= SAMPLES as f32;
             image[(IMG_HEIGHT - 1) - j].push(Pixel {
-                r: (255.0 * pixel.x) as u8,
-                g: (255.0 * pixel.y) as u8,
-                b: (255.0 * pixel.z) as u8,
+                r: (255.0 * f32::sqrt(pixel.x)) as u8,
+                g: (255.0 * f32::sqrt(pixel.y)) as u8,
+                b: (255.0 * f32::sqrt(pixel.z)) as u8,
             });
         }
     }
