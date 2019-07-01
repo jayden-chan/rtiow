@@ -20,8 +20,8 @@ use objects::Sphere;
 use ray::Ray;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 200;
-const IMG_HEIGHT: usize = 100;
+const IMG_WIDTH: usize = 1600;
+const IMG_HEIGHT: usize = 800;
 const SAMPLES: usize = 200;
 
 fn main() {
@@ -72,12 +72,29 @@ fn main() {
     gen_ppm(image);
 }
 
+fn random_in_unit_sphere() -> Vector {
+    let mut p = 2.0
+        * Vector::new(random::<f32>(), random::<f32>(), random::<f32>())
+        - Vector::ones();
+
+    while Vector::dot(p, p) >= 1.0 {
+        p = 2.0
+            * Vector::new(random::<f32>(), random::<f32>(), random::<f32>())
+            - Vector::ones();
+    }
+
+    p
+}
+
 fn color<T: Hittable>(r: Ray, world: &ObjectList<T>) -> Vector {
     let mut rec = HitRecord::empty();
-    let hit = world.hit(r, 0.0, f32::MAX, &mut rec);
+    let hit = world.hit(r, 0.00001, f32::MAX, &mut rec);
 
     if hit {
-        0.5 * (rec.normal.unwrap() + 1.0)
+        let target =
+            rec.p.unwrap() + rec.normal.unwrap() + random_in_unit_sphere();
+        0.5 * color(Ray::new(rec.p.unwrap(), target - rec.p.unwrap()), world)
+    // 0.5 * (rec.normal.unwrap() + 1.0)
     } else {
         let unit_direction = r.dir().normalize();
         let t = 0.5 * (unit_direction.y + 1.0);
