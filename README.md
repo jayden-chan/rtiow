@@ -6,6 +6,7 @@ Weekend"](http://www.realtimerendering.com/raytracing/Ray%20Tracing%20in%20a%20W
 ## Progress Pictures
 
 ### Lambertian & Metal spheres - 2019-07-01
+- Scene: spheres.json
 - 1920 x 1080
 - 2000 samples per pixel
 - Intel i5 6600K @ 4.3 GHz
