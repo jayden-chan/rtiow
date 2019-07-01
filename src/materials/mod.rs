@@ -8,7 +8,7 @@ pub use labertian::*;
 mod metal;
 pub use metal::*;
 
-pub trait Material: Debug {
+pub trait Material: Debug + Send + Sync {
     /// Returns: Whether a ray was scattered, the attenuation, and scattered ray
     fn scatter(&self, r_in: Ray, hit_record: HitRecord) -> (bool, Vector, Ray);
 }

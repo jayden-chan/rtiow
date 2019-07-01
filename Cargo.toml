@@ -13,3 +13,4 @@ harness = false
 
 [dependencies]
 rand = "0.7.0"
+rayon = "*"

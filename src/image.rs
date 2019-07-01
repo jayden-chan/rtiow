@@ -7,6 +7,8 @@ pub struct Pixel {
     pub r: u8,
     pub g: u8,
     pub b: u8,
+    pub x: usize,
+    pub y: usize,
 }
 
 pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
