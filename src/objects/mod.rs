@@ -1,6 +1,8 @@
 use crate::materials::Material;
 use crate::{Ray, Vector};
 
+use std::fmt::Debug;
+
 mod sphere;
 mod world;
 
@@ -20,7 +22,7 @@ impl HitRecord {
     }
 }
 
-pub trait Hittable: Send + Sync {
+pub trait Hittable: Debug + Send + Sync {
     fn hit(
         &self,
         r: Ray,

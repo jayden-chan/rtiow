@@ -29,7 +29,8 @@
               "center",
               "radius",
               "material"
-            ]
+            ],
+            "additionalProperties": false
           }
         ]
       }
@@ -74,13 +75,6 @@
         }
       ]
     },
-    "materialTypes": {
-      "type": "string",
-      "enum": [
-        "Metal",
-        "Lambertian"
-      ]
-    },
     "vector": {
       "type": "object",
       "properties": {
@@ -93,7 +87,9 @@
         "z": {
           "type": "number"
         }
-      }
+      },
+       "required": ["x", "y", "z"],
+       "additionalProperties": false
     }
   }
 }
