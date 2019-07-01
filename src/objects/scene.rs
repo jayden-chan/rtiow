@@ -8,13 +8,13 @@ use std::fs;
 use std::path::Path;
 
 #[derive(Debug)]
-pub struct World {
+pub struct Scene {
     objects: Vec<Box<Hittable>>,
 }
 
-impl World {
+impl Scene {
     pub fn from_objects(objects: Vec<Box<Hittable>>) -> Self {
-        World { objects }
+        Scene { objects }
     }
 
     pub fn from_json(path: &Path) -> Result<Self, String> {
@@ -22,10 +22,10 @@ impl World {
 
         match json {
             Ok(content) => {
-                let world = serde_json::from_str::<SchemaWorld>(&content);
+                let scene = serde_json::from_str::<SchemaScene>(&content);
 
-                match world {
-                    Ok(world) => Ok(schema_world_to_world(world)),
+                match scene {
+                    Ok(scene) => Ok(schema_scene_to_scene(scene)),
                     Err(e) => Err(format!("Failed to parse JSON: {}", e)),
                 }
             }
@@ -34,10 +34,10 @@ impl World {
     }
 }
 
-fn schema_world_to_world(s_world: SchemaWorld) -> World {
+fn schema_scene_to_scene(scene: SchemaScene) -> Scene {
     let mut objects: Vec<Box<Hittable>> = Vec::new();
 
-    for object in s_world.objects {
+    for object in scene.objects {
         match object.name.as_str() {
             "Sphere" => {
                 let center = object.center.unwrap();
@@ -80,10 +80,10 @@ fn schema_world_to_world(s_world: SchemaWorld) -> World {
         }
     }
 
-    return World::from_objects(objects);
+    return Scene::from_objects(objects);
 }
 
-impl Hittable for World {
+impl Hittable for Scene {
     fn hit(
         &self,
         r: Ray,
@@ -135,6 +135,6 @@ struct SchemaObject {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct SchemaWorld {
+struct SchemaScene {
     objects: Vec<SchemaObject>,
 }

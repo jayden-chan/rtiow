@@ -3,11 +3,11 @@ use crate::{Ray, Vector};
 
 use std::fmt::Debug;
 
+mod scene;
 mod sphere;
-mod world;
 
+pub use scene::*;
 pub use sphere::*;
-pub use world::*;
 
 #[derive(Debug, Copy, Clone)]
 pub struct HitRecord {

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "World Schema",
+  "title": "Scene Schema",
   "type": "object",
   "properties": {
     "objects": {

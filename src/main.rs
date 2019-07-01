@@ -19,7 +19,7 @@ use std::path::Path;
 
 use camera::Camera;
 use image::{gen_ppm, Pixel};
-use objects::{HitRecord, Hittable, World};
+use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
 use vector3::Vector;
 
@@ -45,12 +45,12 @@ fn main() {
         }
     }
 
-    let world = World::from_json(Path::new("./scenes/spheres.json"));
+    let scene = Scene::from_json(Path::new("./scenes/spheres.json"));
 
-    match world {
-        Ok(world) => {
+    match scene {
+        Ok(scene) => {
             println!(
-                "World loaded from JSON, rendering ({} x {} @ {} samples)",
+                "Scene loaded from JSON, rendering ({} x {} @ {} samples)",
                 IMG_WIDTH, IMG_HEIGHT, SAMPLES
             );
 
@@ -69,7 +69,7 @@ fn main() {
 
                         let r = camera.get_ray(u, v);
 
-                        curr_pixel += color(r, &world, 0);
+                        curr_pixel += color(r, &scene, 0);
                     }
 
                     curr_pixel /= SAMPLES as f32;
@@ -87,8 +87,8 @@ fn main() {
     }
 }
 
-fn color(r: Ray, world: &World, depth: usize) -> Vector {
-    let (hit, result) = world.hit(r, 0.00001, f32::MAX);
+fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
+    let (hit, result) = scene.hit(r, 0.00001, f32::MAX);
 
     if hit {
         let (hit_record, material) = result.unwrap();
@@ -96,7 +96,7 @@ fn color(r: Ray, world: &World, depth: usize) -> Vector {
             material.scatter(r, hit_record);
 
         if depth < MAX_RECURSIVE_DEPTH && did_scatter {
-            return attenuation * color(scattered, world, depth + 1);
+            return attenuation * color(scattered, scene, depth + 1);
         } else {
             return Vector::zero();
         }
