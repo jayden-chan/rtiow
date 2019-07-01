@@ -25,7 +25,6 @@ pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
     assert!(height > 0);
 
     let width = image[0].len();
-    //testing hehe
 
     let img_header = format!("P6\n{} {}\n255\n", width, height);
     let mut img_buffer = Vec::from(img_header.as_bytes());

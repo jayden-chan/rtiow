@@ -1,21 +1,17 @@
-use crate::object::{HitRecord, Hittable};
+use super::{HitRecord, Hittable};
+use crate::materials::Material;
 use crate::{Ray, Vector};
 use std::f32;
 
 #[derive(Debug, Copy, Clone)]
-pub struct Sphere {
+pub struct Sphere<T: Material> {
     center: Vector,
     radius: f32,
+    material: T,
 }
 
-impl Hittable for Sphere {
-    fn hit(
-        &self,
-        r: Ray,
-        t_min: f32,
-        t_max: f32,
-        hit_record: &mut HitRecord,
-    ) -> bool {
+impl<T: Material> Hittable for Sphere<T> {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> (bool, Option<HitRecord>) {
         let oc = r.origin() - self.center;
 
         let a = Vector::dot(r.dir(), r.dir());
@@ -28,33 +24,41 @@ impl Hittable for Sphere {
 
             if q_eq < t_max && q_eq > t_min {
                 let point_at_parameter = r.point_at_parameter(q_eq);
-                hit_record.t = Some(q_eq);
-                hit_record.p = Some(point_at_parameter);
-                hit_record.normal =
-                    Some((point_at_parameter - self.center) / self.radius);
-
-                return true;
+                return (
+                    true,
+                    Some(HitRecord::new(
+                        q_eq,
+                        point_at_parameter,
+                        (point_at_parameter - self.center) / self.radius,
+                    )),
+                );
             }
 
             let q_eq = (-b + f32::sqrt(discriminant)) / a;
 
             if q_eq < t_max && q_eq > t_min {
                 let point_at_parameter = r.point_at_parameter(q_eq);
-                hit_record.t = Some(q_eq);
-                hit_record.p = Some(point_at_parameter);
-                hit_record.normal =
-                    Some((point_at_parameter - self.center) / self.radius);
-
-                return true;
+                return (
+                    true,
+                    Some(HitRecord::new(
+                        q_eq,
+                        point_at_parameter,
+                        (point_at_parameter - self.center) / self.radius,
+                    )),
+                );
             }
         }
 
-        false
+        (false, None)
     }
 }
 
-impl Sphere {
-    pub fn new(center: Vector, radius: f32) -> Self {
-        Self { center, radius }
+impl<T: Material> Sphere<T> {
+    pub fn new(center: Vector, radius: f32, material: T) -> Self {
+        Self {
+            center,
+            radius,
+            material,
+        }
     }
 }

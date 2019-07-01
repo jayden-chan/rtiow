@@ -2,7 +2,7 @@ extern crate rand;
 
 mod camera;
 mod image;
-mod object;
+mod materials;
 mod objects;
 mod ray;
 mod util;
@@ -15,27 +15,26 @@ use rand::prelude::*;
 
 use camera::Camera;
 use image::{gen_ppm, Pixel};
-use object::{HitRecord, Hittable, ObjectList};
-use objects::Sphere;
+use objects::{HitRecord, Hittable, ObjectList, Sphere};
 use ray::Ray;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 1600;
-const IMG_HEIGHT: usize = 800;
-const SAMPLES: usize = 200;
+const IMG_WIDTH: usize = 200;
+const IMG_HEIGHT: usize = 100;
+const SAMPLES: usize = 100;
 
 fn main() {
-    let mut image = Vec::new();
+    let mut image = Vec::with_capacity(IMG_HEIGHT);
 
     let world = ObjectList::from_objects(vec![
         Sphere::new(Vector::new(0.0, 0.0, -1.0), 0.5),
         Sphere::new(Vector::new(0.0, -100.5, -1.0), 100.0),
     ]);
 
-    let camera = Camera::new();
+    let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
 
     for j in (0..IMG_HEIGHT).rev() {
-        image.push(Vec::new());
+        image.push(Vec::with_capacity(IMG_WIDTH));
 
         for i in 0..IMG_WIDTH {
             let mut pixel = Vector::zero();
@@ -72,28 +71,14 @@ fn main() {
     gen_ppm(image);
 }
 
-fn random_in_unit_sphere() -> Vector {
-    let mut p = 2.0
-        * Vector::new(random::<f32>(), random::<f32>(), random::<f32>())
-        - Vector::ones();
-
-    while Vector::dot(p, p) >= 1.0 {
-        p = 2.0
-            * Vector::new(random::<f32>(), random::<f32>(), random::<f32>())
-            - Vector::ones();
-    }
-
-    p
-}
-
 fn color<T: Hittable>(r: Ray, world: &ObjectList<T>) -> Vector {
-    let mut rec = HitRecord::empty();
-    let hit = world.hit(r, 0.00001, f32::MAX, &mut rec);
+    let (hit, hr) = world.hit(r, 0.00001, f32::MAX);
 
     if hit {
+        let hit_record = hr.unwrap();
         let target =
-            rec.p.unwrap() + rec.normal.unwrap() + random_in_unit_sphere();
-        0.5 * color(Ray::new(rec.p.unwrap(), target - rec.p.unwrap()), world)
+            hit_record.p + hit_record.normal + util::random_in_unit_sphere();
+        0.5 * color(Ray::new(hit_record.p, target - hit_record.p), world)
     // 0.5 * (rec.normal.unwrap() + 1.0)
     } else {
         let unit_direction = r.dir().normalize();
