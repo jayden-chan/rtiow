@@ -15,14 +15,10 @@ pub fn fast_inv_sqrt(x: f32) -> f32 {
 
 #[inline]
 pub fn random_in_unit_sphere() -> Vector {
-    let mut p = 2.0
-        * Vector::new(random::<f32>(), random::<f32>(), random::<f32>())
-        - Vector::ones();
+    let mut p = 2.0 * Vector::rand() - Vector::ones();
 
     while Vector::dot(p, p) >= 1.0 {
-        p = 2.0
-            * Vector::new(random::<f32>(), random::<f32>(), random::<f32>())
-            - Vector::ones();
+        p = 2.0 * Vector::rand() - Vector::ones();
     }
 
     p
