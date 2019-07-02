@@ -9,12 +9,56 @@
       },
       "radius": 0.5,
       "material": {
+        "name": "Dielectric",
+        "ref_idx": 1.52
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -1.0
+      },
+      "radius": -0.45,
+      "material": {
+        "name": "Dielectric",
+        "ref_idx": 1.52
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": -0.9,
+        "y": 0.0,
+        "z": -1.5
+      },
+      "radius": 0.5,
+      "material": {
         "name": "Lambertian",
         "albedo": {
           "x": 0.9,
-          "y": 0.1,
-          "z": 0.1
+          "y": 0.3,
+          "z": 0.3
         }
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.7,
+        "y": 0.0,
+        "z": -1.8
+      },
+      "radius": 0.5,
+      "material": {
+        "name": "Metal",
+        "albedo": {
+          "x": 0.1,
+          "y": 0.4,
+          "z": 0.9
+        },
+        "fuzz": 0.0
       }
     },
     {
@@ -32,50 +76,6 @@
           "y": 0.2,
           "z": 0.2
         }
-      }
-    },
-    {
-      "name": "Sphere",
-      "center": {
-        "x": 1.0,
-        "y": 0.0,
-        "z": -1.0
-      },
-      "radius": 0.5,
-      "material": {
-        "name": "Metal",
-        "albedo": {
-          "x": 0.8,
-          "y": 0.6,
-          "z": 0.2
-        },
-        "fuzz": 0.0
-      }
-    },
-    {
-      "name": "Sphere",
-      "center": {
-        "x": -1.0,
-        "y": 0.0,
-        "z": -1.0
-      },
-      "radius": 0.5,
-      "material": {
-        "name": "Dielectric",
-        "ref_idx": 1.52
-      }
-    },
-    {
-      "name": "Sphere",
-      "center": {
-        "x": -1.0,
-        "y": 0.0,
-        "z": -1.0
-      },
-      "radius": -0.45,
-      "material": {
-        "name": "Dielectric",
-        "ref_idx": 1.52
       }
     }
   ]
