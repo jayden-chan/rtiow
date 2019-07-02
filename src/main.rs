@@ -60,26 +60,24 @@ fn main() {
 
     let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
 
-    let (rx, tx) = channel();
-    let image_rows = image.len();
+    // let (rx, tx) = channel();
+    // let image_rows = image.len();
 
-    let join_handle = thread::spawn(move || {
-        let mut i = 0;
-        let total = image_rows;
-        while let Ok(v) = tx.recv() {
-            i += v;
+    // let join_handle = thread::spawn(move || {
+    //     let mut i = 0;
+    //     let total = image_rows;
+    //     while let Ok(v) = tx.recv() {
+    //         i += v;
 
-            if progress_bar(i, total, 80, "Rendering") {
-                println!();
-                break;
-            }
-        }
-    });
+    //         if progress_bar(i, total, 80, "Rendering") {
+    //             println!();
+    //             break;
+    //         }
+    //     }
+    // });
 
-    // Clone senders for each image row. This is kinda hacky but whatever
-    let senders: Vec<_> = image.iter().map(|_| rx.clone()).collect();
-
-    image.iter_mut().zip(senders).for_each(|(row, sender)| {
+    let mut completed_rows = 0;
+    image.iter_mut().for_each(|row| {
         row.par_iter_mut().for_each(|pixel| {
             let mut curr_pixel = Vector::zero();
 
@@ -98,10 +96,11 @@ fn main() {
             pixel.b = (255.0 * f32::sqrt(curr_pixel.z)) as u8;
         });
 
-        sender.send(1).unwrap();
+        completed_rows += 1;
+        progress_bar(completed_rows, IMG_HEIGHT, 80, "Rendering");
     });
 
-    join_handle.join().unwrap();
+    println!();
     gen_ppm(image);
 }
 
