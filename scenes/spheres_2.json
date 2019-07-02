@@ -64,6 +64,19 @@
         "name": "Dielectric",
         "ref_idx": 1.5
       }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": -1.0,
+        "y": 0.0,
+        "z": -1.0
+      },
+      "radius": -0.45,
+      "material": {
+        "name": "Dielectric",
+        "ref_idx": 1.5
+      }
     }
   ]
 }

@@ -56,6 +56,10 @@ impl Vector {
         }
     }
 
+    pub fn inv_mag(self) -> f32 {
+        fast_inv_sqrt((self.x * self.x) + (self.y * self.y) + (self.z * self.z))
+    }
+
     pub fn dot(lhs: Vector, rhs: Vector) -> f32 {
         lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
     }

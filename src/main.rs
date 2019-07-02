@@ -23,9 +23,9 @@ use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 1920;
-const IMG_HEIGHT: usize = 1080;
-const SAMPLES: usize = 2000;
+const IMG_WIDTH: usize = 300;
+const IMG_HEIGHT: usize = 150;
+const SAMPLES: usize = 200;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
 fn main() {
@@ -45,7 +45,7 @@ fn main() {
         }
     }
 
-    let scene = Scene::from_json(Path::new("./scenes/spheres.json"));
+    let scene = Scene::from_json(Path::new("./scenes/spheres_2.json"));
 
     match scene {
         Ok(scene) => {
