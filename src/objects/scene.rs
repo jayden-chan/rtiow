@@ -1,4 +1,4 @@
-use crate::materials::{Lambertian, Material, Metal};
+use crate::materials::{Dielectric, Lambertian, Material, Metal};
 use crate::{Ray, Vector};
 
 use super::{HitRecord, Hittable, Sphere};
@@ -44,7 +44,7 @@ fn schema_scene_to_scene(scene: SchemaScene) -> Scene {
                 let radius = object.radius.unwrap();
                 match object.material.name.as_str() {
                     "Metal" => {
-                        let albedo = object.material.albedo;
+                        let albedo = object.material.albedo.unwrap();
                         let fuzz = object.material.fuzz.unwrap();
 
                         objects.push(Box::new(Sphere::new(
@@ -56,7 +56,7 @@ fn schema_scene_to_scene(scene: SchemaScene) -> Scene {
                         )));
                     }
                     "Lambertian" => {
-                        let albedo = object.material.albedo;
+                        let albedo = object.material.albedo.unwrap();
 
                         objects.push(Box::new(Sphere::new(
                             Vector::new(center.x, center.y, center.z),
@@ -64,6 +64,15 @@ fn schema_scene_to_scene(scene: SchemaScene) -> Scene {
                             Box::new(Lambertian::new(
                                 albedo.x, albedo.y, albedo.z,
                             )),
+                        )));
+                    }
+                    "Dielectric" => {
+                        let ref_idx = object.material.ref_idx.unwrap();
+
+                        objects.push(Box::new(Sphere::new(
+                            Vector::new(center.x, center.y, center.z),
+                            radius,
+                            Box::new(Dielectric::new(ref_idx)),
                         )));
                     }
                     _ => {
@@ -109,7 +118,7 @@ impl Hittable for Scene {
 }
 
 /********************************************************/
-/*     AUTO GENERATED FROM SCHEMA -- DO NOT MODIFY      */
+/*              AUTO GENERATED FROM SCHEMA              */
 /********************************************************/
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -122,7 +131,8 @@ struct SchemaVector {
 #[derive(Debug, Serialize, Deserialize)]
 struct SchemaMaterial {
     name: String,
-    albedo: SchemaVector,
+    albedo: Option<SchemaVector>,
+    ref_idx: Option<f32>,
     fuzz: Option<f32>,
 }
 

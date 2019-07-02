@@ -72,6 +72,19 @@
           },
           "required": ["name", "albedo"],
           "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "Dielectric"
+            },
+            "ref_idx": {
+              "type": "number"
+            }
+          },
+          "required": ["name", "ref_idx"],
+          "additionalProperties": false
         }
       ]
     },

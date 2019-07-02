@@ -186,3 +186,15 @@ impl ops::DivAssign<f32> for Vector {
         self.z /= rhs;
     }
 }
+
+/// Allow -vector
+impl ops::Neg for Vector {
+    type Output = Vector;
+    fn neg(self) -> Vector {
+        Vector {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+        }
+    }
+}

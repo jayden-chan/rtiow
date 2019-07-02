@@ -23,8 +23,8 @@ use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 200;
-const IMG_HEIGHT: usize = 100;
+const IMG_WIDTH: usize = 1920;
+const IMG_HEIGHT: usize = 1080;
 const SAMPLES: usize = 2000;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
