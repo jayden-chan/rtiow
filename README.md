@@ -8,8 +8,8 @@ Weekend"](http://www.realtimerendering.com/raytracing/Ray%20Tracing%20in%20a%20W
 ### Lambertian & Metal spheres - 2019-07-01
 - Scene: `scenes/spheres.json`
 - 1920 x 1080
-- 2000 samples per pixel
-- Intel i5 6600K @ 4.3 GHz
-- Render time: 00:06:21
+- 4000 samples per pixel
+- Machine: GCP n1-highcpu-24
+- Render time: 00:03:56
 
 ![](/img/spheres.png "Lambertian & Metal spheres")

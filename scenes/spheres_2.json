@@ -62,7 +62,7 @@
       "radius": 0.5,
       "material": {
         "name": "Dielectric",
-        "ref_idx": 1.5
+        "ref_idx": 1.52
       }
     },
     {
@@ -75,7 +75,7 @@
       "radius": -0.45,
       "material": {
         "name": "Dielectric",
-        "ref_idx": 1.5
+        "ref_idx": 1.52
       }
     }
   ]
