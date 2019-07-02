@@ -21,3 +21,27 @@ Rendering settings:
 - Render time: 00:01:22
 
 ![](/img/spheres.png "Lambertian & Metal spheres")
+
+## Feature Roadmap
+
+### Implemented
+- [x] 3D Vector
+- [x] Image generation
+- [x] Spheres
+- [x] Recursive ray scattering
+- [x] Lambertian, Metal, and Dielectric surfaces
+- [x] Multisampling
+- [x] Parallel rendering
+- [x] Loading scenes from JSON
+
+### Not Implemented
+- [ ] Positionable Camera & custom FOV
+- [ ] Planes & Triangles
+- [ ] BVHs
+- [ ] ADC
+- [ ] Textures
+- [ ] Lighting
+- [ ] Shadow rays
+- [ ] Volumes
+- [ ] Phong Reflection (?)
+- [ ] Photon Mapping (?)
