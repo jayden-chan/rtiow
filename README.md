@@ -39,6 +39,7 @@ Rendering settings:
 - [ ] Planes & Triangles
 - [ ] BVHs
 - [ ] ADC
+- [ ] Spectral rays
 - [ ] Textures
 - [ ] Lighting
 - [ ] Shadow rays
