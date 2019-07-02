@@ -48,70 +48,61 @@ fn main() {
     }
 
     let path = Path::new("./scenes/spheres_2.json");
-    let scene = Scene::from_json(path);
+    let scene = Scene::from_json(path).unwrap();
 
-    match scene {
-        Ok(scene) => {
-            println!(
-                "Scene loaded from {}, rendering ({} x {} @ {} samples)",
-                path.display(),
-                IMG_WIDTH,
-                IMG_HEIGHT,
-                SAMPLES
-            );
+    println!(
+        "Scene loaded from {}, rendering ({} x {} @ {} samples)",
+        path.display(),
+        IMG_WIDTH,
+        IMG_HEIGHT,
+        SAMPLES
+    );
 
-            let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
+    let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
 
-            let (rx, tx) = channel();
-            let image_rows = image.len();
+    let (rx, tx) = channel();
+    let image_rows = image.len();
 
-            let join_handle = thread::spawn(move || {
-                let mut i = 0;
-                let total = image_rows;
-                while let Ok(v) = tx.recv() {
-                    i += v;
+    let join_handle = thread::spawn(move || {
+        let mut i = 0;
+        let total = image_rows;
+        while let Ok(v) = tx.recv() {
+            i += v;
 
-                    if progress_bar(i, total, 80, "Rendering") {
-                        println!();
-                        break;
-                    }
-                }
-            });
-
-            // Clone senders for each image row. This is kinda hacky but whatever
-            let senders: Vec<_> = image.iter().map(|_| rx.clone()).collect();
-
-            image.iter_mut().zip(senders).for_each(|(row, sender)| {
-                row.par_iter_mut().for_each(|pixel| {
-                    let mut curr_pixel = Vector::zero();
-
-                    for _ in 0..SAMPLES {
-                        let u = (pixel.x as f32 + random::<f32>())
-                            / IMG_WIDTH as f32;
-                        let v = (pixel.y as f32 + random::<f32>())
-                            / IMG_HEIGHT as f32;
-
-                        let r = camera.get_ray(u, v);
-
-                        curr_pixel += color(r, &scene, 0);
-                    }
-
-                    curr_pixel /= SAMPLES as f32;
-                    pixel.r = (255.0 * f32::sqrt(curr_pixel.x)) as u8;
-                    pixel.g = (255.0 * f32::sqrt(curr_pixel.y)) as u8;
-                    pixel.b = (255.0 * f32::sqrt(curr_pixel.z)) as u8;
-                });
-
-                sender.send(1).unwrap();
-            });
-
-            join_handle.join().unwrap();
-            gen_ppm(image);
+            if progress_bar(i, total, 80, "Rendering") {
+                println!();
+                break;
+            }
         }
-        Err(e) => {
-            panic!(e);
-        }
-    }
+    });
+
+    // Clone senders for each image row. This is kinda hacky but whatever
+    let senders: Vec<_> = image.iter().map(|_| rx.clone()).collect();
+
+    image.iter_mut().zip(senders).for_each(|(row, sender)| {
+        row.par_iter_mut().for_each(|pixel| {
+            let mut curr_pixel = Vector::zero();
+
+            for _ in 0..SAMPLES {
+                let u = (pixel.x as f32 + random::<f32>()) / IMG_WIDTH as f32;
+                let v = (pixel.y as f32 + random::<f32>()) / IMG_HEIGHT as f32;
+
+                let r = camera.get_ray(u, v);
+
+                curr_pixel += color(r, &scene, 0);
+            }
+
+            curr_pixel /= SAMPLES as f32;
+            pixel.r = (255.0 * f32::sqrt(curr_pixel.x)) as u8;
+            pixel.g = (255.0 * f32::sqrt(curr_pixel.y)) as u8;
+            pixel.b = (255.0 * f32::sqrt(curr_pixel.z)) as u8;
+        });
+
+        sender.send(1).unwrap();
+    });
+
+    join_handle.join().unwrap();
+    gen_ppm(image);
 }
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
