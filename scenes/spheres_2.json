@@ -35,12 +35,13 @@
       },
       "radius": 0.5,
       "material": {
-        "name": "Lambertian",
+        "name": "Metal",
         "albedo": {
           "x": 0.9,
-          "y": 0.3,
-          "z": 0.3
-        }
+          "y": 0.1,
+          "z": 0.1
+        },
+        "fuzz": 0.0
       }
     },
     {

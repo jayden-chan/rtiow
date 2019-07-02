@@ -13,6 +13,7 @@ case $1 in
         ;;
     download)
         scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/raytracer/out/image.ppm ./out/image.ppm
+        feh --auto-zoom --force-aliasing out/image.ppm
         ;;
     convert)
         convert out/image.ppm img/$2.png
