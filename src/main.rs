@@ -15,8 +15,6 @@ use rayon::prelude::*;
 
 use std::f32;
 use std::path::Path;
-use std::sync::mpsc::channel;
-use std::thread;
 
 use camera::Camera;
 use image::{gen_ppm, Pixel};

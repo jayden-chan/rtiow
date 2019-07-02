@@ -4,8 +4,13 @@ extern crate criterion;
 use criterion::black_box;
 use criterion::Criterion;
 
+#[path = "../src/vector3.rs"]
+mod vector3;
+use vector3::*;
+
 #[path = "../src/util.rs"]
 mod util;
+
 use util::fast_inv_sqrt;
 
 fn criterion_benchmark(c: &mut Criterion) {
