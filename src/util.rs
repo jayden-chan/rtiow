@@ -1,7 +1,8 @@
 use crate::Vector;
-use rand::prelude::*;
 
 use std::f32;
+use std::io::stdout;
+use std::io::Write;
 
 // TODO: This function should be replaced with RSQRT SIMD
 #[inline(always)]
@@ -47,4 +48,26 @@ pub fn vector_refract(
     } else {
         (false, None)
     }
+}
+
+pub fn progress_bar(
+    curr: usize,
+    total: usize,
+    width: usize,
+    text: &'static str,
+) -> bool {
+    let done_chars = (curr as f32 / total as f32) * width as f32;
+    let blank_chars = width - done_chars as usize;
+
+    print!(
+        "    {:10} [{}{}] {:3.1}%\r",
+        text,
+        "=".repeat(done_chars as usize),
+        " ".repeat(blank_chars),
+        (curr as f32 / total as f32) * 100.0
+    );
+
+    stdout().flush().unwrap();
+
+    curr == total
 }

@@ -1,5 +1,5 @@
 use crate::materials::Material;
-use crate::util::{fast_inv_sqrt, vector_reflect, vector_refract};
+use crate::util::{vector_reflect, vector_refract};
 use crate::{HitRecord, Ray, Vector};
 
 use rand::prelude::*;

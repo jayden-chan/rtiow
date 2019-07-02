@@ -10,17 +10,19 @@ mod ray;
 mod util;
 mod vector3;
 
-use std::f32;
-
 use rand::prelude::*;
 use rayon::prelude::*;
 
+use std::f32;
 use std::path::Path;
+use std::sync::mpsc::channel;
+use std::thread;
 
 use camera::Camera;
 use image::{gen_ppm, Pixel};
 use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
+use util::progress_bar;
 use vector3::Vector;
 
 const IMG_WIDTH: usize = 300;
@@ -58,10 +60,28 @@ fn main() {
                 SAMPLES
             );
 
-            println!("This may take a while...");
             let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
 
-            image.iter_mut().for_each(|row| {
+            let (rx, tx) = channel();
+            let image_rows = image.len();
+
+            let join_handle = thread::spawn(move || {
+                let mut i = 0;
+                let total = image_rows;
+                while let Ok(v) = tx.recv() {
+                    i += v;
+
+                    if progress_bar(i, total, 80, "Rendering") {
+                        println!();
+                        break;
+                    }
+                }
+            });
+
+            // Clone senders for each image row. This is kinda hacky but whatever
+            let senders: Vec<_> = image.iter().map(|_| rx.clone()).collect();
+
+            image.iter_mut().zip(senders).for_each(|(row, sender)| {
                 row.par_iter_mut().for_each(|pixel| {
                     let mut curr_pixel = Vector::zero();
 
@@ -81,8 +101,11 @@ fn main() {
                     pixel.g = (255.0 * f32::sqrt(curr_pixel.y)) as u8;
                     pixel.b = (255.0 * f32::sqrt(curr_pixel.z)) as u8;
                 });
+
+                sender.send(1).unwrap();
             });
 
+            join_handle.join().unwrap();
             gen_ppm(image);
         }
         Err(e) => {

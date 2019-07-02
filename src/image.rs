@@ -31,13 +31,8 @@ pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
     let img_header = format!("P6\n{} {}\n255\n", width, height);
     let mut img_buffer = Vec::from(img_header.as_bytes());
 
-    for (idx, row) in image.iter().enumerate() {
+    for row in image {
         assert!(row.len() == width);
-
-        print!(
-            "Writing file... {}%\r",
-            (((idx + 1) as f32 / height as f32) * 100.0) as u8
-        );
 
         for pixel in row {
             img_buffer.push(pixel.r);
@@ -48,8 +43,8 @@ pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
 
     match file.write_all(&img_buffer) {
         Err(why) => {
-            panic!("\nCouldn't write to {}: {}", display, why.description())
+            panic!("Couldn't write to {}: {}", display, why.description())
         }
-        Ok(_) => println!("\nImage written to {}", display),
+        Ok(_) => println!("Image written to {}", display),
     }
 }
