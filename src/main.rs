@@ -50,7 +50,7 @@ fn main() {
 
     println!(
         "Scene loaded from {}, rendering ({} x {} @ {} samples)",
-        path.display(),
+        path.file_name().unwrap().to_str().unwrap(), // <-- Wow.... nasty
         IMG_WIDTH,
         IMG_HEIGHT,
         SAMPLES
