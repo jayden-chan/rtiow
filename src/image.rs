@@ -11,6 +11,7 @@ pub struct Pixel {
     pub y: usize,
 }
 
+/// Writes a 2 dimensional vector of Pixels to a P6 PPM file
 pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
     let path = Path::new("out/image.ppm");
     let display = path.display();

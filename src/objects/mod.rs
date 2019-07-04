@@ -9,6 +9,10 @@ mod sphere;
 pub use scene::*;
 pub use sphere::*;
 
+/// A HitRecord describes an interaction between an incoming [`Ray`]
+/// and an object.
+///
+/// [`Ray`]: struct.Ray.html
 #[derive(Debug, Copy, Clone)]
 pub struct HitRecord {
     pub t: f32,
@@ -22,7 +26,17 @@ impl HitRecord {
     }
 }
 
+/// The Hittable trait describes any object in the scene that a light
+/// ray can interact with. All items rendered on the screen implement the
+/// Hittable trait.
 pub trait Hittable: Debug + Send + Sync {
+    /// A method for returning whether a given ray intersects this object
+    ///
+    /// Returns whether the given ray intersects this object. If it does,
+    /// a tuple containing the [`HitRecord`] for the
+    /// intersection as well as the material of the object that was hit.
+    ///
+    /// [`HitRecord`]: trait.HitRecord.html
     fn hit(
         &self,
         r: Ray,

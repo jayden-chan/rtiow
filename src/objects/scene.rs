@@ -34,6 +34,10 @@ impl Scene {
     }
 }
 
+/// Converts a scene grabbed from a JSON file into a real scene
+/// usable by the main renderer. The reason this function is necessary
+/// is because the JSON schema for the scene files isn't directly
+/// translatable to Rust types.
 fn schema_scene_to_scene(scene: SchemaScene) -> Scene {
     let mut objects: Vec<Box<Hittable>> = Vec::new();
 

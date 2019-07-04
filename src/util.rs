@@ -1,3 +1,6 @@
+//! This module contains some (mostly mathematical)
+//! utility functions that are used by some of the other modules.
+//! They are mostly small and inlined
 use crate::Vector;
 
 use std::f32;

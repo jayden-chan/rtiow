@@ -6,6 +6,8 @@ use rand::prelude::*;
 
 use std::f32;
 
+/// The Dielectric material type. This material partially
+/// reflects and refracts rays that interact with it.
 #[derive(Debug, Copy, Clone)]
 pub struct Dielectric {
     ref_idx: f32,
@@ -17,6 +19,10 @@ impl Dielectric {
     }
 }
 
+/// Provides an approximation for the contribution of the Fresnel factor
+/// during reflection calculations
+///
+/// [More info](https://en.wikipedia.org/wiki/Schlick%27s_approximation)
 fn schlick(cosine: f32, ref_idx: f32) -> f32 {
     let r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
     let r0 = r0 * r0;

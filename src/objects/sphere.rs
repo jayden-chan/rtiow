@@ -1,3 +1,5 @@
+//! A simple Sphere object
+
 use super::{HitRecord, Hittable};
 use crate::materials::Material;
 use crate::{Ray, Vector};

@@ -58,26 +58,10 @@ fn main() {
 
     let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
 
-    // let (rx, tx) = channel();
-    // let image_rows = image.len();
-
-    // let join_handle = thread::spawn(move || {
-    //     let mut i = 0;
-    //     let total = image_rows;
-    //     while let Ok(v) = tx.recv() {
-    //         i += v;
-
-    //         if progress_bar(i, total, 80, "Rendering") {
-    //             println!();
-    //             break;
-    //         }
-    //     }
-    // });
-
     let mut completed_rows = 0;
     image.iter_mut().for_each(|row| {
         row.par_iter_mut().for_each(|pixel| {
-            let mut curr_pixel = Vector::zero();
+            let mut curr_pixel = Vector::zeros();
 
             for _ in 0..SAMPLES {
                 let u = (pixel.x as f32 + random::<f32>()) / IMG_WIDTH as f32;
@@ -113,7 +97,7 @@ fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
         if depth < MAX_RECURSIVE_DEPTH && did_scatter {
             return attenuation * color(scattered, scene, depth + 1);
         } else {
-            return Vector::zero();
+            return Vector::zeros();
         }
     } else {
         let unit_direction = r.dir().normalize();

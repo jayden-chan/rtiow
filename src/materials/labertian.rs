@@ -3,6 +3,7 @@ use crate::{HitRecord, Ray, Vector};
 
 use super::Material;
 
+/// Lambertian material impl - an ideal diffuse reflector
 #[derive(Debug, Copy, Clone)]
 pub struct Lambertian {
     albedo: Vector,

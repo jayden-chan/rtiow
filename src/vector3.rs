@@ -1,9 +1,14 @@
-use std::ops;
+//! This module contains the 3D Vector implementation used
+//! by pretty much everything in the program. Obviously this
+//! is kind of boilerplate-ey and I could have just used an external
+//! crate, but I wanted to minimize the number of dependencies
+//! since this is a learning project.
 
 use crate::util::fast_inv_sqrt;
-
 use rand::prelude::*;
+use std::ops;
 
+/// A 3 dimentional vector.
 #[derive(Debug, Copy, Clone)]
 pub struct Vector {
     pub x: f32,
@@ -13,11 +18,13 @@ pub struct Vector {
 
 /// Constructor-like
 impl Vector {
+    /// Creates a new vector with the provided x, y, and z values
     pub fn new(x: f32, y: f32, z: f32) -> Self {
         Self { x, y, z }
     }
 
-    pub fn zero() -> Self {
+    /// Creates a vector with all values as zero
+    pub fn zeros() -> Self {
         Self {
             x: 0.0,
             y: 0.0,
@@ -25,6 +32,7 @@ impl Vector {
         }
     }
 
+    /// Creates a vector with all values as one
     pub fn ones() -> Self {
         Self {
             x: 1.0,
@@ -33,6 +41,7 @@ impl Vector {
         }
     }
 
+    /// Creates a buffer with all random values (between 0 and 1)
     pub fn rand() -> Self {
         Self {
             x: random::<f32>(),
@@ -44,6 +53,7 @@ impl Vector {
 
 /// Vector math implementations
 impl Vector {
+    /// Return a vector with the same direction but with length 1
     pub fn normalize(self) -> Self {
         let mag_inv = fast_inv_sqrt(
             (self.x * self.x) + (self.y * self.y) + (self.z * self.z),
@@ -56,14 +66,17 @@ impl Vector {
         }
     }
 
+    /// Returns the reciprocal of the square root of the vector's magnitude
     pub fn inv_mag(self) -> f32 {
         fast_inv_sqrt((self.x * self.x) + (self.y * self.y) + (self.z * self.z))
     }
 
+    /// Compute the dot product of two vectors
     pub fn dot(lhs: Vector, rhs: Vector) -> f32 {
         lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
     }
 
+    /// Compute the cross product of two vectors
     pub fn cross(lhs: Vector, rhs: Vector) -> Self {
         Self {
             x: lhs.y * rhs.z - lhs.z * rhs.y,

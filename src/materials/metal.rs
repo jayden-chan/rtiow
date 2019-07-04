@@ -3,6 +3,7 @@ use crate::{HitRecord, Ray, Vector};
 
 use super::Material;
 
+/// Metal - a surface that simply reflects all light
 #[derive(Debug, Copy, Clone)]
 pub struct Metal {
     albedo: Vector,
