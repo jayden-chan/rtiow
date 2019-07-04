@@ -12,40 +12,36 @@ pub struct Pixel {
 }
 
 /// Writes a 2 dimensional vector of Pixels to a P6 PPM file
-pub fn gen_ppm(image: Vec<Vec<Pixel>>) {
+pub fn gen_ppm(image: Vec<Vec<Pixel>>) -> Result<(), String> {
     let path = Path::new("out/image.ppm");
     let display = path.display();
-
-    let mut file = match File::create(&path) {
-        Err(why) => {
-            panic!("Couldn't create {}: {}", display, why.description())
-        }
-        Ok(file) => file,
-    };
-
     let height = image.len();
 
-    assert!(height > 0);
+    if height <= 0 {
+        return Err(String::from("Height must be greater than 0"));
+    }
 
     let width = image[0].len();
 
-    let img_header = format!("P6\n{} {}\n255\n", width, height);
-    let mut img_buffer = Vec::from(img_header.as_bytes());
+    File::create(&path)
+        .map_err(|why| {
+            format!("Couldn't create {}: {}", display, why.description())
+        })
+        .and_then(|mut file| {
+            let img_header = format!("P6\n{} {}\n255\n", width, height);
+            let mut img_buffer = Vec::from(img_header.as_bytes());
 
-    for row in image {
-        assert!(row.len() == width);
+            image.iter().for_each(|row| {
+                assert!(row.len() == width);
+                row.iter().for_each(|pixel| {
+                    img_buffer.push(pixel.r);
+                    img_buffer.push(pixel.g);
+                    img_buffer.push(pixel.b);
+                })
+            });
 
-        for pixel in row {
-            img_buffer.push(pixel.r);
-            img_buffer.push(pixel.g);
-            img_buffer.push(pixel.b);
-        }
-    }
-
-    match file.write_all(&img_buffer) {
-        Err(why) => {
-            panic!("Couldn't write to {}: {}", display, why.description())
-        }
-        Ok(_) => println!("Image written to {}", display),
-    }
+            file.write_all(&img_buffer).map_err(|why| {
+                format!("Couldn't create {}: {}", display, why.description())
+            })
+        })
 }

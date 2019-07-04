@@ -17,7 +17,7 @@ An alternate angle of the previous scene using a custom camera position and FOV
 
 ![](/img/spheres_2_alt.png "Positionable Camera")
 
-### Dielectrics Material - 2019-07-01
+### Dielectric Materials - 2019-07-01
 A simple scene with two metal spheres and a hollow glass sphere, showcasing the
 reflective / refractive properties of dielectric materials
 - Scene: [`scenes/spheres_2.json`](/scenes/spheres_2.json)
@@ -39,7 +39,6 @@ reflection properties of Lambertian and Metal materials.
 - [x] 3D Vector
 - [x] Image generation
 - [x] Spheres
-- [x] Recursive ray scattering
 - [x] Lambertian, Metal, and Dielectric surfaces
 - [x] Multisampling
 - [x] Parallel rendering
@@ -48,7 +47,7 @@ reflection properties of Lambertian and Metal materials.
 
 ### Not Implemented
 - [ ] Planes & Triangles
-- [ ] BVHs
+- [ ] BVH
 - [ ] ADC
 - [ ] Spectral rays
 - [ ] Textures

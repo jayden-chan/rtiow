@@ -29,7 +29,7 @@ const IMG_HEIGHT: usize = 270;
 const SAMPLES: usize = 200;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
-fn main() {
+fn main() -> Result<(), String> {
     let mut image = Vec::with_capacity(IMG_HEIGHT);
 
     for y in 0..IMG_HEIGHT {
@@ -56,7 +56,7 @@ fn main() {
 
     println!(
         "Scene loaded from {}, rendering ({} x {} @ {} samples)",
-        path.file_name().unwrap().to_str().unwrap(), // <-- Wow.... nasty
+        path.file_name().and_then(|p| p.to_str()).unwrap(),
         IMG_WIDTH,
         IMG_HEIGHT,
         SAMPLES
@@ -87,7 +87,7 @@ fn main() {
     });
 
     println!();
-    gen_ppm(image);
+    gen_ppm(image)
 }
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
