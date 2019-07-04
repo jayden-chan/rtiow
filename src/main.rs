@@ -48,7 +48,7 @@ fn main() -> Result<(), String> {
 
     let scene_file = env::args()
         .nth(1)
-        .unwrap_or(String::from("./scenes/test.json"));
+        .unwrap_or(String::from("./scenes/spheres.json"));
 
     let path = Path::new(&scene_file);
     let scene =

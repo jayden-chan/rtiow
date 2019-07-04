@@ -30,19 +30,15 @@ impl Scene {
     }
 
     pub fn from_json(path: &Path, aspect_r: f32) -> Result<Self, String> {
-        let json = fs::read_to_string(path);
-
-        match json {
-            Ok(content) => {
-                let scene = serde_json::from_str::<SchemaScene>(&content);
-
-                match scene {
-                    Ok(scene) => Ok(schema_scene_to_scene(scene, aspect_r)),
-                    Err(e) => Err(format!("Failed to parse JSON: {}", e)),
-                }
-            }
-            Err(_) => Err(String::from("Failed to read file")),
-        }
+        fs::read_to_string(path)
+            .map_err(|e| format!("Failed to read JSON file: {}", e))
+            .and_then(|json| {
+                serde_json::from_str::<SchemaScene>(&json)
+                    .map_err(|e| format!("Failed to parse JSON: {}", e))
+                    .and_then(|scene| {
+                        Ok(schema_scene_to_scene(scene, aspect_r))
+                    })
+            })
     }
 }
 
