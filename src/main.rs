@@ -13,6 +13,7 @@ mod vector3;
 use rand::prelude::*;
 use rayon::prelude::*;
 
+use std::env;
 use std::f32;
 use std::path::Path;
 
@@ -23,9 +24,9 @@ use ray::Ray;
 use util::progress_bar;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 300;
-const IMG_HEIGHT: usize = 150;
-const SAMPLES: usize = 100;
+const IMG_WIDTH: usize = 480;
+const IMG_HEIGHT: usize = 270;
+const SAMPLES: usize = 200;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
 fn main() {
@@ -45,8 +46,13 @@ fn main() {
         }
     }
 
-    let path = Path::new("./scenes/spheres_2.json");
-    let scene = Scene::from_json(path).unwrap();
+    let scene_file = env::args()
+        .nth(1)
+        .unwrap_or(String::from("./scenes/test.json"));
+
+    let path = Path::new(&scene_file);
+    let scene =
+        Scene::from_json(path, IMG_WIDTH as f32 / IMG_HEIGHT as f32).unwrap();
 
     println!(
         "Scene loaded from {}, rendering ({} x {} @ {} samples)",
@@ -55,8 +61,6 @@ fn main() {
         IMG_HEIGHT,
         SAMPLES
     );
-
-    let camera = Camera::new(IMG_WIDTH as f32, IMG_HEIGHT as f32);
 
     let mut completed_rows = 0;
     image.iter_mut().for_each(|row| {
@@ -67,7 +71,7 @@ fn main() {
                 let u = (pixel.x as f32 + random::<f32>()) / IMG_WIDTH as f32;
                 let v = (pixel.y as f32 + random::<f32>()) / IMG_HEIGHT as f32;
 
-                let r = camera.get_ray(u, v);
+                let r = scene.camera.get_ray(u, v);
 
                 curr_pixel += color(r, &scene, 0);
             }

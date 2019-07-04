@@ -80,7 +80,7 @@ impl Vector {
     pub fn cross(lhs: Vector, rhs: Vector) -> Self {
         Self {
             x: lhs.y * rhs.z - lhs.z * rhs.y,
-            y: -lhs.x * rhs.z - lhs.z * rhs.x,
+            y: lhs.z * rhs.x - lhs.x * rhs.z,
             z: lhs.x * rhs.y - lhs.y * rhs.x,
         }
     }

@@ -34,6 +34,23 @@
           }
         ]
       }
+    },
+    "camera": {
+      "type": "object",
+      "properties": {
+        "look_from": {
+          "$ref": "#/definitions/vector"
+        },
+        "look_at": {
+          "$ref": "#/definitions/vector"
+        },
+        "vup": {
+          "$ref": "#/definitions/vector"
+        },
+        "vfov": {
+          "type": "number"
+        }
+      }
     }
   },
   "definitions": {

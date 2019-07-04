@@ -1,4 +1,5 @@
 use crate::materials::{Dielectric, Lambertian, Material, Metal};
+use crate::Camera;
 use crate::{Ray, Vector};
 
 use super::{HitRecord, Hittable, Sphere};
@@ -10,14 +11,25 @@ use std::path::Path;
 #[derive(Debug)]
 pub struct Scene {
     objects: Vec<Box<Hittable>>,
+    pub camera: Camera,
 }
 
 impl Scene {
-    pub fn from_objects(objects: Vec<Box<Hittable>>) -> Self {
-        Scene { objects }
+    pub fn from_objects(objects: Vec<Box<Hittable>>, aspect_r: f32) -> Self {
+        Scene {
+            objects,
+            camera: Camera::default(aspect_r),
+        }
     }
 
-    pub fn from_json(path: &Path) -> Result<Self, String> {
+    pub fn from_objects_and_cam(
+        objects: Vec<Box<Hittable>>,
+        camera: Camera,
+    ) -> Self {
+        Self { objects, camera }
+    }
+
+    pub fn from_json(path: &Path, aspect_r: f32) -> Result<Self, String> {
         let json = fs::read_to_string(path);
 
         match json {
@@ -25,7 +37,7 @@ impl Scene {
                 let scene = serde_json::from_str::<SchemaScene>(&content);
 
                 match scene {
-                    Ok(scene) => Ok(schema_scene_to_scene(scene)),
+                    Ok(scene) => Ok(schema_scene_to_scene(scene, aspect_r)),
                     Err(e) => Err(format!("Failed to parse JSON: {}", e)),
                 }
             }
@@ -38,7 +50,7 @@ impl Scene {
 /// usable by the main renderer. The reason this function is necessary
 /// is because the JSON schema for the scene files isn't directly
 /// translatable to Rust types.
-fn schema_scene_to_scene(scene: SchemaScene) -> Scene {
+fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
     let mut objects: Vec<Box<Hittable>> = Vec::new();
 
     for object in scene.objects {
@@ -93,7 +105,19 @@ fn schema_scene_to_scene(scene: SchemaScene) -> Scene {
         }
     }
 
-    return Scene::from_objects(objects);
+    match scene.camera {
+        Some(c) => {
+            let camera = Camera::new(
+                Vector::new(c.look_from.x, c.look_from.y, c.look_from.z),
+                Vector::new(c.look_at.x, c.look_at.y, c.look_at.z),
+                Vector::new(c.vup.x, c.vup.y, c.vup.z),
+                c.vfov,
+                aspect_r,
+            );
+            Scene::from_objects_and_cam(objects, camera)
+        }
+        None => Scene::from_objects(objects, aspect_r),
+    }
 }
 
 impl Hittable for Scene {
@@ -149,6 +173,15 @@ struct SchemaObject {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+struct SchemaCamera {
+    look_from: SchemaVector,
+    look_at: SchemaVector,
+    vup: SchemaVector,
+    vfov: f32,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 struct SchemaScene {
     objects: Vec<SchemaObject>,
+    camera: Option<SchemaCamera>,
 }
