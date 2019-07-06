@@ -25,10 +25,10 @@ impl Material for Lambertian {
     ) -> (bool, Vector, Ray) {
         let target = hit_record.p + hit_record.normal + random_in_unit_sphere();
 
-        return (
+        (
             true,
             self.albedo,
             Ray::new(hit_record.p, target - hit_record.p),
-        );
+        )
     }
 }

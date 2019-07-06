@@ -55,7 +55,7 @@ fn main() -> Result<(), String> {
 
     let scene_file = env::args()
         .nth(1)
-        .unwrap_or(String::from("./scenes/spheres.json"));
+        .unwrap_or_else(|| String::from("./scenes/spheres.json"));
 
     let path = Path::new(&scene_file);
     let scene = Scene::from_json(path, IMG_WIDTH as f32 / IMG_HEIGHT as f32)?;

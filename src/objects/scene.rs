@@ -108,8 +108,9 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
                 Vector::new(c.look_from.x, c.look_from.y, c.look_from.z);
             let look_at = Vector::new(c.look_at.x, c.look_at.y, c.look_at.z);
 
-            let focus_dist =
-                c.focus_dist.unwrap_or((look_from - look_at).length());
+            let focus_dist = c
+                .focus_dist
+                .unwrap_or_else(|| (look_from - look_at).length());
 
             let aperture = c.aperture.unwrap_or(0.0001);
 

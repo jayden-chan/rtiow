@@ -28,10 +28,10 @@ impl Material for Metal {
             reflected + self.fuzz * random_in_unit_sphere(),
         );
 
-        return (
+        (
             Vector::dot(scattered.dir(), hit_record.normal) > 0.0,
             self.albedo,
             scattered,
-        );
+        )
     }
 }

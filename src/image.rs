@@ -17,7 +17,7 @@ pub fn gen_ppm(image: Vec<Vec<Pixel>>) -> Result<(), String> {
     let display = path.display();
     let height = image.len();
 
-    if height <= 0 {
+    if height == 0 {
         return Err(String::from("Height must be greater than 0"));
     }
 
