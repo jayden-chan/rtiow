@@ -28,7 +28,11 @@ use vector3::Vector;
 const IMG_WIDTH: usize = 480;
 const IMG_HEIGHT: usize = 270;
 const SAMPLES: usize = 50;
+
 const MAX_RECURSIVE_DEPTH: usize = 50;
+const T_MIN: f32 = 0.0001;
+
+const PROG_BAR_WIDTH: usize = 80;
 
 fn main() -> Result<(), String> {
     let start_time = time::Instant::now();
@@ -86,7 +90,7 @@ fn main() -> Result<(), String> {
         });
 
         completed_rows += 1;
-        progress_bar(completed_rows, IMG_HEIGHT, 80, "Rendering");
+        progress_bar(completed_rows, IMG_HEIGHT, PROG_BAR_WIDTH, "Rendering");
     });
 
     println!("\nCompleted rendering in {:#?}", start_time.elapsed());
@@ -94,7 +98,7 @@ fn main() -> Result<(), String> {
 }
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
-    let (hit, result) = scene.hit(r, 0.0001, f32::MAX);
+    let (hit, result) = scene.hit(r, T_MIN, f32::MAX);
 
     if hit {
         let (hit_record, material) = result.unwrap();
