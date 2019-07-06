@@ -18,6 +18,9 @@ case $1 in
     convert)
         convert out/image.ppm img/$2.png
         ;;
+    build-skylake)
+        RUSTFLAGS="-Ctarget-cpu=skylake" cargo build --release
+        ;;
     *)
         echo "unknown command"
 esac
