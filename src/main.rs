@@ -30,7 +30,7 @@ const IMG_HEIGHT: usize = 270;
 const SAMPLES: usize = 50;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
-const T_MIN: f32 = 0.0001;
+const T_MIN: f32 = 0.005;
 
 const PROG_BAR_WIDTH: usize = 80;
 
