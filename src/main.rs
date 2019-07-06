@@ -91,7 +91,7 @@ fn main() -> Result<(), String> {
 }
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
-    let (hit, result) = scene.hit(r, 0.00001, f32::MAX);
+    let (hit, result) = scene.hit(r, 0.0001, f32::MAX);
 
     if hit {
         let (hit_record, material) = result.unwrap();
