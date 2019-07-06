@@ -16,6 +16,7 @@ use rayon::prelude::*;
 use std::env;
 use std::f32;
 use std::path::Path;
+use std::time;
 
 use camera::Camera;
 use image::{gen_ppm, Pixel};
@@ -30,6 +31,8 @@ const SAMPLES: usize = 50;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
 fn main() -> Result<(), String> {
+    let start_time = time::Instant::now();
+
     let mut image = Vec::with_capacity(IMG_HEIGHT);
 
     for y in 0..IMG_HEIGHT {
@@ -86,7 +89,7 @@ fn main() -> Result<(), String> {
         progress_bar(completed_rows, IMG_HEIGHT, 80, "Rendering");
     });
 
-    println!();
+    println!("\nCompleted rendering in {:#?}", start_time.elapsed());
     gen_ppm(image)
 }
 
