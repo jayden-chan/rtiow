@@ -53,7 +53,7 @@ reflection properties of Lambertian and Metal materials.
 - [x] Parallel rendering
 - [x] Loading scenes from JSON
 - [x] Positionable Camera & custom FOV
-- [x] Aperture & focal length customization
+- [x] Camera aperture & focal length
 
 ### Not Implemented
 - [ ] Planes & Triangles
@@ -61,8 +61,8 @@ reflection properties of Lambertian and Metal materials.
 - [ ] ADC
 - [ ] Spectral rays
 - [ ] Textures
-- [ ] Lighting
-- [ ] Shadow rays
+- [ ] Lights
 - [ ] Volumes
 - [ ] Phong Reflection (?)
 - [ ] Photon Mapping (?)
+- [ ] MLT (?)
