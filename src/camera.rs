@@ -58,12 +58,6 @@ impl Camera {
             0.5,
             1.0,
         )
-        // Self {
-        //     lower_left_corner: Vector::new(-aspect_r, -1.0, -1.0),
-        //     horizontal: Vector::new(2.0 * aspect_r, 0.0, 0.0),
-        //     vertical: Vector::new(0.0, 2.0, 0.0),
-        //     origin: Vector::new(0.0, 0.0, 0.0),
-        // }
     }
 }
 
@@ -71,6 +65,7 @@ impl Camera {
     pub fn get_ray(&self, u: f32, v: f32) -> Ray {
         let rd = self.lens_radius * random_in_unit_disk();
         let offset = self.u * rd.x + self.v * rd.y;
+
         Ray::new(
             self.origin + offset,
             self.lower_left_corner + self.horizontal * u + self.vertical * v
