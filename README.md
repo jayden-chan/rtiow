@@ -15,7 +15,7 @@ Implemented camera aperture width and focal length effects. This is the end of t
 Tracing in One Weekend" book. The render below includes a bunch of randomly generated
 spheres and showcases the depth of field effect given by the camera lens parameters.
 - Scene: [`scenes/spheres_3.json`](/scenes/spheres_3.json)
-- Render time: 00:42:50
+- Render time: 00:45:01
 
 ![](/img/spheres_3.png "Camera Lens Effects")
 
