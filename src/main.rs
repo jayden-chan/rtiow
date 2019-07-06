@@ -25,8 +25,8 @@ use ray::Ray;
 use util::progress_bar;
 use vector3::Vector;
 
-const IMG_WIDTH: usize = 480;
-const IMG_HEIGHT: usize = 270;
+const IMG_WIDTH: usize = 192;
+const IMG_HEIGHT: usize = 108;
 const SAMPLES: usize = 50;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
@@ -58,8 +58,7 @@ fn main() -> Result<(), String> {
         .unwrap_or(String::from("./scenes/spheres.json"));
 
     let path = Path::new(&scene_file);
-    let scene =
-        Scene::from_json(path, IMG_WIDTH as f32 / IMG_HEIGHT as f32).unwrap();
+    let scene = Scene::from_json(path, IMG_WIDTH as f32 / IMG_HEIGHT as f32)?;
 
     println!(
         "Scene loaded from {}, rendering ({} x {} @ {} samples)",
@@ -98,10 +97,7 @@ fn main() -> Result<(), String> {
 }
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
-    let (hit, result) = scene.hit(r, T_MIN, f32::MAX);
-
-    if hit {
-        let (hit_record, material) = result.unwrap();
+    if let Some((hit_record, material)) = scene.hit(r, T_MIN, f32::MAX) {
         let (did_scatter, attenuation, scattered) =
             material.scatter(r, hit_record);
 

@@ -19,7 +19,7 @@ impl Hittable for Sphere {
         r: Ray,
         t_min: f32,
         t_max: f32,
-    ) -> (bool, Option<(HitRecord, &Box<Material>)>) {
+    ) -> Option<(HitRecord, &Box<Material>)> {
         let oc = r.origin() - self.center;
 
         let a = Vector::dot(r.dir(), r.dir());
@@ -37,21 +37,18 @@ impl Hittable for Sphere {
 
             if q_eq < t_max && q_eq > t_min {
                 let point_at_parameter = r.point_at_parameter(q_eq);
-                return (
-                    true,
-                    Some((
-                        HitRecord::new(
-                            q_eq,
-                            point_at_parameter,
-                            (point_at_parameter - self.center) / self.radius,
-                        ),
-                        &self.material,
-                    )),
-                );
+                return Some((
+                    HitRecord::new(
+                        q_eq,
+                        point_at_parameter,
+                        (point_at_parameter - self.center) / self.radius,
+                    ),
+                    &self.material,
+                ));
             }
         }
 
-        (false, None)
+        None
     }
 }
 
