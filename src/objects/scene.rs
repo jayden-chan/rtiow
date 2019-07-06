@@ -54,6 +54,7 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
             "Sphere" => {
                 let center = object.center.unwrap();
                 let radius = object.radius.unwrap();
+
                 match object.material.name.as_str() {
                     "Metal" => {
                         let albedo = object.material.albedo.unwrap();

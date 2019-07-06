@@ -10,7 +10,7 @@ use std::io::stdout;
 use std::io::Write;
 
 // TODO: This function should be replaced with RSQRT SIMD
-#[inline(always)]
+#[inline]
 #[allow(clippy::all)] // Pointer casts in here cause warnings
 pub fn fast_inv_sqrt(x: f32) -> f32 {
     let i: u32 = unsafe { std::mem::transmute(x) };
@@ -43,7 +43,7 @@ pub fn random_in_unit_sphere() -> Vector {
     p
 }
 
-#[inline(always)]
+#[inline]
 pub fn vector_reflect(v: Vector, n: Vector) -> Vector {
     v - 2.0 * Vector::dot(v, n) * n
 }
