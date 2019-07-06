@@ -3,6 +3,8 @@
 //! They are mostly small and inlined
 use crate::Vector;
 
+use rand::prelude::*;
+
 use std::f32;
 use std::io::stdout;
 use std::io::Write;
@@ -15,6 +17,19 @@ pub fn fast_inv_sqrt(x: f32) -> f32 {
     let j = 0x5F3759DF - (i >> 1);
     let y: f32 = unsafe { std::mem::transmute(j) };
     y * (1.5 - 0.5 * x * y * y)
+}
+
+#[inline]
+pub fn random_in_unit_disk() -> Vector {
+    let mut p = 2.0 * Vector::new(random::<f32>(), random::<f32>(), 0.0)
+        - Vector::new(1.0, 1.0, 0.0);
+
+    while Vector::dot(p, p) >= 1.0 {
+        p = 2.0 * Vector::new(random::<f32>(), random::<f32>(), 0.0)
+            - Vector::new(1.0, 1.0, 0.0);
+    }
+
+    p
 }
 
 #[inline]

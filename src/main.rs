@@ -26,7 +26,7 @@ use vector3::Vector;
 
 const IMG_WIDTH: usize = 480;
 const IMG_HEIGHT: usize = 270;
-const SAMPLES: usize = 200;
+const SAMPLES: usize = 50;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
 fn main() -> Result<(), String> {

@@ -103,13 +103,25 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
 
     match scene.camera {
         Some(c) => {
+            let look_from =
+                Vector::new(c.look_from.x, c.look_from.y, c.look_from.z);
+            let look_at = Vector::new(c.look_at.x, c.look_at.y, c.look_at.z);
+
+            let focus_dist =
+                c.focus_dist.unwrap_or((look_from - look_at).length());
+
+            let aperture = c.aperture.unwrap_or(0.0001);
+
             let camera = Camera::new(
-                Vector::new(c.look_from.x, c.look_from.y, c.look_from.z),
-                Vector::new(c.look_at.x, c.look_at.y, c.look_at.z),
+                look_from,
+                look_at,
                 Vector::new(c.vup.x, c.vup.y, c.vup.z),
                 c.vfov,
                 aspect_r,
+                aperture,
+                focus_dist,
             );
+
             Scene::from_objects_and_cam(objects, camera)
         }
         None => Scene::from_objects(objects, aspect_r),
@@ -174,6 +186,8 @@ struct SchemaCamera {
     look_at: SchemaVector,
     vup: SchemaVector,
     vfov: f32,
+    aperture: Option<f32>,
+    focus_dist: Option<f32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

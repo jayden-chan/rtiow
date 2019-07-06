@@ -5,7 +5,10 @@
 //! since this is a learning project.
 
 use crate::util::fast_inv_sqrt;
+
 use rand::prelude::*;
+
+use std::f32;
 use std::ops;
 
 /// A 3 dimentional vector.
@@ -69,6 +72,10 @@ impl Vector {
     /// Returns the reciprocal of the square root of the vector's magnitude
     pub fn inv_mag(self) -> f32 {
         fast_inv_sqrt((self.x * self.x) + (self.y * self.y) + (self.z * self.z))
+    }
+
+    pub fn length(self) -> f32 {
+        f32::sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
     }
 
     /// Compute the dot product of two vectors

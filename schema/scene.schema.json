@@ -49,10 +49,23 @@
         },
         "vfov": {
           "type": "number"
+        },
+        "aperture": {
+          "type": "number"
+        },
+        "focus_dist": {
+          "type": "number"
         }
-      }
+      },
+      "required": [
+        "look_from",
+        "look_at",
+        "vup",
+        "vfov"
+      ]
     }
   },
+  "required": ["objects"],
   "definitions": {
     "material": {
       "type": "object",

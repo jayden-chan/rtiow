@@ -1,0 +1,102 @@
+{
+  "camera": {
+    "look_from": {
+      "x": -1.0,
+      "y": 1.7,
+      "z": -2.5
+    },
+    "look_at": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": -1.2
+    },
+    "vup": {
+      "x": 0.0,
+      "y": 1.0,
+      "z": 0.0
+    },
+    "vfov": 35.0,
+    "aperture": 2.0
+  },
+  "objects": [
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -1.0
+      },
+      "radius": 0.5,
+      "material": {
+        "name": "Dielectric",
+        "ref_idx": 1.52
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -1.0
+      },
+      "radius": -0.45,
+      "material": {
+        "name": "Dielectric",
+        "ref_idx": 1.52
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": -0.9,
+        "y": 0.0,
+        "z": -1.5
+      },
+      "radius": 0.5,
+      "material": {
+        "name": "Metal",
+        "albedo": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.1
+        },
+        "fuzz": 0.3
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.7,
+        "y": 0.0,
+        "z": -1.8
+      },
+      "radius": 0.5,
+      "material": {
+        "name": "Metal",
+        "albedo": {
+          "x": 0.1,
+          "y": 0.4,
+          "z": 0.9
+        },
+        "fuzz": 0.0
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.0,
+        "y": -100.5,
+        "z": -1.0
+      },
+      "radius": 100.0,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.2,
+          "y": 0.2,
+          "z": 0.2
+        }
+      }
+    }
+  ]
+}
