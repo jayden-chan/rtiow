@@ -78,7 +78,7 @@ pub fn progress_bar(
     let blank_chars = width - done_chars as usize;
 
     print!(
-        "    {:10} [{}{}] {:3.1}%\r",
+        "    {:10} [{}{}] {:.2}%\r",
         text,
         "=".repeat(done_chars as usize),
         " ".repeat(blank_chars),

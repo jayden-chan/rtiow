@@ -10,6 +10,15 @@ Rendering settings:
 - 5000 samples per pixel
 - Machine: GCP n1-highcpu-96 (96 vCPUs, 86.4 GB memory)
 
+### Camera Lens Effects - 2019-07-05
+Implemented camera aperture width and focal length effects. This is the end of the "Ray
+Tracing in One Weekend" book. The render below includes a bunch of randomly generated
+spheres and showcases the depth of field effect given by the camera lens parameters.
+- Scene: [`scenes/spheres_3.json`](/scenes/spheres_3.json)
+- Render time: 00:42:50
+
+![](/img/spheres_3.png "Camera Lens Effects")
+
 ### Positionable Camera - 2019-07-03
 An alternate angle of the previous scene using a custom camera position and FOV
 - Scene: [`scenes/spheres_2_alt.json`](/scenes/spheres_2_alt.json)
@@ -44,6 +53,7 @@ reflection properties of Lambertian and Metal materials.
 - [x] Parallel rendering
 - [x] Loading scenes from JSON
 - [x] Positionable Camera & custom FOV
+- [x] Aperture & focal length customization
 
 ### Not Implemented
 - [ ] Planes & Triangles
