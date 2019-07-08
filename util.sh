@@ -3,9 +3,11 @@
 case $1 in
     setup)
         sudo apt update
-        sudo apt install gcc htop
+        sudo apt install gcc htop make
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         source $HOME/.cargo/env
+        sudo curl -sL https://deb.nodesource.com/setup_12.x | bash -
+        sudo apt-get install -y nodejs
         mkdir out
         ;;
     connect)
@@ -17,9 +19,6 @@ case $1 in
         ;;
     convert)
         convert out/image.ppm img/$2.png
-        ;;
-    build-skylake)
-        RUSTFLAGS="-Ctarget-cpu=skylake" cargo build --release
         ;;
     *)
         echo "unknown command"

@@ -21,11 +21,13 @@ use std::time;
 use image::{gen_ppm, Pixel};
 use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
-use util::progress_bar;
 use vector3::Vector;
 
+#[allow(unused)]
+use util::{progress_bar, sixteen_by_nine, two_by_one};
+
 const IMG_WIDTH: usize = 192;
-const IMG_HEIGHT: usize = 108;
+const IMG_HEIGHT: usize = sixteen_by_nine(IMG_WIDTH);
 const SAMPLES: usize = 50;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;

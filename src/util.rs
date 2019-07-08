@@ -9,6 +9,16 @@ use std::f32;
 use std::io::stdout;
 use std::io::Write;
 
+#[allow(unused)]
+pub const fn sixteen_by_nine(width: usize) -> usize {
+    (width * 9) / 16
+}
+
+#[allow(unused)]
+pub const fn two_by_one(width: usize) -> usize {
+    width / 2
+}
+
 // TODO: This function should be replaced with RSQRT SIMD
 #[inline]
 #[allow(clippy::all)] // Pointer casts in here cause warnings
