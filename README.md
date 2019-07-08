@@ -14,14 +14,14 @@ Rendering settings:
 Implemented camera aperture width and focal length effects. This is the end of the "Ray
 Tracing in One Weekend" book. The render below includes a bunch of randomly generated
 spheres and showcases the depth of field effect given by the camera lens parameters.
-- Scene: [`scenes/3.json`](/scenes/spheres_3.json)
+- Scene: [`scenes/3.json`](/scenes/3.json)
 - Render time: 00:45:01
 
 ![](/img/spheres_3.png "Camera Lens Effects")
 
 ### Positionable Camera - 2019-07-03
 An alternate angle of the previous scene using a custom camera position and FOV
-- Scene: [`scenes/2_alt.json`](/scenes/spheres_2_alt.json)
+- Scene: [`scenes/2_alt.json`](/scenes/2_alt.json)
 - Render time: 00:01:48
 
 ![](/img/spheres_2_alt.png "Positionable Camera")
@@ -29,7 +29,7 @@ An alternate angle of the previous scene using a custom camera position and FOV
 ### Dielectric Materials - 2019-07-01
 A simple scene with two metal spheres and a hollow glass sphere, showcasing the
 reflective / refractive properties of dielectric materials
-- Scene: [`scenes/2.json`](/scenes/spheres_2.json)
+- Scene: [`scenes/2.json`](/scenes/2.json)
 - Render time: 00:01:19
 
 ![](/img/spheres_2.png "Hollow Dielectric Sphere")
@@ -37,7 +37,7 @@ reflective / refractive properties of dielectric materials
 ### Lambertian & Metal Materials - 2019-07-01
 A simple scene with some metal and matte spheres, showcasing the scattering and
 reflection properties of Lambertian and Metal materials.
-- Scene: [`scenes/1.json`](/scenes/spheres.json)
+- Scene: [`scenes/1.json`](/scenes/1.json)
 - Render time: 00:01:22
 
 ![](/img/spheres.png "Lambertian & Metal spheres")
