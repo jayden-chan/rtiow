@@ -17,6 +17,15 @@
               "center": {
                 "$ref": "#/definitions/vector"
               },
+              "center2": {
+                "$ref": "#/definitions/vector"
+              },
+              "t0": {
+                "type": "number"
+              },
+              "t1": {
+                "type": "number"
+              },
               "radius": {
                 "type": "number"
               },

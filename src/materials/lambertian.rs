@@ -18,17 +18,13 @@ impl Lambertian {
 }
 
 impl Material for Lambertian {
-    fn scatter(
-        &self,
-        _r_in: Ray,
-        hit_record: HitRecord,
-    ) -> (bool, Vector, Ray) {
+    fn scatter(&self, r_in: Ray, hit_record: HitRecord) -> (bool, Vector, Ray) {
         let target = hit_record.p + hit_record.normal + random_in_unit_sphere();
 
         (
             true,
             self.albedo,
-            Ray::new(hit_record.p, target - hit_record.p),
+            Ray::new(hit_record.p, target - hit_record.p, r_in.time()),
         )
     }
 }

@@ -26,6 +26,7 @@ impl Material for Metal {
         let scattered = Ray::new(
             hit_record.p,
             reflected + self.fuzz * random_in_unit_sphere(),
+            r_in.time(),
         );
 
         (

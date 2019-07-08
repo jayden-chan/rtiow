@@ -3,6 +3,8 @@ use crate::{Ray, Vector};
 
 use std::f32;
 
+use rand::prelude::*;
+
 #[derive(Debug)]
 pub struct Camera {
     lower_left_corner: Vector,
@@ -13,6 +15,8 @@ pub struct Camera {
     u: Vector,
     v: Vector,
     w: Vector,
+    t0: f32,
+    t1: f32,
 }
 
 impl Camera {
@@ -24,6 +28,8 @@ impl Camera {
         aspect_r: f32,
         aperture: f32,
         focus_dist: f32,
+        t0: f32,
+        t1: f32,
     ) -> Self {
         let theta = vfov * f32::consts::PI / 180.0;
         let half_height = f32::tan(theta / 2.0);
@@ -45,6 +51,8 @@ impl Camera {
             vertical: 2.0 * half_height * focus_dist * v,
             origin: look_from,
             lens_radius: aperture / 2.0,
+            t0,
+            t1,
         }
     }
 
@@ -57,6 +65,8 @@ impl Camera {
             aspect_r,
             0.0,
             1.0,
+            0.0,
+            0.0,
         )
     }
 }
@@ -65,12 +75,14 @@ impl Camera {
     pub fn get_ray(&self, u: f32, v: f32) -> Ray {
         let rd = self.lens_radius * random_in_unit_disk();
         let offset = self.u * rd.x + self.v * rd.y;
+        let time = self.t0 + random::<f32>() * (self.t1 - self.t0);
 
         Ray::new(
             self.origin + offset,
             self.lower_left_corner + self.horizontal * u + self.vertical * v
                 - self.origin
                 - offset,
+            time,
         )
     }
 }

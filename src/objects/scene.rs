@@ -1,8 +1,8 @@
+use crate::camera::Camera;
 use crate::materials::{Dielectric, Lambertian, Material, Metal};
-use crate::Camera;
 use crate::{Ray, Vector};
 
-use super::{HitRecord, Hittable, Sphere};
+use super::{HitRecord, Hittable, MovingSphere, Sphere};
 
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -50,54 +50,57 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
     let mut objects: Vec<Box<Hittable>> = Vec::new();
 
     for object in scene.objects {
-        match object.name.as_str() {
-            "Sphere" => {
-                let center = object.center.unwrap();
-                let radius = object.radius.unwrap();
-
-                match object.material.name.as_str() {
-                    "Metal" => {
-                        let albedo = object.material.albedo.unwrap();
-                        let fuzz = object.material.fuzz.unwrap();
-
-                        objects.push(Box::new(Sphere::new(
-                            Vector::new(center.x, center.y, center.z),
-                            radius,
-                            Box::new(Metal::new(
-                                albedo.x, albedo.y, albedo.z, fuzz,
-                            )),
-                        )));
-                    }
-                    "Lambertian" => {
-                        let albedo = object.material.albedo.unwrap();
-
-                        objects.push(Box::new(Sphere::new(
-                            Vector::new(center.x, center.y, center.z),
-                            radius,
-                            Box::new(Lambertian::new(
-                                albedo.x, albedo.y, albedo.z,
-                            )),
-                        )));
-                    }
-                    "Dielectric" => {
-                        let ref_idx = object.material.ref_idx.unwrap();
-
-                        objects.push(Box::new(Sphere::new(
-                            Vector::new(center.x, center.y, center.z),
-                            radius,
-                            Box::new(Dielectric::new(ref_idx)),
-                        )));
-                    }
-                    _ => {
-                        panic!(
-                            "Unrecognized material type encountered: {}",
-                            object.material.name
-                        );
-                    }
-                }
+        let material: Box<Material> = match object.material.name.as_str() {
+            "Metal" => {
+                let albedo = object.material.albedo.unwrap();
+                let fuzz = object.material.fuzz.unwrap();
+                Box::new(Metal::new(albedo.x, albedo.y, albedo.z, fuzz))
+            }
+            "Lambertian" => {
+                let albedo = object.material.albedo.unwrap();
+                Box::new(Lambertian::new(albedo.x, albedo.y, albedo.z))
+            }
+            "Dielectric" => {
+                let ref_idx = object.material.ref_idx.unwrap();
+                Box::new(Dielectric::new(ref_idx))
             }
             _ => {
-                panic!("Unrecognized object type encountered: {}", object.name);
+                unreachable!(
+                    "Unrecognized material type encountered: {}",
+                    object.material.name
+                );
+            }
+        };
+
+        match object.name.as_str() {
+            "Sphere" => {
+                let center = object.center;
+                let radius = object.radius;
+
+                objects.push(Box::new(Sphere::new(
+                    Vector::new(center.x, center.y, center.z),
+                    radius,
+                    material,
+                )));
+            }
+            "MovingSphere" => {
+                let center = object.center;
+                let center2 = object.center2.unwrap();
+                let radius = object.radius;
+                let t0 = object.t0.unwrap();
+                let t1 = object.t1.unwrap();
+
+                objects.push(Box::new(MovingSphere::new(
+                    Vector::new(center.x, center.y, center.z),
+                    Vector::new(center2.x, center2.y, center2.z),
+                    t0,
+                    t1,
+                    radius,
+                    material,
+                )));
+            }
+            _ => {
+                unreachable!("Unknown object type found");
             }
         }
     }
@@ -114,6 +117,9 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
 
             let aperture = c.aperture.unwrap_or(0.0001);
 
+            let t0 = c.t0.unwrap_or(0.0);
+            let t1 = c.t1.unwrap_or(0.0);
+
             let camera = Camera::new(
                 look_from,
                 look_at,
@@ -122,6 +128,8 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
                 aspect_r,
                 aperture,
                 focus_dist,
+                t0,
+                t1,
             );
 
             Scene::from_objects_and_cam(objects, camera)
@@ -173,8 +181,11 @@ struct SchemaMaterial {
 #[derive(Debug, Serialize, Deserialize)]
 struct SchemaObject {
     name: String,
-    center: Option<SchemaVector>,
-    radius: Option<f32>,
+    center: SchemaVector,
+    center2: Option<SchemaVector>,
+    radius: f32,
+    t0: Option<f32>,
+    t1: Option<f32>,
     material: SchemaMaterial,
 }
 
@@ -186,6 +197,8 @@ struct SchemaCamera {
     vfov: f32,
     aperture: Option<f32>,
     focus_dist: Option<f32>,
+    t0: Option<f32>,
+    t1: Option<f32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

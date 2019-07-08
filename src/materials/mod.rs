@@ -2,8 +2,8 @@ use crate::{HitRecord, Ray, Vector};
 
 use std::fmt::Debug;
 
-mod labertian;
-pub use labertian::*;
+mod lambertian;
+pub use lambertian::*;
 
 mod metal;
 pub use metal::*;

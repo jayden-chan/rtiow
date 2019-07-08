@@ -65,10 +65,14 @@ impl Material for Dielectric {
             (
                 true,
                 Vector::ones(),
-                Ray::new(hit_record.p, refracted.unwrap()),
+                Ray::new(hit_record.p, refracted.unwrap(), r_in.time()),
             )
         } else {
-            (true, Vector::ones(), Ray::new(hit_record.p, reflected))
+            (
+                true,
+                Vector::ones(),
+                Ray::new(hit_record.p, reflected, r_in.time()),
+            )
         }
     }
 }

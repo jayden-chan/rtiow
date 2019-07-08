@@ -18,7 +18,6 @@ use std::f32;
 use std::path::Path;
 use std::time;
 
-use camera::Camera;
 use image::{gen_ppm, Pixel};
 use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
@@ -55,7 +54,7 @@ fn main() -> Result<(), String> {
 
     let scene_file = env::args()
         .nth(1)
-        .unwrap_or_else(|| String::from("./scenes/spheres.json"));
+        .unwrap_or_else(|| String::from("./scenes/1.json"));
 
     let path = Path::new(&scene_file);
     let scene = Scene::from_json(path, IMG_WIDTH as f32 / IMG_HEIGHT as f32)?;
@@ -102,9 +101,9 @@ fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
             material.scatter(r, hit_record);
 
         if depth < MAX_RECURSIVE_DEPTH && did_scatter {
-            return attenuation * color(scattered, scene, depth + 1);
+            attenuation * color(scattered, scene, depth + 1)
         } else {
-            return Vector::zeros();
+            Vector::zeros()
         }
     } else {
         let unit_direction = r.dir().normalize();

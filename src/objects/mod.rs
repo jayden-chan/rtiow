@@ -3,9 +3,11 @@ use crate::{Ray, Vector};
 
 use std::fmt::Debug;
 
+mod moving_sphere;
 mod scene;
 mod sphere;
 
+pub use moving_sphere::*;
 pub use scene::*;
 pub use sphere::*;
 
