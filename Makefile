@@ -1,5 +1,5 @@
 all: build run-debug
-run: run-debug open
+run: open
 
 build:
 	cargo build
