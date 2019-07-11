@@ -52,10 +52,9 @@ impl Material for Dielectric {
                 )
             };
 
-        let (did_refract, refracted) =
-            vector_refract(r_in.dir(), outward_normal, ni_over_nt);
+        let refracted = vector_refract(r_in.dir(), outward_normal, ni_over_nt);
 
-        let reflect_probability = if did_refract {
+        let reflect_probability = if refracted.is_some() {
             schlick(cosine, self.ref_idx)
         } else {
             1.0

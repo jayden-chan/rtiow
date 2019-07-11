@@ -59,22 +59,15 @@ pub fn vector_reflect(v: Vector, n: Vector) -> Vector {
 }
 
 #[inline]
-pub fn vector_refract(
-    v: Vector,
-    n: Vector,
-    ni_over_nt: f32,
-) -> (bool, Option<Vector>) {
+pub fn vector_refract(v: Vector, n: Vector, ni_over_nt: f32) -> Option<Vector> {
     let v = v.normalize();
     let dt = Vector::dot(v, n);
     let discriminant = 1.0 - ni_over_nt * ni_over_nt * (1.0 - dt * dt);
 
     if discriminant > 0.0 {
-        (
-            true,
-            Some(ni_over_nt * (v - n * dt) - n * f32::sqrt(discriminant)),
-        )
+        Some(ni_over_nt * (v - n * dt) - n * f32::sqrt(discriminant))
     } else {
-        (false, None)
+        None
     }
 }
 

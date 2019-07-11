@@ -11,7 +11,7 @@ run-debug:
 	./target/debug/raytracer
 
 open:
-	open out/image.ppm
+	feh --auto-zoom --force-aliasing out/image.ppm
 
 clean:
 	rm -rf target
