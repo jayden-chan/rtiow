@@ -12,7 +12,7 @@
             "properties": {
               "name": {
                 "type": "string",
-                "const": "Sphere"
+                "const": "MovingSphere"
               },
               "center": {
                 "$ref": "#/definitions/vector"
@@ -36,9 +36,31 @@
             "required": [
               "name",
               "center",
+              "center2",
+              "t0",
+              "t1",
               "radius",
               "material"
             ],
+            "additionalProperties": false
+          },
+          {
+            "properties": {
+              "name": {
+                "type": "string",
+                "const": "Sphere"
+              },
+              "center": {
+                "$ref": "#/definitions/vector"
+              },
+              "radius": {
+                "type": "number"
+              },
+              "material": {
+                "$ref": "#/definitions/material"
+              }
+            },
+            "required": ["name", "center", "radius", "material"],
             "additionalProperties": false
           }
         ]
@@ -66,12 +88,7 @@
           "type": "number"
         }
       },
-      "required": [
-        "look_from",
-        "look_at",
-        "vup",
-        "vfov"
-      ]
+      "required": ["look_from", "look_at", "vup", "vfov"]
     }
   },
   "required": ["objects"],
@@ -92,11 +109,7 @@
               "type": "number"
             }
           },
-          "required": [
-            "name",
-            "albedo",
-            "fuzz"
-          ],
+          "required": ["name", "albedo", "fuzz"],
           "additionalProperties": false
         },
         {
@@ -140,8 +153,8 @@
           "type": "number"
         }
       },
-       "required": ["x", "y", "z"],
-       "additionalProperties": false
+      "required": ["x", "y", "z"],
+      "additionalProperties": false
     }
   }
 }
