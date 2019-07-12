@@ -1,4 +1,4 @@
-use crate::camera::Camera;
+use crate::camera::{Camera, CameraConstructor};
 use crate::materials::{Dielectric, Lambertian, Material, Metal};
 use crate::{Ray, Vector};
 
@@ -120,17 +120,19 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
             let t0 = c.t0.unwrap_or(0.0);
             let t1 = c.t1.unwrap_or(0.0);
 
-            let camera = Camera::new(
+            let camera_settings = CameraConstructor {
                 look_from,
                 look_at,
-                Vector::new(c.vup.x, c.vup.y, c.vup.z),
-                c.vfov,
+                vup: Vector::new(c.vup.x, c.vup.y, c.vup.z),
+                vfov: c.vfov,
                 aspect_r,
                 aperture,
                 focus_dist,
                 t0,
                 t1,
-            );
+            };
+
+            let camera = Camera::new(camera_settings);
 
             Scene::from_objects_and_cam(objects, camera)
         }

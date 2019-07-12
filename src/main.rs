@@ -23,7 +23,7 @@ use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
 use vector3::Vector;
 
-#[allow(unused)]
+#[allow(unused_imports)]
 use util::{progress_bar, sixteen_by_nine, two_by_one};
 
 const IMG_WIDTH: usize = 480;

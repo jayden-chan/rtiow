@@ -19,55 +19,59 @@ pub struct Camera {
     t1: f32,
 }
 
-impl Camera {
-    pub fn new(
-        look_from: Vector,
-        look_at: Vector,
-        vup: Vector,
-        vfov: f32,
-        aspect_r: f32,
-        aperture: f32,
-        focus_dist: f32,
-        t0: f32,
-        t1: f32,
-    ) -> Self {
-        let theta = vfov * f32::consts::PI / 180.0;
-        let half_height = f32::tan(theta / 2.0);
-        let half_width = aspect_r * half_height;
+pub struct CameraConstructor {
+    pub look_from: Vector,
+    pub look_at: Vector,
+    pub vup: Vector,
+    pub vfov: f32,
+    pub aspect_r: f32,
+    pub aperture: f32,
+    pub focus_dist: f32,
+    pub t0: f32,
+    pub t1: f32,
+}
 
-        let w = (look_from - look_at).normalize();
-        let u = Vector::cross(vup, w).normalize();
+impl Camera {
+    pub fn new(vals: CameraConstructor) -> Self {
+        let theta = vals.vfov * f32::consts::PI / 180.0;
+        let half_height = f32::tan(theta / 2.0);
+        let half_width = vals.aspect_r * half_height;
+
+        let w = (vals.look_from - vals.look_at).normalize();
+        let u = Vector::cross(vals.vup, w).normalize();
         let v = Vector::cross(w, u);
 
         Self {
             u,
             v,
             w,
-            lower_left_corner: look_from
-                - half_width * focus_dist * u
-                - half_height * focus_dist * v
-                - focus_dist * w,
-            horizontal: 2.0 * half_width * focus_dist * u,
-            vertical: 2.0 * half_height * focus_dist * v,
-            origin: look_from,
-            lens_radius: aperture / 2.0,
-            t0,
-            t1,
+            lower_left_corner: vals.look_from
+                - half_width * vals.focus_dist * u
+                - half_height * vals.focus_dist * v
+                - vals.focus_dist * w,
+            horizontal: 2.0 * half_width * vals.focus_dist * u,
+            vertical: 2.0 * half_height * vals.focus_dist * v,
+            origin: vals.look_from,
+            lens_radius: vals.aperture / 2.0,
+            t0: vals.t0,
+            t1: vals.t1,
         }
     }
 
     pub fn default(aspect_r: f32) -> Self {
-        Self::new(
-            Vector::zeros(),
-            Vector::new(0.0, 0.0, -1.0),
-            Vector::new(0.0, 1.0, 0.0),
-            90.0,
+        let defaults = CameraConstructor {
+            look_from: Vector::zeros(),
+            look_at: Vector::new(0.0, 0.0, -1.0),
+            vup: Vector::new(0.0, 1.0, 0.0),
+            vfov: 90.0,
             aspect_r,
-            0.0,
-            1.0,
-            0.0,
-            0.0,
-        )
+            aperture: 0.0,
+            focus_dist: 1.0,
+            t0: 0.0,
+            t1: 0.0,
+        };
+
+        Self::new(defaults)
     }
 }
 
