@@ -10,6 +10,14 @@ Rendering settings:
 - 5000 samples per pixel
 - Machine: GCP n1-highcpu-96 (96 vCPUs, 86.4 GB memory)
 
+### Motion Blur - 2019-07-09
+Implemented camera motion blur. This setting isn't that interesting for still images but
+will be cool if the program is ever used to create animations.
+- Scene: [`scenes/4.json`](/scenes/4.json)
+- Render time: 00:00:42
+
+![](/img/motion_blur.png "Motion Blur")
+
 ### Camera Lens Effects - 2019-07-05
 Implemented camera aperture width and focal length effects. This is the end of the "Ray
 Tracing in One Weekend" book. The render below includes a bunch of randomly generated
