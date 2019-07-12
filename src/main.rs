@@ -94,7 +94,12 @@ fn main() -> Result<(), String> {
     });
 
     println!("\nCompleted rendering in {:#?}", start_time.elapsed());
-    gen_ppm(image)
+    gen_ppm(
+        image,
+        env::args()
+            .nth(2)
+            .unwrap_or_else(|| String::from("out/image.ppm")),
+    )
 }
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
