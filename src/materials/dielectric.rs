@@ -31,7 +31,11 @@ fn schlick(cosine: f32, ref_idx: f32) -> f32 {
 }
 
 impl Material for Dielectric {
-    fn scatter(&self, r_in: Ray, hit_record: HitRecord) -> (bool, Vector, Ray) {
+    fn scatter(
+        &self,
+        r_in: Ray,
+        hit_record: HitRecord,
+    ) -> Option<(Vector, Ray)> {
         let reflected = vector_reflect(r_in.dir(), hit_record.normal);
 
         let (outward_normal, ni_over_nt, cosine) =
@@ -61,17 +65,15 @@ impl Material for Dielectric {
         };
 
         if random::<f32>() >= reflect_probability {
-            (
-                true,
+            Some((
                 Vector::ones(),
                 Ray::new(hit_record.p, refracted.unwrap(), r_in.time()),
-            )
+            ))
         } else {
-            (
-                true,
+            Some((
                 Vector::ones(),
                 Ray::new(hit_record.p, reflected, r_in.time()),
-            )
+            ))
         }
     }
 }

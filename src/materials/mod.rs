@@ -13,5 +13,9 @@ pub use dielectric::*;
 
 pub trait Material: Debug + Send + Sync {
     /// Returns: Whether a ray was scattered, the attenuation, and scattered ray
-    fn scatter(&self, r_in: Ray, hit_record: HitRecord) -> (bool, Vector, Ray);
+    fn scatter(
+        &self,
+        r_in: Ray,
+        hit_record: HitRecord,
+    ) -> Option<(Vector, Ray)>;
 }

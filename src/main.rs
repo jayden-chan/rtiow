@@ -103,14 +103,16 @@ fn main() -> Result<(), String> {
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
     if let Some((hit_record, material)) = scene.hit(r, T_MIN, f32::MAX) {
-        let (did_scatter, attenuation, scattered) =
-            material.scatter(r, hit_record);
-
-        if depth < MAX_RECURSIVE_DEPTH && did_scatter {
-            attenuation * color(scattered, scene, depth + 1)
-        } else {
-            Vector::zeros()
+        if depth < MAX_RECURSIVE_DEPTH {
+            match material.scatter(r, hit_record) {
+                Some((attenuation, scattered)) => {
+                    return attenuation * color(scattered, scene, depth + 1);
+                }
+                None => {}
+            }
         }
+
+        Vector::zeros()
     } else {
         let unit_direction = r.dir().normalize();
         let t = 0.5 * (unit_direction.y + 1.0);

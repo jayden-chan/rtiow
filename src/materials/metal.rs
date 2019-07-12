@@ -20,7 +20,11 @@ impl Metal {
 }
 
 impl Material for Metal {
-    fn scatter(&self, r_in: Ray, hit_record: HitRecord) -> (bool, Vector, Ray) {
+    fn scatter(
+        &self,
+        r_in: Ray,
+        hit_record: HitRecord,
+    ) -> Option<(Vector, Ray)> {
         let reflected =
             vector_reflect(r_in.dir().normalize(), hit_record.normal);
         let scattered = Ray::new(
@@ -29,10 +33,10 @@ impl Material for Metal {
             r_in.time(),
         );
 
-        (
-            Vector::dot(scattered.dir(), hit_record.normal) > 0.0,
-            self.albedo,
-            scattered,
-        )
+        if Vector::dot(scattered.dir(), hit_record.normal) > 0.0 {
+            Some((self.albedo, scattered))
+        } else {
+            None
+        }
     }
 }
