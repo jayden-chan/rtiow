@@ -20,6 +20,17 @@ case $1 in
     convert)
         convert out/image.ppm img/$2.png
         ;;
+    gen)
+        rm -f scenes/animation/*
+        rm -f out/*
+        node scripts/gen_animation_frames.js
+
+        for f in $(ls scenes/animation/); do
+            ./target/release/raytracer "./scenes/animation/$f" "out/$f.ppm"
+        done
+
+        ffmpeg -pattern_type glob -framerate 15 -i "out/*.ppm" output.avi
+        ;;
     *)
         echo "unknown command"
 esac
