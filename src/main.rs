@@ -58,6 +58,10 @@ fn main() -> Result<(), String> {
         .nth(1)
         .unwrap_or_else(|| String::from("./scenes/1.json"));
 
+    let output_file = env::args()
+        .nth(2)
+        .unwrap_or_else(|| String::from("./out/image.ppm"));
+
     let path = Path::new(&scene_file);
     let scene = Scene::from_json(path, IMG_WIDTH as f32 / IMG_HEIGHT as f32)?;
 
@@ -94,12 +98,7 @@ fn main() -> Result<(), String> {
     });
 
     println!("\nCompleted rendering in {:#?}", start_time.elapsed());
-    gen_ppm(
-        image,
-        env::args()
-            .nth(2)
-            .unwrap_or_else(|| String::from("out/image.ppm")),
-    )
+    gen_ppm(image, output_file)
 }
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
