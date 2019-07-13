@@ -10,9 +10,15 @@ Rendering settings:
 - 5000 samples per pixel
 - Machine: GCP n1-highcpu-96 (96 vCPUs, 86.4 GB memory)
 
-### Motion Blur - 2019-07-09
-Implemented camera motion blur. This setting isn't that interesting for still images but
-will be cool if the program is ever used to create animations.
+### Motion Blur - 2019-07-11
+Implemented camera motion blur. This feature is more interesting for animations as
+opposed to still images.
+- Scene: [`scenes/5.json`](/scenes/5.json)
+- Physics script: [`scripts/animation_1.js`](/scripts/animation_1.js)
+- Render time: 00:08:03
+
+![](/img/animation_1.gif "Bouncing Ball Animation")
+
 - Scene: [`scenes/4.json`](/scenes/4.json)
 - Render time: 00:00:42
 

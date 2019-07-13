@@ -31,13 +31,13 @@ case $1 in
     gen)
         rm -f scenes/animation/*
         rm -f out/*
-        node scripts/gen_animation_frames.js
+        node scripts/animation_1.js
 
         for f in $(ls scenes/animation/); do
             ./target/release/raytracer "./scenes/animation/$f" "out/$f.ppm"
         done
 
-        ffmpeg -pattern_type glob -framerate 25 -i "out/*.ppm" "out/output.avi"
+        ffmpeg -pattern_type glob -framerate 25 -i "out/*.ppm" -c:v libx264 -crf 25 -b:v 40M -pix_fmt yuv420p "out/animation_1.mp4"
         ;;
     *)
         echo "unknown command"
