@@ -8,14 +8,19 @@ case $1 in
         source $HOME/.cargo/env
         sudo curl -sL https://deb.nodesource.com/setup_12.x | bash -
         sudo apt-get install -y nodejs
+        sudo apt-get install ffmpeg
         mkdir out
         ;;
     connect)
         ssh -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP
         ;;
-    download)
+    download-img)
         scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/raytracer/out/image.ppm ./out/image.ppm
         feh --auto-zoom --force-aliasing out/image.ppm
+        ;;
+    download-ani)
+        scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/raytracer/out/output.avi ./out/output.avi
+        xdg-open out/output.avi
         ;;
     convert)
         convert out/image.ppm img/$2.png
@@ -30,7 +35,6 @@ case $1 in
         done
 
         ffmpeg -pattern_type glob -framerate 25 -i "out/*.ppm" "out/output.avi"
-        vlc out/output.avi
         ;;
     *)
         echo "unknown command"
