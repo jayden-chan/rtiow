@@ -12,8 +12,8 @@ const VH_COLLISION_MULTIPLIER = 0.8;
 const GRAVITY = -0.01881;
 
 const ANIMATION_SECONDS = 3;
-const RESOLUTION = 500;
-const FPS = 25;
+const FPS = 24;
+const RESOLUTION = FPS * 50;
 
 let t = 0;
 let frames_rendered = 0;
