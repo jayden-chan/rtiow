@@ -50,10 +50,10 @@
       "name": "Sphere",
       "center": {
         "x": 0.0,
-        "y": 0.0,
-        "z": -2.0
+        "y": 0.4,
+        "z": -2.3
       },
-      "radius": 0.5,
+      "radius": 0.9,
       "material": {
         "name": "Metal",
         "albedo": {
@@ -68,10 +68,10 @@
       "name": "Sphere",
       "center": {
         "x": -1.0,
-        "y": 0.0,
-        "z": -2.0
+        "y": 0.4,
+        "z": -2.3
       },
-      "radius": 0.5,
+      "radius": 0.9,
       "material": {
         "name": "Metal",
         "albedo": {
@@ -86,10 +86,10 @@
       "name": "Sphere",
       "center": {
         "x": 1.0,
-        "y": 0.0,
-        "z": -2.0
+        "y": 0.4,
+        "z": -2.3
       },
-      "radius": 0.5,
+      "radius": 0.9,
       "material": {
         "name": "Metal",
         "albedo": {

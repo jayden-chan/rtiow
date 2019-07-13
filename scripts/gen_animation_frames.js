@@ -23,6 +23,7 @@ while (t < FPS * ANIMATION_SECONDS) {
   vy += GRAVITY;
 
   if (scene.objects[0].center2.y <= 0) {
+    scene.objects[0].center2.y = 0;
     vy *= -0.68;
     vh *= 0.75;
   }
