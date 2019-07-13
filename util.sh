@@ -29,7 +29,8 @@ case $1 in
             ./target/release/raytracer "./scenes/animation/$f" "out/$f.ppm"
         done
 
-        ffmpeg -pattern_type glob -framerate 15 -i "out/*.ppm" output.avi
+        ffmpeg -pattern_type glob -framerate 25 -i "out/*.ppm" "out/output.avi"
+        vlc out/output.avi
         ;;
     *)
         echo "unknown command"

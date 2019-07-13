@@ -1,11 +1,15 @@
 all: build run-debug
 run: open
+build: build-skylake
 
-build:
+build-general:
 	cargo build
 
 build-skylake:
 	RUSTFLAGS="-Ctarget-cpu=skylake" cargo build --release
+
+gen:
+	./util.sh gen
 
 run-debug:
 	./target/debug/raytracer
@@ -16,4 +20,4 @@ open:
 clean:
 	rm -rf target
 
-.PHONY: build build-skylake run-debug open clean
+.PHONY: build build-general build-skylake gen run run-debug open clean
