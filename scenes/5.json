@@ -55,12 +55,13 @@
       },
       "radius": 0.5,
       "material": {
-        "name": "Lambertian",
+        "name": "Metal",
         "albedo": {
           "x": 0.1,
           "y": 0.8,
           "z": 0.5
-        }
+        },
+        "fuzz": 0.0
       }
     },
     {
@@ -72,12 +73,13 @@
       },
       "radius": 0.5,
       "material": {
-        "name": "Lambertian",
+        "name": "Metal",
         "albedo": {
           "x": 0.2,
           "y": 0.8,
           "z": 0.1
-        }
+        },
+        "fuzz": 0.0
       }
     },
     {
@@ -89,12 +91,13 @@
       },
       "radius": 0.5,
       "material": {
-        "name": "Lambertian",
+        "name": "Metal",
         "albedo": {
           "x": 0.2,
           "y": 0.2,
           "z": 0.8
-        }
+        },
+        "fuzz": 0.0
       }
     },
     {

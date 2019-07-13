@@ -18,7 +18,7 @@ while (t < FPS * ANIMATION_SECONDS) {
   scene.objects[0].center2.x += vh;
   scene.objects[0].center2.y += vy;
 
-  scene.camera.look_at.x += 0.005;
+  scene.camera.look_at.x += 0.009;
 
   vy += GRAVITY;
 
