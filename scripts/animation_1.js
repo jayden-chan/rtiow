@@ -6,7 +6,7 @@ let vh = 0.1;
 let vy = 0.0;
 
 const CAMERA_PAN_SPEED = 0.01;
-const VY_COLLISION_MULTIPLIER = -0.98;
+const VY_COLLISION_MULTIPLIER = -0.87;
 const VH_COLLISION_MULTIPLIER = 0.8;
 
 const GRAVITY = -0.01881;
@@ -36,12 +36,18 @@ while (t < RESOLUTION * FPS * ANIMATION_SECONDS) {
   }
 
   if (t % RESOLUTION === 0) {
+    const bak = JSON.parse(JSON.stringify(scene.objects[0].center2));
+
+    scene.objects[0].center2.x += vh;
+    scene.objects[0].center2.y += vy;
+
     fs.writeFileSync(
       `./scenes/animation/${frames_rendered.toString().padStart(3, '0')}.json`,
       JSON.stringify(scene, null, 2),
     );
 
     frames_rendered += 1;
+    scene.objects[0].center2 = bak;
   }
 
   t += 1;

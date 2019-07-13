@@ -14,6 +14,9 @@ case $1 in
     connect)
         ssh -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP
         ;;
+    download)
+        scp -i ~/.ssh/gcp_ssh -r jayden@$GCP_VM_IP:/home/jayden/raytracer/$2 ./$2
+        ;;
     download-img)
         scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/raytracer/out/image.ppm ./out/image.ppm
         feh --auto-zoom --force-aliasing out/image.ppm
