@@ -4,8 +4,6 @@ use super::{HitRecord, Hittable};
 use crate::materials::Material;
 use crate::{Ray, Vector};
 
-use std::f32;
-
 #[derive(Debug)]
 pub struct Sphere {
     center: Vector,
@@ -28,11 +26,11 @@ impl Hittable for Sphere {
         let discriminant = b * b - a * c;
 
         if discriminant > 0.0 {
-            let mut q_eq = (-b - f32::sqrt(discriminant)) / a;
+            let mut q_eq = (-b - discriminant.sqrt()) / a;
 
             // If the minus variant is out of range try the plus one
             if q_eq >= t_max || q_eq <= t_min {
-                q_eq = (-b + f32::sqrt(discriminant)) / a;
+                q_eq = (-b + discriminant.sqrt()) / a;
             }
 
             if q_eq < t_max && q_eq > t_min {

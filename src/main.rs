@@ -88,9 +88,9 @@ fn main() -> Result<(), String> {
             }
 
             curr_pixel /= SAMPLES as f32;
-            pixel.r = (255.0 * f32::sqrt(curr_pixel.x)) as u8;
-            pixel.g = (255.0 * f32::sqrt(curr_pixel.y)) as u8;
-            pixel.b = (255.0 * f32::sqrt(curr_pixel.z)) as u8;
+            pixel.r = (255.0 * curr_pixel.x.sqrt()) as u8;
+            pixel.g = (255.0 * curr_pixel.y.sqrt()) as u8;
+            pixel.b = (255.0 * curr_pixel.z.sqrt()) as u8;
         });
 
         completed_rows += 1;
@@ -104,11 +104,10 @@ fn main() -> Result<(), String> {
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
     if let Some((hit_record, material)) = scene.hit(r, T_MIN, f32::MAX) {
         if depth < MAX_RECURSIVE_DEPTH {
-            match material.scatter(r, hit_record) {
-                Some((attenuation, scattered)) => {
-                    return attenuation * color(scattered, scene, depth + 1);
-                }
-                None => {}
+            if let Some((attenuation, scattered)) =
+                material.scatter(r, hit_record)
+            {
+                return attenuation * color(scattered, scene, depth + 1);
             }
         }
 

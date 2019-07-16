@@ -5,7 +5,6 @@ use crate::Vector;
 
 use rand::prelude::*;
 
-use std::f32;
 use std::io::stdout;
 use std::io::Write;
 
@@ -65,7 +64,7 @@ pub fn vector_refract(v: Vector, n: Vector, ni_over_nt: f32) -> Option<Vector> {
     let discriminant = 1.0 - ni_over_nt * ni_over_nt * (1.0 - dt * dt);
 
     if discriminant > 0.0 {
-        Some(ni_over_nt * (v - n * dt) - n * f32::sqrt(discriminant))
+        Some(ni_over_nt * (v - n * dt) - n * discriminant.sqrt())
     } else {
         None
     }
