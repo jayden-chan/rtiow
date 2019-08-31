@@ -8,7 +8,7 @@ use crate::{Ray, Vector};
 pub struct Sphere {
     center: Vector,
     radius: f32,
-    material: Box<Material>,
+    material: Box<dyn Material>,
 }
 
 impl Hittable for Sphere {
@@ -17,7 +17,7 @@ impl Hittable for Sphere {
         r: Ray,
         t_min: f32,
         t_max: f32,
-    ) -> Option<(HitRecord, &Box<Material>)> {
+    ) -> Option<(HitRecord, &Box<dyn Material>)> {
         let oc = r.origin() - self.center;
 
         let a = Vector::dot(r.dir(), r.dir());
@@ -51,7 +51,11 @@ impl Hittable for Sphere {
 }
 
 impl Sphere {
-    pub fn new(center: Vector, radius: f32, material: Box<Material>) -> Self {
+    pub fn new(
+        center: Vector,
+        radius: f32,
+        material: Box<dyn Material>,
+    ) -> Self {
         Self {
             center,
             radius,

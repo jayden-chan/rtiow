@@ -10,12 +10,15 @@ use std::path::Path;
 
 #[derive(Debug)]
 pub struct Scene {
-    objects: Vec<Box<Hittable>>,
+    objects: Vec<Box<dyn Hittable>>,
     pub camera: Camera,
 }
 
 impl Scene {
-    pub fn from_objects(objects: Vec<Box<Hittable>>, aspect_r: f32) -> Self {
+    pub fn from_objects(
+        objects: Vec<Box<dyn Hittable>>,
+        aspect_r: f32,
+    ) -> Self {
         Scene {
             objects,
             camera: Camera::default(aspect_r),
@@ -23,7 +26,7 @@ impl Scene {
     }
 
     pub fn from_objects_and_cam(
-        objects: Vec<Box<Hittable>>,
+        objects: Vec<Box<dyn Hittable>>,
         camera: Camera,
     ) -> Self {
         Self { objects, camera }
@@ -47,10 +50,10 @@ impl Scene {
 /// is because the JSON schema for the scene files isn't directly
 /// translatable to Rust types.
 fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
-    let mut objects: Vec<Box<Hittable>> = Vec::new();
+    let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
 
     for object in scene.objects {
-        let material: Box<Material> = match object.material.name.as_str() {
+        let material: Box<dyn Material> = match object.material.name.as_str() {
             "Metal" => {
                 let albedo = object.material.albedo.unwrap();
                 let fuzz = object.material.fuzz.unwrap();
@@ -146,7 +149,7 @@ impl Hittable for Scene {
         r: Ray,
         t_min: f32,
         t_max: f32,
-    ) -> Option<(HitRecord, &Box<Material>)> {
+    ) -> Option<(HitRecord, &Box<dyn Material>)> {
         let mut result = None;
         let mut closest_so_far = t_max;
 

@@ -11,7 +11,7 @@ pub struct MovingSphere {
     t0: f32,
     t1: f32,
     radius: f32,
-    material: Box<Material>,
+    material: Box<dyn Material>,
 }
 
 impl Hittable for MovingSphere {
@@ -20,7 +20,7 @@ impl Hittable for MovingSphere {
         r: Ray,
         t_min: f32,
         t_max: f32,
-    ) -> Option<(HitRecord, &Box<Material>)> {
+    ) -> Option<(HitRecord, &Box<dyn Material>)> {
         let oc = r.origin() - self.center(r.time());
 
         let a = Vector::dot(r.dir(), r.dir());
@@ -61,7 +61,7 @@ impl MovingSphere {
         t0: f32,
         t1: f32,
         radius: f32,
-        material: Box<Material>,
+        material: Box<dyn Material>,
     ) -> Self {
         Self {
             center0,

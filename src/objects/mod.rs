@@ -44,5 +44,5 @@ pub trait Hittable: Debug + Send + Sync {
         r: Ray,
         t_min: f32,
         t_max: f32,
-    ) -> Option<(HitRecord, &Box<Material>)>;
+    ) -> Option<(HitRecord, &Box<dyn Material>)>;
 }

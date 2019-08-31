@@ -1,7 +1,3 @@
-extern crate rand;
-extern crate rayon;
-extern crate serde;
-
 mod camera;
 mod image;
 mod materials;
@@ -70,7 +66,7 @@ fn main() -> Result<(), String> {
         path.file_name().and_then(|p| p.to_str()).unwrap(),
         IMG_WIDTH,
         IMG_HEIGHT,
-        SAMPLES
+        SAMPLES,
     );
 
     let mut completed_rows = 0;
