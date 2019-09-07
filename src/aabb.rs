@@ -1,5 +1,6 @@
 use crate::{Ray, Vector};
 
+#[derive(Debug, Copy, Clone)]
 pub struct Aabb {
     min: Vector,
     max: Vector,

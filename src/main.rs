@@ -1,4 +1,5 @@
 mod aabb;
+mod bvh;
 mod camera;
 mod image;
 mod materials;
@@ -7,6 +8,7 @@ mod ray;
 mod util;
 mod vector3;
 
+use image::{gen_ppm, Pixel};
 use rand::prelude::*;
 use rayon::prelude::*;
 
@@ -15,7 +17,6 @@ use std::f32;
 use std::path::Path;
 use std::time;
 
-use image::{gen_ppm, Pixel};
 use objects::{HitRecord, Hittable, Scene};
 use ray::Ray;
 use vector3::Vector;
