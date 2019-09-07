@@ -1,6 +1,7 @@
 //! A simple moving Sphere object
 
 use super::{HitRecord, Hittable};
+use crate::aabb::Aabb;
 use crate::materials::Material;
 use crate::{Ray, Vector};
 
@@ -51,6 +52,24 @@ impl Hittable for MovingSphere {
         }
 
         None
+    }
+
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<Aabb> {
+        let box0 = Aabb::new(
+            self.center(t0)
+                - Vector::new(self.radius, self.radius, self.radius),
+            self.center(t0)
+                + Vector::new(self.radius, self.radius, self.radius),
+        );
+
+        let box1 = Aabb::new(
+            self.center(t1)
+                - Vector::new(self.radius, self.radius, self.radius),
+            self.center(t1)
+                + Vector::new(self.radius, self.radius, self.radius),
+        );
+
+        Some(Aabb::surrounding_box(box0, box1))
     }
 }
 

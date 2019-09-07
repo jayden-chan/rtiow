@@ -229,11 +229,10 @@ impl ops::Neg for Vector {
     }
 }
 
+// Allow indexing into the vector's values with the v[idx] syntax
 impl ops::Index<usize> for Vector {
     type Output = f32;
     fn index(&self, idx: usize) -> &Self::Output {
-        assert!(idx > 0 && idx < 3);
-
         match idx {
             0 => &self.x,
             1 => &self.y,

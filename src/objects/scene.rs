@@ -3,6 +3,7 @@ use crate::materials::{Dielectric, Lambertian, Material, Metal};
 use crate::{Ray, Vector};
 
 use super::{HitRecord, Hittable, MovingSphere, Sphere};
+use crate::aabb::Aabb;
 
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -161,6 +162,28 @@ impl Hittable for Scene {
         }
 
         result
+    }
+
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<Aabb> {
+        if self.objects.is_empty() {
+            return None;
+        }
+
+        if let Some(temp_box) = self.objects[0].bounding_box(t0, t1) {
+            let mut ret = temp_box;
+
+            for item in &self.objects[1..] {
+                if let Some(b) = item.bounding_box(t0, t1) {
+                    ret = Aabb::surrounding_box(ret, b);
+                } else {
+                    return None;
+                }
+            }
+
+            return Some(ret);
+        }
+
+        None
     }
 }
 

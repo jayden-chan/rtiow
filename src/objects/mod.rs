@@ -46,4 +46,10 @@ pub trait Hittable: Debug + Send + Sync {
         t_min: f32,
         t_max: f32,
     ) -> Option<(HitRecord, &Box<dyn Material>)>;
+
+    /// A method for returning whether the hittable object can be
+    /// contained within a bounding box. If it can, the [`AABB`] is returned.
+    ///
+    /// [`AABB`]: trait.Aabb.html
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<Aabb>;
 }
