@@ -4,13 +4,13 @@ use crate::Ray;
 use crate::{HitRecord, Hittable};
 
 #[derive(Debug)]
-pub struct BvhNode {
+pub struct Bvh {
     left: Box<dyn Hittable>,
     right: Box<dyn Hittable>,
     bounding_box: Aabb,
 }
 
-impl Hittable for BvhNode {
+impl Hittable for Bvh {
     fn hit(
         &self,
         r: Ray,
