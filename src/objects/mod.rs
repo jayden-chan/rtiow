@@ -1,3 +1,4 @@
+use crate::aabb::Aabb;
 use crate::materials::Material;
 use crate::{Ray, Vector};
 
