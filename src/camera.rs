@@ -5,7 +5,7 @@ use std::f32;
 
 use rand::prelude::*;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Camera {
     lower_left_corner: Vector,
     horizontal: Vector,
