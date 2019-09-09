@@ -6,64 +6,7 @@
     "objects": {
       "type": "array",
       "items": {
-        "type": "object",
-        "oneOf": [
-          {
-            "properties": {
-              "name": {
-                "type": "string",
-                "const": "MovingSphere"
-              },
-              "center": {
-                "$ref": "#/definitions/vector"
-              },
-              "center2": {
-                "$ref": "#/definitions/vector"
-              },
-              "t0": {
-                "type": "number"
-              },
-              "t1": {
-                "type": "number"
-              },
-              "radius": {
-                "type": "number"
-              },
-              "material": {
-                "$ref": "#/definitions/material"
-              }
-            },
-            "required": [
-              "name",
-              "center",
-              "center2",
-              "t0",
-              "t1",
-              "radius",
-              "material"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "properties": {
-              "name": {
-                "type": "string",
-                "const": "Sphere"
-              },
-              "center": {
-                "$ref": "#/definitions/vector"
-              },
-              "radius": {
-                "type": "number"
-              },
-              "material": {
-                "$ref": "#/definitions/material"
-              }
-            },
-            "required": ["name", "center", "radius", "material"],
-            "additionalProperties": false
-          }
-        ]
+        "$ref": "#/definitions/hittable"
       }
     },
     "camera": {
@@ -93,6 +36,80 @@
   },
   "required": ["objects"],
   "definitions": {
+    "hittable": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "MovingSphere"
+            },
+            "center": {
+              "$ref": "#/definitions/vector"
+            },
+            "center2": {
+              "$ref": "#/definitions/vector"
+            },
+            "t0": {
+              "type": "number"
+            },
+            "t1": {
+              "type": "number"
+            },
+            "radius": {
+              "type": "number"
+            },
+            "material": {
+              "$ref": "#/definitions/material"
+            }
+          },
+          "required": [
+            "name",
+            "center",
+            "center2",
+            "t0",
+            "t1",
+            "radius",
+            "material"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "Sphere"
+            },
+            "center": {
+              "$ref": "#/definitions/vector"
+            },
+            "radius": {
+              "type": "number"
+            },
+            "material": {
+              "$ref": "#/definitions/material"
+            }
+          },
+          "required": ["name", "center", "radius", "material"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "BVH"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/hittable"
+              }
+            }
+          }
+        }
+      ]
+    },
     "material": {
       "type": "object",
       "oneOf": [

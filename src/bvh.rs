@@ -117,8 +117,8 @@ impl Bvh {
             }
         };
 
-        let box_left = left.bounding_box(0.0, 0.0).unwrap();
-        let box_right = right.bounding_box(0.0, 0.0).unwrap();
+        let box_left = left.bounding_box(t0, t1).unwrap();
+        let box_right = right.bounding_box(t0, t1).unwrap();
 
         let bounding_box = Aabb::surrounding_box(box_left, box_right);
         return Box::new(Self {

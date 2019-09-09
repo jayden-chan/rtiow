@@ -4,6 +4,7 @@ use crate::{Ray, Vector};
 
 use super::{HitRecord, Hittable, MovingSphere, Sphere};
 use crate::aabb::Aabb;
+use crate::bvh::Bvh;
 
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -51,35 +52,90 @@ impl Scene {
 /// is because the JSON schema for the scene files isn't directly
 /// translatable to Rust types.
 fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
+    match scene.camera {
+        Some(c) => {
+            let look_from =
+                Vector::new(c.look_from.x, c.look_from.y, c.look_from.z);
+            let look_at = Vector::new(c.look_at.x, c.look_at.y, c.look_at.z);
+
+            let focus_dist = c
+                .focus_dist
+                .unwrap_or_else(|| (look_from - look_at).length());
+
+            let aperture = c.aperture.unwrap_or(0.0001);
+
+            let t0 = c.t0.unwrap_or(0.0);
+            let t1 = c.t1.unwrap_or(0.0);
+
+            let objects = parse_objects(scene.objects, t0, t1);
+
+            let camera_settings = CameraConstructor {
+                look_from,
+                look_at,
+                vup: Vector::new(c.vup.x, c.vup.y, c.vup.z),
+                vfov: c.vfov,
+                aspect_r,
+                aperture,
+                focus_dist,
+                t0,
+                t1,
+            };
+
+            let camera = Camera::new(camera_settings);
+
+            Scene::from_objects_and_cam(objects, camera)
+        }
+        None => Scene::from_objects(
+            parse_objects(scene.objects, 0.0, 0.0),
+            aspect_r,
+        ),
+    }
+}
+
+fn parse_objects(
+    scene_objects: Vec<SchemaObject>,
+    t0: f32,
+    t1: f32,
+) -> Vec<Box<dyn Hittable>> {
     let mut objects: Vec<Box<dyn Hittable>> = Vec::new();
 
-    for object in scene.objects {
-        let material: Box<dyn Material> = match object.material.name.as_str() {
+    for object in scene_objects {
+        if object.name == "BVH" {
+            objects.push(Bvh::new(
+                &mut parse_objects(object.items.unwrap(), t0, t1),
+                t0,
+                t1,
+            ));
+            continue;
+        }
+
+        let object_material = object.material.unwrap();
+        let material: Box<dyn Material> = match object_material.name.as_str() {
             "Metal" => {
-                let albedo = object.material.albedo.unwrap();
-                let fuzz = object.material.fuzz.unwrap();
+                let albedo = object_material.albedo.unwrap();
+                let fuzz = object_material.fuzz.unwrap();
                 Box::new(Metal::new(albedo.x, albedo.y, albedo.z, fuzz))
             }
             "Lambertian" => {
-                let albedo = object.material.albedo.unwrap();
+                let albedo = object_material.albedo.unwrap();
                 Box::new(Lambertian::new(albedo.x, albedo.y, albedo.z))
             }
             "Dielectric" => {
-                let ref_idx = object.material.ref_idx.unwrap();
+                let ref_idx = object_material.ref_idx.unwrap();
                 Box::new(Dielectric::new(ref_idx))
             }
             _ => {
                 unreachable!(
                     "Unrecognized material type encountered: {}",
-                    object.material.name
+                    object_material.name
                 );
             }
         };
 
         match object.name.as_str() {
             "Sphere" => {
-                let center = object.center;
-                let radius = object.radius;
+                let center = object.center.unwrap();
+                let radius = object.radius.unwrap();
 
                 objects.push(Box::new(Sphere::new(
                     Vector::new(center.x, center.y, center.z),
@@ -88,9 +144,9 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
                 )));
             }
             "MovingSphere" => {
-                let center = object.center;
+                let center = object.center.unwrap();
                 let center2 = object.center2.unwrap();
-                let radius = object.radius;
+                let radius = object.radius.unwrap();
                 let t0 = object.t0.unwrap();
                 let t1 = object.t1.unwrap();
 
@@ -109,39 +165,7 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
         }
     }
 
-    match scene.camera {
-        Some(c) => {
-            let look_from =
-                Vector::new(c.look_from.x, c.look_from.y, c.look_from.z);
-            let look_at = Vector::new(c.look_at.x, c.look_at.y, c.look_at.z);
-
-            let focus_dist = c
-                .focus_dist
-                .unwrap_or_else(|| (look_from - look_at).length());
-
-            let aperture = c.aperture.unwrap_or(0.0001);
-
-            let t0 = c.t0.unwrap_or(0.0);
-            let t1 = c.t1.unwrap_or(0.0);
-
-            let camera_settings = CameraConstructor {
-                look_from,
-                look_at,
-                vup: Vector::new(c.vup.x, c.vup.y, c.vup.z),
-                vfov: c.vfov,
-                aspect_r,
-                aperture,
-                focus_dist,
-                t0,
-                t1,
-            };
-
-            let camera = Camera::new(camera_settings);
-
-            Scene::from_objects_and_cam(objects, camera)
-        }
-        None => Scene::from_objects(objects, aspect_r),
-    }
+    objects
 }
 
 impl Hittable for Scene {
@@ -209,12 +233,13 @@ struct SchemaMaterial {
 #[derive(Debug, Serialize, Deserialize)]
 struct SchemaObject {
     name: String,
-    center: SchemaVector,
+    center: Option<SchemaVector>,
     center2: Option<SchemaVector>,
-    radius: f32,
+    radius: Option<f32>,
     t0: Option<f32>,
     t1: Option<f32>,
-    material: SchemaMaterial,
+    material: Option<SchemaMaterial>,
+    items: Option<Vec<SchemaObject>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
