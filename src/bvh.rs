@@ -8,13 +8,13 @@ use std::cmp::Ordering;
 use std::f32;
 
 #[derive(Debug)]
-pub struct Bvh<'a> {
-    left: &'a Box<dyn Hittable>,
-    right: &'a Box<dyn Hittable>,
+pub struct Bvh {
+    left: Box<dyn Hittable>,
+    right: Box<dyn Hittable>,
     bounding_box: Aabb,
 }
 
-impl<'a> Hittable for Bvh<'a> {
+impl Hittable for Bvh {
     fn hit(
         &self,
         r: Ray,
@@ -53,8 +53,12 @@ impl<'a> Hittable for Bvh<'a> {
     }
 }
 
-impl<'a> Bvh<'a> {
-    pub fn new(objects: &'a mut [Box<dyn Hittable>], t0: f32, t1: f32) -> Self {
+impl Bvh {
+    pub fn new(
+        objects: &mut Vec<Box<dyn Hittable>>,
+        t0: f32,
+        t1: f32,
+    ) -> Box<dyn Hittable> {
         let axis = (3f32 * random::<f32>()) as u32;
 
         match axis {
@@ -96,20 +100,31 @@ impl<'a> Bvh<'a> {
             }
         }
 
-        let (left, right) = match objects.len() {
-            1 => (&objects[0], &objects[0]),
-            2 => (&objects[0], &objects[1]),
-            l => (&objects[0], &objects[1]),
+        let left: Box<dyn Hittable>;
+        let right: Box<dyn Hittable>;
+
+        match objects.len() {
+            0 => panic!("wrong bvh length"),
+            1 => return objects.remove(0),
+            l => {
+                let l_vec = objects;
+                let mut r_vec = l_vec.split_off(l / 2);
+                let leftb = Self::new(l_vec, t0, t1);
+                let rightb = Self::new(&mut r_vec, t0, t1);
+
+                left = leftb;
+                right = rightb;
+            }
         };
 
         let box_left = left.bounding_box(0.0, 0.0).unwrap();
         let box_right = right.bounding_box(0.0, 0.0).unwrap();
 
         let bounding_box = Aabb::surrounding_box(box_left, box_right);
-        return Self {
+        return Box::new(Self {
             left: left,
             right: right,
             bounding_box,
-        };
+        });
     }
 }
