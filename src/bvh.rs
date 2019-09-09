@@ -22,27 +22,25 @@ impl Hittable for Bvh {
         t_max: f32,
     ) -> Option<(HitRecord, &Box<dyn Material>)> {
         if self.bounding_box.hit(r, t_min, t_max) {
-            let hit_left = self.left.hit(r, t_min, t_max);
-            let hit_right = self.right.hit(r, t_min, t_max);
-
-            if hit_left.is_some() && hit_right.is_some() {
-                let (rec_left, mat_left) = hit_left.unwrap();
-                let (rec_right, mat_right) = hit_right.unwrap();
-
-                if rec_left.t < rec_right.t {
-                    return Some((rec_left, mat_left));
-                } else {
-                    return Some((rec_right, mat_right));
+            match (
+                self.left.hit(r, t_min, t_max),
+                self.right.hit(r, t_min, t_max),
+            ) {
+                (None, None) => None,
+                (Some((rec_left, mat_left)), None) => {
+                    Some((rec_left, mat_left))
                 }
-            } else if hit_left.is_some() {
-                let (rec_left, mat_left) = hit_left.unwrap();
-                return Some((rec_left, mat_left));
-            } else if hit_right.is_some() {
-                let (rec_right, mat_right) = hit_right.unwrap();
-                return Some((rec_right, mat_right));
-            }
-
-            return None;
+                (None, Some((rec_right, mat_right))) => {
+                    Some((rec_right, mat_right))
+                }
+                (Some((rec_left, mat_left)), Some((rec_right, mat_right))) => {
+                    return if rec_left.t < rec_right.t {
+                        Some((rec_left, mat_left))
+                    } else {
+                        Some((rec_right, mat_right))
+                    };
+                }
+            };
         }
 
         None
