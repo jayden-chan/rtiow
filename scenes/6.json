@@ -1,0 +1,76 @@
+{
+  "camera": {
+    "look_from": {
+      "x": 0,
+      "y": 2,
+      "z": -10
+    },
+    "look_at": {
+      "x": 0,
+      "y": 3,
+      "z": 0
+    },
+    "vup": {
+      "x": 0.0,
+      "y": 1.0,
+      "z": 0.0
+    },
+    "vfov": 60.0
+  },
+  "objects": [
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.0,
+        "y": 7.0,
+        "z": 0.0
+      },
+      "radius": 2,
+      "material": {
+        "name": "DiffuseLight",
+        "texture": {
+          "name": "Constant",
+          "values": {
+            "x": 4.0,
+            "y": 4.0,
+            "z": 4.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0,
+        "y": 2.0,
+        "z": 0
+      },
+      "radius": 2,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.9,
+          "y": 0.1,
+          "z": 0.1
+        }
+      }
+    },
+    {
+      "name": "Sphere",
+      "center": {
+        "x": 0.0,
+        "y": -1000.0,
+        "z": 0.0
+      },
+      "radius": 1000.0,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.2,
+          "y": 0.2,
+          "z": 0.2
+        }
+      }
+    }
+  ]
+}

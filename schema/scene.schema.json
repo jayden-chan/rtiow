@@ -104,9 +104,39 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/hittable"
-              }
+              },
+              "required": ["name", "items"],
+              "additionalProperties": false
             }
           }
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "Rectangle"
+            },
+            "x0": {
+              "type": "number"
+            },
+            "x1": {
+              "type": "number"
+            },
+            "y0": {
+              "type": "number"
+            },
+            "y1": {
+              "type": "number"
+            },
+            "k": {
+              "type": "number"
+            },
+            "material": {
+              "$ref": "#/definitions/material"
+            }
+          },
+          "required": ["x0", "x1", "y0", "y1", "k", "material"],
+          "additionalProperties": false
         }
       ]
     },
@@ -153,6 +183,37 @@
             }
           },
           "required": ["name", "ref_idx"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "DiffuseLight"
+            },
+            "texture": {
+              "$ref": "#/definitions/texture"
+            }
+          },
+          "required": ["name", "texture"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "texture": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "const": "Constant"
+            },
+            "values": {
+              "$ref": "#/definitions/vector"
+            }
+          },
+          "required": ["name", "values"],
           "additionalProperties": false
         }
       ]

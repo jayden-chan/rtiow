@@ -1,11 +1,11 @@
 use crate::aabb::Aabb;
 use crate::bvh::Bvh;
 use crate::camera::{Camera, CameraConstructor};
-use crate::materials::{Dielectric, Lambertian, Material, Metal};
+use crate::materials::{Dielectric, DiffuseLight, Lambertian, Material, Metal};
 use crate::textures::*;
 use crate::{Ray, Vector};
 
-use super::{HitRecord, Hittable, MovingSphere, Sphere};
+use super::{HitRecord, Hittable, MovingSphere, Rectangle, Sphere};
 
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -93,6 +93,23 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
     }
 }
 
+fn parse_texture(texture: SchemaTexture) -> Box<dyn Texture> {
+    match texture.name.as_str() {
+        "Constant" => {
+            let values = texture.values.unwrap();
+            Box::new(ConstantTexture::new(Vector::new(
+                values.x, values.y, values.z,
+            )))
+        }
+        _ => {
+            unreachable!(
+                "Unrecognized texture type encountered: {}",
+                texture.name
+            );
+        }
+    }
+}
+
 fn parse_material(material: SchemaMaterial) -> Box<dyn Material> {
     match material.name.as_str() {
         "Metal" => {
@@ -109,6 +126,10 @@ fn parse_material(material: SchemaMaterial) -> Box<dyn Material> {
         "Dielectric" => {
             let ref_idx = material.ref_idx.unwrap();
             Box::new(Dielectric::new(ref_idx))
+        }
+        "DiffuseLight" => {
+            let texture = material.texture.unwrap();
+            Box::new(DiffuseLight::new(parse_texture(texture)))
         }
         _ => {
             unreachable!(
@@ -165,6 +186,22 @@ fn parse_objects(
                     radius,
                     material,
                 )));
+            }
+            "Rectangle" => {
+                let x0 = object.x0.unwrap();
+                let x1 = object.x1.unwrap();
+                let y0 = object.y0.unwrap();
+                let y1 = object.y1.unwrap();
+                let k = object.k.unwrap();
+
+                objects.push(Box::new(Rectangle {
+                    x0,
+                    x1,
+                    y0,
+                    y1,
+                    k,
+                    material,
+                }));
             }
             _ => {
                 unreachable!("Unknown object type found");
@@ -230,11 +267,18 @@ struct SchemaVector {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+struct SchemaTexture {
+    name: String,
+    values: Option<SchemaVector>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 struct SchemaMaterial {
     name: String,
     albedo: Option<SchemaVector>,
     ref_idx: Option<f32>,
     fuzz: Option<f32>,
+    texture: Option<SchemaTexture>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -245,6 +289,11 @@ struct SchemaObject {
     radius: Option<f32>,
     t0: Option<f32>,
     t1: Option<f32>,
+    x0: Option<f32>,
+    x1: Option<f32>,
+    y0: Option<f32>,
+    y1: Option<f32>,
+    k: Option<f32>,
     material: Option<SchemaMaterial>,
     items: Option<Vec<SchemaObject>>,
 }

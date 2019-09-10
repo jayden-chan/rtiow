@@ -19,3 +19,9 @@ impl Material for DiffuseLight {
         self.emit.value(u, v, p)
     }
 }
+
+impl DiffuseLight {
+    pub fn new(emit: Box<dyn Texture>) -> Self {
+        Self { emit }
+    }
+}

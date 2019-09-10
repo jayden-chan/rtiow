@@ -89,9 +89,25 @@ fn main() -> Result<(), String> {
             }
 
             curr_pixel /= SAMPLES as f32;
-            pixel.r = (255.0 * curr_pixel.x.sqrt()) as u8;
-            pixel.g = (255.0 * curr_pixel.y.sqrt()) as u8;
-            pixel.b = (255.0 * curr_pixel.z.sqrt()) as u8;
+
+            // Treat overflowed pixels as max value
+            if curr_pixel.x > 1.0 {
+                curr_pixel.x = 1.0;
+            }
+            if curr_pixel.y > 1.0 {
+                curr_pixel.y = 1.0;
+            }
+            if curr_pixel.z > 1.0 {
+                curr_pixel.z = 1.0;
+            }
+
+            let r = 255.99 * curr_pixel.x.sqrt();
+            let g = 255.99 * curr_pixel.y.sqrt();
+            let b = 255.99 * curr_pixel.z.sqrt();
+
+            pixel.r = r as u8;
+            pixel.g = g as u8;
+            pixel.b = b as u8;
         });
 
         completed_rows += 1;

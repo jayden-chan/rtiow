@@ -3,12 +3,12 @@ use crate::{aabb::Aabb, materials::Material, Ray, Vector};
 
 #[derive(Debug)]
 pub struct Rectangle {
-    x0: f32,
-    x1: f32,
-    y0: f32,
-    y1: f32,
-    k: f32,
-    material: Box<dyn Material>,
+    pub x0: f32,
+    pub x1: f32,
+    pub y0: f32,
+    pub y1: f32,
+    pub k: f32,
+    pub material: Box<dyn Material>,
 }
 
 impl Hittable for Rectangle {
