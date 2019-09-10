@@ -1,10 +1,11 @@
+use crate::aabb::Aabb;
+use crate::bvh::Bvh;
 use crate::camera::{Camera, CameraConstructor};
 use crate::materials::{Dielectric, Lambertian, Material, Metal};
+use crate::textures::*;
 use crate::{Ray, Vector};
 
 use super::{HitRecord, Hittable, MovingSphere, Sphere};
-use crate::aabb::Aabb;
-use crate::bvh::Bvh;
 
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -92,6 +93,32 @@ fn schema_scene_to_scene(scene: SchemaScene, aspect_r: f32) -> Scene {
     }
 }
 
+fn parse_material(material: SchemaMaterial) -> Box<dyn Material> {
+    match material.name.as_str() {
+        "Metal" => {
+            let albedo = material.albedo.unwrap();
+            let fuzz = material.fuzz.unwrap();
+            Box::new(Metal::new(albedo.x, albedo.y, albedo.z, fuzz))
+        }
+        "Lambertian" => {
+            let albedo = material.albedo.unwrap();
+            Box::new(Lambertian::new(Box::new(ConstantTexture::new(
+                Vector::new(albedo.x, albedo.y, albedo.z),
+            ))))
+        }
+        "Dielectric" => {
+            let ref_idx = material.ref_idx.unwrap();
+            Box::new(Dielectric::new(ref_idx))
+        }
+        _ => {
+            unreachable!(
+                "Unrecognized material type encountered: {}",
+                material.name
+            );
+        }
+    }
+}
+
 fn parse_objects(
     scene_objects: Vec<SchemaObject>,
     t0: f32,
@@ -110,27 +137,7 @@ fn parse_objects(
         }
 
         let object_material = object.material.unwrap();
-        let material: Box<dyn Material> = match object_material.name.as_str() {
-            "Metal" => {
-                let albedo = object_material.albedo.unwrap();
-                let fuzz = object_material.fuzz.unwrap();
-                Box::new(Metal::new(albedo.x, albedo.y, albedo.z, fuzz))
-            }
-            "Lambertian" => {
-                let albedo = object_material.albedo.unwrap();
-                Box::new(Lambertian::new(albedo.x, albedo.y, albedo.z))
-            }
-            "Dielectric" => {
-                let ref_idx = object_material.ref_idx.unwrap();
-                Box::new(Dielectric::new(ref_idx))
-            }
-            _ => {
-                unreachable!(
-                    "Unrecognized material type encountered: {}",
-                    object_material.name
-                );
-            }
-        };
+        let material: Box<dyn Material> = parse_material(object_material);
 
         match object.name.as_str() {
             "Sphere" => {

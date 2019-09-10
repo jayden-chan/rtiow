@@ -2,18 +2,17 @@ use crate::util::random_in_unit_sphere;
 use crate::{HitRecord, Ray, Vector};
 
 use super::Material;
+use crate::textures::Texture;
 
 /// Lambertian material impl - an ideal diffuse reflector
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug)]
 pub struct Lambertian {
-    albedo: Vector,
+    texture: Box<dyn Texture>,
 }
 
 impl Lambertian {
-    pub fn new(r: f32, g: f32, b: f32) -> Self {
-        Self {
-            albedo: Vector::new(r, g, b),
-        }
+    pub fn new(texture: Box<dyn Texture>) -> Self {
+        Self { texture }
     }
 }
 
@@ -26,7 +25,7 @@ impl Material for Lambertian {
         let target = hit_record.p + hit_record.normal + random_in_unit_sphere();
 
         Some((
-            self.albedo,
+            self.texture.value(0.0, 0.0, hit_record.p),
             Ray::new(hit_record.p, target - hit_record.p, r_in.time()),
         ))
     }

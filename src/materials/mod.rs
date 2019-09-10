@@ -18,4 +18,9 @@ pub trait Material: Debug + Send + Sync {
         r_in: Ray,
         hit_record: HitRecord,
     ) -> Option<(Vector, Ray)>;
+
+    /// Return the amount of light emitted by this material
+    fn emitted(&self, _u: f32, _v: f32, _p: Vector) -> Vector {
+        Vector::zeros()
+    }
 }
