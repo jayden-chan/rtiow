@@ -27,17 +27,13 @@ impl Hittable for Bvh {
                 self.right.hit(r, t_min, t_max),
             ) {
                 (None, None) => None,
-                (Some((rec_left, mat_left)), None) => {
-                    Some((rec_left, mat_left))
-                }
-                (None, Some((rec_right, mat_right))) => {
-                    Some((rec_right, mat_right))
-                }
-                (Some((rec_left, mat_left)), Some((rec_right, mat_right))) => {
-                    return if rec_left.t < rec_right.t {
-                        Some((rec_left, mat_left))
+                (Some((rec, mat)), None) => Some((rec, mat)),
+                (None, Some((rec, mat))) => Some((rec, mat)),
+                (Some((rec_l, mat_l)), Some((rec_r, mat_r))) => {
+                    return if rec_l.t < rec_r.t {
+                        Some((rec_l, mat_l))
                     } else {
-                        Some((rec_right, mat_right))
+                        Some((rec_r, mat_r))
                     };
                 }
             };
@@ -57,7 +53,7 @@ impl Bvh {
         t0: f32,
         t1: f32,
     ) -> Box<dyn Hittable> {
-        let axis = (3f32 * random::<f32>()) as u32;
+        let axis = (3.0 * random::<f32>()) as u32;
 
         match axis {
             0 => {
@@ -89,7 +85,7 @@ impl Bvh {
                     let box_left = a.bounding_box(0.0, 0.0).unwrap();
                     let box_right = b.bounding_box(0.0, 0.0).unwrap();
 
-                    if box_left.min().y - box_right.min().y < 0.0 {
+                    if box_left.min().z - box_right.min().z < 0.0 {
                         return Ordering::Less;
                     } else {
                         return Ordering::Greater;
@@ -98,31 +94,25 @@ impl Bvh {
             }
         }
 
-        let left: Box<dyn Hittable>;
-        let right: Box<dyn Hittable>;
-
         match objects.len() {
             0 => panic!("wrong bvh length"),
             1 => return objects.remove(0),
             l => {
                 let l_vec = objects;
                 let mut r_vec = l_vec.split_off(l / 2);
-                let leftb = Self::new(l_vec, t0, t1);
-                let rightb = Self::new(&mut r_vec, t0, t1);
+                let left = Self::new(l_vec, t0, t1);
+                let right = Self::new(&mut r_vec, t0, t1);
 
-                left = leftb;
-                right = rightb;
+                let box_left = left.bounding_box(t0, t1).unwrap();
+                let box_right = right.bounding_box(t0, t1).unwrap();
+
+                let bounding_box = Aabb::surrounding_box(box_left, box_right);
+                return Box::new(Self {
+                    left: left,
+                    right: right,
+                    bounding_box,
+                });
             }
         };
-
-        let box_left = left.bounding_box(t0, t1).unwrap();
-        let box_right = right.bounding_box(t0, t1).unwrap();
-
-        let bounding_box = Aabb::surrounding_box(box_left, box_right);
-        return Box::new(Self {
-            left: left,
-            right: right,
-            bounding_box,
-        });
     }
 }
