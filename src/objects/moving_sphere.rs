@@ -1,9 +1,7 @@
 //! A simple moving Sphere object
 
 use super::{HitRecord, Hittable};
-use crate::aabb::Aabb;
-use crate::materials::Material;
-use crate::{Ray, Vector};
+use crate::{aabb::Aabb, materials::Material, util::sphere_uv, Ray, Vector};
 
 #[derive(Debug)]
 pub struct MovingSphere {
@@ -39,13 +37,19 @@ impl Hittable for MovingSphere {
 
             if q_eq < t_max && q_eq > t_min {
                 let point_at_parameter = r.point_at_parameter(q_eq);
+                let (u, v) = sphere_uv(
+                    (point_at_parameter - self.center(r.time())) / self.radius,
+                );
+
                 return Some((
-                    HitRecord::new(
-                        q_eq,
-                        point_at_parameter,
-                        (point_at_parameter - self.center(r.time()))
+                    HitRecord {
+                        u,
+                        v,
+                        t: q_eq,
+                        p: point_at_parameter,
+                        normal: (point_at_parameter - self.center(r.time()))
                             / self.radius,
-                    ),
+                    },
                     &self.material,
                 ));
             }

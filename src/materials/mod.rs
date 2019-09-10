@@ -11,6 +11,9 @@ pub use metal::*;
 mod dielectric;
 pub use dielectric::*;
 
+mod diffuse_light;
+pub use diffuse_light::*;
+
 pub trait Material: Debug + Send + Sync {
     /// Returns: Whether a ray was scattered, the attenuation, and scattered ray
     fn scatter(

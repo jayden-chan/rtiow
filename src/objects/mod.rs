@@ -5,10 +5,12 @@ use crate::{Ray, Vector};
 use std::fmt::Debug;
 
 mod moving_sphere;
+mod rectangle;
 mod scene;
 mod sphere;
 
 pub use moving_sphere::*;
+pub use rectangle::*;
 pub use scene::*;
 pub use sphere::*;
 
@@ -18,15 +20,11 @@ pub use sphere::*;
 /// [`Ray`]: struct.Ray.html
 #[derive(Debug, Copy, Clone)]
 pub struct HitRecord {
+    pub u: f32,
+    pub v: f32,
     pub t: f32,
     pub p: Vector,
     pub normal: Vector,
-}
-
-impl HitRecord {
-    pub fn new(t: f32, p: Vector, normal: Vector) -> Self {
-        Self { t, p, normal }
-    }
 }
 
 /// The Hittable trait describes any object in the scene that a light

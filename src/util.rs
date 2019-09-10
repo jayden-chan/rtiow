@@ -5,6 +5,7 @@ use crate::Vector;
 
 use rand::prelude::*;
 
+use std::f32::consts::PI;
 use std::io::stdout;
 use std::io::Write;
 
@@ -50,6 +51,13 @@ pub fn random_in_unit_sphere() -> Vector {
     }
 
     p
+}
+
+#[inline]
+pub fn sphere_uv(p: Vector) -> (f32, f32) {
+    let phi = f32::atan2(p.z, p.x);
+    let theta = f32::asin(p.y);
+    ((1.0 - (phi + PI) / (2.0 * PI)), ((theta + PI / 2.0) / PI))
 }
 
 #[inline]

@@ -22,7 +22,7 @@ impl Hittable for Bvh {
         t_max: f32,
     ) -> Option<(HitRecord, &Box<dyn Material>)> {
         if self.bounding_box.hit(r, t_min, t_max) {
-            match (
+            return match (
                 self.left.hit(r, t_min, t_max),
                 self.right.hit(r, t_min, t_max),
             ) {
@@ -30,11 +30,11 @@ impl Hittable for Bvh {
                 (Some((rec, mat)), None) => Some((rec, mat)),
                 (None, Some((rec, mat))) => Some((rec, mat)),
                 (Some((rec_l, mat_l)), Some((rec_r, mat_r))) => {
-                    return if rec_l.t < rec_r.t {
+                    if rec_l.t < rec_r.t {
                         Some((rec_l, mat_l))
                     } else {
                         Some((rec_r, mat_r))
-                    };
+                    }
                 }
             };
         }

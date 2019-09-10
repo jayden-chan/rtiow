@@ -23,9 +23,8 @@ impl Material for Lambertian {
         hit_record: HitRecord,
     ) -> Option<(Vector, Ray)> {
         let target = hit_record.p + hit_record.normal + random_in_unit_sphere();
-
         Some((
-            self.texture.value(0.0, 0.0, hit_record.p),
+            self.texture.value(hit_record.u, hit_record.v, hit_record.p),
             Ray::new(hit_record.p, target - hit_record.p, r_in.time()),
         ))
     }
