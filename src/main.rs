@@ -73,6 +73,8 @@ fn main() -> Result<(), String> {
 
     let mut completed_rows = 0;
     image.iter_mut().for_each(|row| {
+        progress_bar(completed_rows, IMG_HEIGHT, PROG_BAR_WIDTH, "Rendering");
+
         row.par_iter_mut().for_each(|pixel| {
             let mut curr_pixel = Vector::zeros();
 
@@ -92,7 +94,6 @@ fn main() -> Result<(), String> {
         });
 
         completed_rows += 1;
-        progress_bar(completed_rows, IMG_HEIGHT, PROG_BAR_WIDTH, "Rendering");
     });
 
     println!("\nCompleted rendering in {:#?}", start_time.elapsed());
