@@ -10,6 +10,20 @@ Rendering settings:
 - 5000 samples per pixel
 - Machine: GCP n1-highcpu-96 (96 vCPUs, 86.4 GB memory)
 
+### Lights - 2019-09-09
+Implemented a simple diffuse lighting material that can emit its own rays.
+- Scene: [`scenes/6.json`](/scenes/6.json)
+- Render time: 00:00:15
+
+![](/img/spheres_6.png "Diffuse Light Material")
+
+### Bounding Volume Hierarchy - 2019-09-09
+Implemented a basic bounding volume hierarchy to organize objects into groups and reduce
+ray-object intersection computations. This results in a significant speedup in rendering
+for scenes that have many objects.
+
+![](/img/spheres_3_bvh.png "BVH")
+
 ### Motion Blur - 2019-07-11
 Implemented camera motion blur. This feature is more interesting for animations as
 opposed to still images.
@@ -68,14 +82,14 @@ reflection properties of Lambertian and Metal materials.
 - [x] Loading scenes from JSON
 - [x] Positionable Camera & custom FOV
 - [x] Camera aperture & focal length
+- [x] BVH
+- [x] Lights
 
 ### Not Implemented
 - [ ] Planes & Triangles
-- [ ] BVH
 - [ ] ADC
 - [ ] Spectral rays
 - [ ] Textures
-- [ ] Lights
 - [ ] Volumes
 - [ ] Phong Reflection (?)
 - [ ] Photon Mapping (?)
