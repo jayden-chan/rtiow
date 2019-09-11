@@ -9,8 +9,8 @@ pub struct DiffuseLight {
 impl Material for DiffuseLight {
     fn scatter(
         &self,
-        r_in: Ray,
-        hit_record: HitRecord,
+        _r_in: Ray,
+        _hit_record: HitRecord,
     ) -> Option<(Vector, Ray)> {
         None
     }

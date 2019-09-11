@@ -8,6 +8,7 @@ pub struct Rectangle {
     pub y0: f32,
     pub y1: f32,
     pub k: f32,
+    pub norm: f32,
     pub material: Box<dyn Material>,
 }
 
@@ -36,7 +37,7 @@ impl Hittable for Rectangle {
                 u: (x - self.x0) / (self.x1 - self.x0),
                 v: (y - self.y0) / (self.y1 - self.y0),
                 p: r.point_at_parameter(t),
-                normal: Vector::new(0.0, 0.0, 1.0),
+                normal: Vector::new(0.0, 0.0, 1.0) * self.norm,
             },
             &self.material,
         ))

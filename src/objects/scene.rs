@@ -193,6 +193,7 @@ fn parse_objects(
                 let y0 = object.y0.unwrap();
                 let y1 = object.y1.unwrap();
                 let k = object.k.unwrap();
+                let flip = object.flip.unwrap();
 
                 objects.push(Box::new(Rectangle {
                     x0,
@@ -200,6 +201,7 @@ fn parse_objects(
                     y0,
                     y1,
                     k,
+                    norm: if flip { -1.0 } else { 1.0 },
                     material,
                 }));
             }
@@ -294,6 +296,7 @@ struct SchemaObject {
     y0: Option<f32>,
     y1: Option<f32>,
     k: Option<f32>,
+    flip: Option<bool>,
     material: Option<SchemaMaterial>,
     items: Option<Vec<SchemaObject>>,
 }

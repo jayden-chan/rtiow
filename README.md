@@ -10,10 +10,16 @@ Rendering settings:
 - 5000 samples per pixel
 - Machine: GCP n1-highcpu-96 (96 vCPUs, 86.4 GB memory)
 
-### Lights - 2019-09-09
-Implemented a simple diffuse lighting material that can emit its own rays.
+### Lights & Rectangles - 2019-09-09
+Implemented a simple diffuse lighting material that can emit its own rays. Also
+implemented an axis-aligned rectangle object type.
+- Scene: [`scenes/7.json`](/scenes/7.json)
+- Render time: 00:00:25
+
+![](/img/lights_2.png "Lights and Mirrors")
+
 - Scene: [`scenes/6.json`](/scenes/6.json)
-- Render time: 00:00:15
+- Render time: 00:00:17
 
 ![](/img/spheres_6.png "Diffuse Light Material")
 
