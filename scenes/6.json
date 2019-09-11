@@ -1,9 +1,9 @@
 {
   "camera": {
     "look_from": {
-      "x": 0,
+      "x": 20,
       "y": 3,
-      "z": -20
+      "z": 0
     },
     "look_at": {
       "x": 0,
@@ -19,13 +19,51 @@
   },
   "objects": [
     {
+      "name": "Rectangle",
+      "x0": -3,
+      "x1": 3,
+      "y0": 1,
+      "y1": 3,
+      "k": 4,
+      "material": {
+        "name": "DiffuseLight",
+        "texture": {
+          "name": "Constant",
+          "values": {
+            "x": 4.0,
+            "y": 4.0,
+            "z": 4.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Rectangle",
+      "x0": -3,
+      "x1": 3,
+      "y0": 1,
+      "y1": 3,
+      "k": -4,
+      "material": {
+        "name": "DiffuseLight",
+        "texture": {
+          "name": "Constant",
+          "values": {
+            "x": 4.0,
+            "y": 4.0,
+            "z": 4.0
+          }
+        }
+      }
+    },
+    {
       "name": "Sphere",
       "center": {
-        "x": -4.0,
-        "y": 6.0,
-        "z": -1
+        "x": -1,
+        "y": 12.0,
+        "z": 0
       },
-      "radius": 2,
+      "radius": 4,
       "material": {
         "name": "DiffuseLight",
         "texture": {

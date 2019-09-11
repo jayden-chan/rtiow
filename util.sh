@@ -11,6 +11,10 @@ case $1 in
         sudo apt-get install ffmpeg
         mkdir out
         ;;
+    iter)
+        make build && ./target/release/raytracer $2 out/image.ppm
+        feh --auto-zoom --force-aliasing out/image.ppm
+        ;;
     connect)
         ssh -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP
         ;;
