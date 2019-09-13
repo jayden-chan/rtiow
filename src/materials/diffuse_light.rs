@@ -1,7 +1,7 @@
 use super::Material;
 use crate::{textures::Texture, HitRecord, Ray, Vector};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DiffuseLight {
     emit: Box<dyn Texture>,
 }

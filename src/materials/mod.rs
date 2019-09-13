@@ -14,7 +14,26 @@ pub use dielectric::*;
 mod diffuse_light;
 pub use diffuse_light::*;
 
-pub trait Material: Debug + Send + Sync {
+trait MaterialClone {
+    fn clone_box(&self) -> Box<dyn Material>;
+}
+
+impl<T> MaterialClone for T
+where
+    T: 'static + Material + Clone,
+{
+    fn clone_box(&self) -> Box<dyn Material> {
+        Box::new(self.clone())
+    }
+}
+
+impl Clone for Box<dyn Material> {
+    fn clone(&self) -> Box<dyn Material> {
+        self.clone_box()
+    }
+}
+
+pub trait Material: Debug + Send + Sync + MaterialClone {
     /// Returns: Whether a ray was scattered, the attenuation, and scattered ray
     fn scatter(
         &self,

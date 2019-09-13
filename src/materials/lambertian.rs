@@ -5,7 +5,7 @@ use super::Material;
 use crate::textures::Texture;
 
 /// Lambertian material impl - an ideal diffuse reflector
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Lambertian {
     texture: Box<dyn Texture>,
 }
