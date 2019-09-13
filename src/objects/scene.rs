@@ -244,8 +244,8 @@ fn parse_objects(
                 }
             }
             "Block" => {
-                let p0 = object.center.unwrap();
-                let p1 = object.center2.unwrap();
+                let p0 = object.p0.unwrap();
+                let p1 = object.p1.unwrap();
 
                 objects.push(Box::new(Block::new(
                     Vector::new(p0.x, p0.y, p0.z),
