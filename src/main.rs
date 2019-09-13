@@ -1,3 +1,5 @@
+#![feature(const_generics)]
+
 mod aabb;
 mod bvh;
 mod camera;

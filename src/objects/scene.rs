@@ -5,7 +5,7 @@ use crate::materials::{Dielectric, DiffuseLight, Lambertian, Material, Metal};
 use crate::textures::*;
 use crate::{Ray, Vector};
 
-use super::{HitRecord, Hittable, MovingSphere, Rectangle, Sphere};
+use super::{HitRecord, Hittable, MovingSphere, RectPlane, Rectangle, Sphere};
 
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -195,7 +195,7 @@ fn parse_objects(
                 let k = object.k.unwrap();
                 let flip = object.flip.unwrap();
 
-                objects.push(Box::new(Rectangle {
+                objects.push(Box::new(Rectangle::<{ RectPlane::XY }> {
                     x0,
                     x1,
                     y0,
