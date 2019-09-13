@@ -48,7 +48,7 @@ impl Hittable for Bvh {
 }
 
 impl Bvh {
-    pub fn new(
+    pub fn construct(
         objects: &mut Vec<Box<dyn Hittable>>,
         t0: f32,
         t1: f32,
@@ -62,9 +62,9 @@ impl Bvh {
                     let box_right = b.bounding_box(0.0, 0.0).unwrap();
 
                     if box_left.min().x - box_right.min().x < 0.0 {
-                        return Ordering::Less;
+                        Ordering::Less
                     } else {
-                        return Ordering::Greater;
+                        Ordering::Greater
                     }
                 });
             }
@@ -74,9 +74,9 @@ impl Bvh {
                     let box_right = b.bounding_box(0.0, 0.0).unwrap();
 
                     if box_left.min().y - box_right.min().y < 0.0 {
-                        return Ordering::Less;
+                        Ordering::Less
                     } else {
-                        return Ordering::Greater;
+                        Ordering::Greater
                     }
                 });
             }
@@ -86,9 +86,9 @@ impl Bvh {
                     let box_right = b.bounding_box(0.0, 0.0).unwrap();
 
                     if box_left.min().z - box_right.min().z < 0.0 {
-                        return Ordering::Less;
+                        Ordering::Less
                     } else {
-                        return Ordering::Greater;
+                        Ordering::Greater
                     }
                 });
             }
@@ -96,23 +96,23 @@ impl Bvh {
 
         match objects.len() {
             0 => panic!("wrong bvh length"),
-            1 => return objects.remove(0),
+            1 => objects.remove(0),
             l => {
                 let l_vec = objects;
                 let mut r_vec = l_vec.split_off(l / 2);
-                let left = Self::new(l_vec, t0, t1);
-                let right = Self::new(&mut r_vec, t0, t1);
+                let left = Self::construct(l_vec, t0, t1);
+                let right = Self::construct(&mut r_vec, t0, t1);
 
                 let box_left = left.bounding_box(t0, t1).unwrap();
                 let box_right = right.bounding_box(t0, t1).unwrap();
 
                 let bounding_box = Aabb::surrounding_box(box_left, box_right);
-                return Box::new(Self {
-                    left: left,
-                    right: right,
+                Box::new(Self {
+                    left,
+                    right,
                     bounding_box,
-                });
+                })
             }
-        };
+        }
     }
 }

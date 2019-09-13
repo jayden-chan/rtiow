@@ -149,7 +149,7 @@ fn parse_objects(
 
     for object in scene_objects {
         if object.name == "BVH" {
-            objects.push(Bvh::new(
+            objects.push(Bvh::construct(
                 &mut parse_objects(object.items.unwrap(), t0, t1),
                 t0,
                 t1,
