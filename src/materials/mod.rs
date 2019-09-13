@@ -14,7 +14,7 @@ pub use dielectric::*;
 mod diffuse_light;
 pub use diffuse_light::*;
 
-trait MaterialClone {
+pub trait MaterialClone {
     fn clone_box(&self) -> Box<dyn Material>;
 }
 

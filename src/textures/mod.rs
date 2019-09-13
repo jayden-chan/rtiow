@@ -4,7 +4,7 @@ use std::fmt::Debug;
 mod constant;
 pub use constant::*;
 
-trait TextureClone {
+pub trait TextureClone {
     fn clone_box(&self) -> Box<dyn Texture>;
 }
 
