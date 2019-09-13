@@ -5,7 +5,9 @@ use crate::materials::{Dielectric, DiffuseLight, Lambertian, Material, Metal};
 use crate::textures::*;
 use crate::{Ray, Vector};
 
-use super::{HitRecord, Hittable, MovingSphere, RectPlane, Rectangle, Sphere};
+use super::{
+    Block, HitRecord, Hittable, MovingSphere, RectPlane, Rectangle, Sphere,
+};
 
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -241,6 +243,16 @@ fn parse_objects(
                     }
                 }
             }
+            "Block" => {
+                let p0 = object.center.unwrap();
+                let p1 = object.center2.unwrap();
+
+                objects.push(Box::new(Block::new(
+                    Vector::new(p0.x, p0.y, p0.z),
+                    Vector::new(p1.x, p1.y, p1.z),
+                    material,
+                )));
+            }
             _ => {
                 unreachable!("Unknown object type found");
             }
@@ -334,6 +346,8 @@ struct SchemaObject {
     k: Option<f32>,
     flip: Option<bool>,
     plane: Option<String>,
+    p0: Option<SchemaVector>,
+    p1: Option<SchemaVector>,
     material: Option<SchemaMaterial>,
     items: Option<Vec<SchemaObject>>,
 }

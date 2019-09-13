@@ -114,6 +114,25 @@
           "properties": {
             "name": {
               "type": "string",
+              "const": "Block"
+            },
+            "p0": {
+              "$ref": "#/definitions/vector"
+            },
+            "p1": {
+              "$ref": "#/definitions/vector"
+            },
+            "material": {
+              "$ref": "#/definitions/material"
+            }
+          },
+          "required": ["p0", "p1", "material"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
               "const": "Rectangle"
             },
             "plane": {
