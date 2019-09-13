@@ -1,0 +1,135 @@
+{
+  "camera": {
+    "look_from": {
+      "x": 278,
+      "y": 278,
+      "z": -800
+    },
+    "look_at": {
+      "x": 278,
+      "y": 278,
+      "z": 0
+    },
+    "vup": {
+      "x": 0.0,
+      "y": 1.0,
+      "z": 0.0
+    },
+    "aperture": 0,
+    "focus_dist": 10,
+    "vfov": 40.0
+  },
+  "objects": [
+    {
+      "name": "Rectangle",
+      "plane": "YZ",
+      "a0": 0,
+      "a1": 555,
+      "b0": 0,
+      "b1": 555,
+      "k": 555,
+      "flip": true,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.12,
+          "y": 0.45,
+          "z": 0.15
+        }
+      }
+    },
+    {
+      "name": "Rectangle",
+      "plane": "YZ",
+      "a0": 0,
+      "a1": 555,
+      "b0": 0,
+      "b1": 555,
+      "k": 0,
+      "flip": false,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.65,
+          "y": 0.05,
+          "z": 0.05
+        }
+      }
+    },
+    {
+      "name": "Rectangle",
+      "plane": "XZ",
+      "a0": 213,
+      "a1": 343,
+      "b0": 227,
+      "b1": 332,
+      "k": 554,
+      "flip": false,
+      "material": {
+        "name": "DiffuseLight",
+        "texture": {
+          "name": "Constant",
+          "values": {
+            "x": 15.0,
+            "y": 15.0,
+            "z": 15.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Rectangle",
+      "plane": "XZ",
+      "a0": 0,
+      "a1": 555,
+      "b0": 0,
+      "b1": 555,
+      "k": 555,
+      "flip": true,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.73,
+          "y": 0.73,
+          "z": 0.73
+        }
+      }
+    },
+    {
+      "name": "Rectangle",
+      "plane": "XZ",
+      "a0": 0,
+      "a1": 555,
+      "b0": 0,
+      "b1": 555,
+      "k": 0,
+      "flip": false,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.73,
+          "y": 0.73,
+          "z": 0.73
+        }
+      }
+    },
+    {
+      "name": "Rectangle",
+      "plane": "XY",
+      "a0": 0,
+      "a1": 555,
+      "b0": 0,
+      "b1": 555,
+      "k": 555,
+      "flip": true,
+      "material": {
+        "name": "Lambertian",
+        "albedo": {
+          "x": 0.73,
+          "y": 0.73,
+          "z": 0.73
+        }
+      }
+    }
+  ]
+}

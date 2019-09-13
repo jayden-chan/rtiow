@@ -10,6 +10,14 @@ Rendering settings:
 - 5000 samples per pixel
 - Machine: GCP n1-highcpu-96 (96 vCPUs, 86.4 GB memory)
 
+### Remaining Rectangle Planes - 2019-09-12
+Implemented the remaining rectangular plane objects using Rust's new `const generics`
+feature. The new rectangle types are demonstrated using the famous Cornell Box.
+- Scene: [`scenes/8.json`](/scenes/8.json)
+- Render time: 00:01:00
+
+![](/img/cornell.png "Cornell Box")
+
 ### Lights & Rectangles - 2019-09-09
 Implemented a simple diffuse lighting material that can emit its own rays. Also
 implemented an axis-aligned rectangle object type.

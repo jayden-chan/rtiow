@@ -25,7 +25,7 @@ use ray::Ray;
 use vector3::Vector;
 
 #[allow(unused_imports)]
-use util::{progress_bar, sixteen_by_nine, two_by_one};
+use util::{one_by_one, progress_bar, sixteen_by_nine, two_by_one};
 
 const IMG_WIDTH: usize = 480;
 const IMG_HEIGHT: usize = sixteen_by_nine(IMG_WIDTH);
