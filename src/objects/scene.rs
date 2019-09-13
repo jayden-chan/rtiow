@@ -188,18 +188,18 @@ fn parse_objects(
                 )));
             }
             "Rectangle" => {
-                let x0 = object.x0.unwrap();
-                let x1 = object.x1.unwrap();
-                let y0 = object.y0.unwrap();
-                let y1 = object.y1.unwrap();
+                let a0 = object.x0.unwrap();
+                let a1 = object.x1.unwrap();
+                let b0 = object.y0.unwrap();
+                let b1 = object.y1.unwrap();
                 let k = object.k.unwrap();
                 let flip = object.flip.unwrap();
 
                 objects.push(Box::new(Rectangle::<{ RectPlane::XY }> {
-                    x0,
-                    x1,
-                    y0,
-                    y1,
+                    a0,
+                    a1,
+                    b0,
+                    b1,
                     k,
                     norm: if flip { -1.0 } else { 1.0 },
                     material,
