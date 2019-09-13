@@ -19,6 +19,11 @@ pub const fn two_by_one(width: usize) -> usize {
     width / 2
 }
 
+#[allow(unused)]
+pub const fn one_by_one(width: usize) -> usize {
+    width
+}
+
 // TODO: This function should be replaced with RSQRT SIMD
 #[inline]
 #[allow(clippy::all)] // Pointer casts in here cause warnings

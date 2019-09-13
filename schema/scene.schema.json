@@ -116,16 +116,23 @@
               "type": "string",
               "const": "Rectangle"
             },
-            "x0": {
+            "plane": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["XY", "YZ", "XZ"]
+              }
+            },
+            "a0": {
               "type": "number"
             },
-            "x1": {
+            "a1": {
               "type": "number"
             },
-            "y0": {
+            "b0": {
               "type": "number"
             },
-            "y1": {
+            "b1": {
               "type": "number"
             },
             "k": {

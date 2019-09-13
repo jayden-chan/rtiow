@@ -188,22 +188,58 @@ fn parse_objects(
                 )));
             }
             "Rectangle" => {
-                let a0 = object.x0.unwrap();
-                let a1 = object.x1.unwrap();
-                let b0 = object.y0.unwrap();
-                let b1 = object.y1.unwrap();
+                let a0 = object.a0.unwrap();
+                let a1 = object.a1.unwrap();
+                let b0 = object.b0.unwrap();
+                let b1 = object.b1.unwrap();
+
                 let k = object.k.unwrap();
                 let flip = object.flip.unwrap();
 
-                objects.push(Box::new(Rectangle::<{ RectPlane::XY }> {
-                    a0,
-                    a1,
-                    b0,
-                    b1,
-                    k,
-                    norm: if flip { -1.0 } else { 1.0 },
-                    material,
-                }));
+                match object.plane.unwrap().as_str() {
+                    "XY" => {
+                        objects.push(Box::new(
+                            Rectangle::<{ RectPlane::XY }> {
+                                a0,
+                                a1,
+                                b0,
+                                b1,
+                                k,
+                                norm: if flip { -1.0 } else { 1.0 },
+                                material,
+                            },
+                        ));
+                    }
+                    "YZ" => {
+                        objects.push(Box::new(
+                            Rectangle::<{ RectPlane::YZ }> {
+                                a0,
+                                a1,
+                                b0,
+                                b1,
+                                k,
+                                norm: if flip { -1.0 } else { 1.0 },
+                                material,
+                            },
+                        ));
+                    }
+                    "XZ" => {
+                        objects.push(Box::new(
+                            Rectangle::<{ RectPlane::XZ }> {
+                                a0,
+                                a1,
+                                b0,
+                                b1,
+                                k,
+                                norm: if flip { -1.0 } else { 1.0 },
+                                material,
+                            },
+                        ));
+                    }
+                    _ => {
+                        unreachable!("Unknown rectangle type found");
+                    }
+                }
             }
             _ => {
                 unreachable!("Unknown object type found");
@@ -291,12 +327,13 @@ struct SchemaObject {
     radius: Option<f32>,
     t0: Option<f32>,
     t1: Option<f32>,
-    x0: Option<f32>,
-    x1: Option<f32>,
-    y0: Option<f32>,
-    y1: Option<f32>,
+    a0: Option<f32>,
+    a1: Option<f32>,
+    b0: Option<f32>,
+    b1: Option<f32>,
     k: Option<f32>,
     flip: Option<bool>,
+    plane: Option<String>,
     material: Option<SchemaMaterial>,
     items: Option<Vec<SchemaObject>>,
 }

@@ -20,10 +20,11 @@
   "objects": [
     {
       "name": "Rectangle",
-      "x0": -10,
-      "x1": 8,
-      "y0": 0,
-      "y1": 10,
+      "plane": "XY",
+      "a0": -10,
+      "a1": 8,
+      "b0": 0,
+      "b1": 10,
       "k": -4,
       "flip": false,
       "material": {
