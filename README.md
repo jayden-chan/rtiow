@@ -15,7 +15,7 @@ Implemented the Translate and Rotate wrapper objects that can translate and rota
 other objects (as the names suggest). The `Rotate` object uses `const generics` in a
 similar way to the Rectangle object.
 - Scene: [`scenes/9.json`](/scenes/9.json)
-- Render time: 00:06:26
+- Render time: 00:06:00
 
 ![](/img/cornell_with_blocks.png "Cornell Box with Blocks")
 

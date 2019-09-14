@@ -56,7 +56,7 @@ case $1 in
         convert out/image.ppm img/$2.png
         ;;
     stom)
-        echo "$1 / 60; $1 % 60" | bc
+        echo "$2 / 60; $2 % 60" | bc
         ;;
     gen)
         rm -f scenes/animation/*
