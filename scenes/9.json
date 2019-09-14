@@ -57,6 +57,27 @@
     {
       "name": "Translate",
       "offset": {
+        "x": 185,
+        "y": 165,
+        "z": 155
+      },
+      "inner": {
+        "name": "Sphere",
+        "center": {
+          "x": 0,
+          "y": 70,
+          "z": 0
+        },
+        "radius": 70,
+        "material": {
+          "name": "Dielectric",
+          "ref_idx": 1.52
+        }
+      }
+    },
+    {
+      "name": "Translate",
+      "offset": {
         "x": 265,
         "y": 0,
         "z": 295
