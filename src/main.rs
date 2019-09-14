@@ -27,9 +27,9 @@ use vector3::Vector;
 #[allow(unused_imports)]
 use util::{one_by_one, progress_bar, sixteen_by_nine, two_by_one};
 
-const IMG_WIDTH: usize = 300;
+const IMG_WIDTH: usize = 480;
 const IMG_HEIGHT: usize = one_by_one(IMG_WIDTH);
-const SAMPLES: usize = 3000;
+const SAMPLES: usize = 200;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
 const T_MIN: f32 = 0.005;
@@ -67,11 +67,12 @@ fn main() -> Result<(), String> {
     let scene = Scene::from_json(path, IMG_WIDTH as f32 / IMG_HEIGHT as f32)?;
 
     println!(
-        "Scene loaded from {}, rendering ({} x {} @ {} samples)",
+        "Scene loaded from {}, rendering {} x {} @ {} samples ({} rays)",
         path.file_name().and_then(|p| p.to_str()).unwrap(),
         IMG_WIDTH,
         IMG_HEIGHT,
         SAMPLES,
+        IMG_HEIGHT * IMG_WIDTH * SAMPLES,
     );
 
     let mut completed_rows = 0;

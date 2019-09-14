@@ -32,15 +32,15 @@ impl<const A: RotationAxis> Hittable for Rotate<{ A }> {
         let mut origin = r.origin();
         let mut dir = r.dir();
 
-        origin[a_axis] = self.sin_theta * r.origin()[b_axis]
-            + self.cos_theta * r.origin()[a_axis];
         origin[b_axis] = self.cos_theta * r.origin()[b_axis]
             - self.sin_theta * r.origin()[a_axis];
+        origin[a_axis] = self.sin_theta * r.origin()[b_axis]
+            + self.cos_theta * r.origin()[a_axis];
 
-        dir[a_axis] =
-            self.sin_theta * r.dir()[b_axis] + self.cos_theta * r.dir()[a_axis];
         dir[b_axis] =
             self.cos_theta * r.dir()[b_axis] - self.sin_theta * r.dir()[a_axis];
+        dir[a_axis] =
+            self.sin_theta * r.dir()[b_axis] + self.cos_theta * r.dir()[a_axis];
 
         let rotated_r = Ray::new(origin, dir, r.time());
 
@@ -49,15 +49,15 @@ impl<const A: RotationAxis> Hittable for Rotate<{ A }> {
                 let mut p = hit_record.p;
                 let mut normal = hit_record.normal;
 
-                p[a_axis] = self.cos_theta * hit_record.p[b_axis]
+                p[b_axis] = self.cos_theta * hit_record.p[b_axis]
                     + self.sin_theta * hit_record.p[a_axis];
-                p[b_axis] = -self.sin_theta * hit_record.p[b_axis]
+                p[a_axis] = -self.sin_theta * hit_record.p[b_axis]
                     + self.cos_theta * hit_record.p[a_axis];
 
-                normal[a_axis] = self.cos_theta * hit_record.normal[b_axis]
+                normal[b_axis] = self.cos_theta * hit_record.normal[b_axis]
                     + self.sin_theta * hit_record.normal[a_axis];
-                normal[b_axis] = -self.sin_theta * hit_record.normal[b_axis]
-                    - self.cos_theta * hit_record.normal[a_axis];
+                normal[a_axis] = -self.sin_theta * hit_record.normal[b_axis]
+                    + self.cos_theta * hit_record.normal[a_axis];
 
                 hit_record.p = p;
                 hit_record.normal = normal;
