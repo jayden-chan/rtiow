@@ -7,12 +7,14 @@ use std::fmt::Debug;
 mod block;
 mod moving_sphere;
 mod rectangle;
+mod rotate;
 mod scene;
 mod sphere;
 
 pub use block::*;
 pub use moving_sphere::*;
 pub use rectangle::*;
+pub use rotate::*;
 pub use scene::*;
 pub use sphere::*;
 

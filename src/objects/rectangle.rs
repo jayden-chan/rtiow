@@ -2,9 +2,9 @@ use super::{HitRecord, Hittable};
 use crate::{aabb::Aabb, materials::Material, Ray, Vector};
 
 pub enum RectPlane {
-    XY = 0,
-    YZ = 1,
-    XZ = 2,
+    XY,
+    YZ,
+    XZ,
 }
 
 #[derive(Debug)]

@@ -61,7 +61,7 @@ impl Bvh {
                     let box_left = a.bounding_box(0.0, 0.0).unwrap();
                     let box_right = b.bounding_box(0.0, 0.0).unwrap();
 
-                    if box_left.min().x - box_right.min().x < 0.0 {
+                    if box_left.min.x - box_right.min.x < 0.0 {
                         Ordering::Less
                     } else {
                         Ordering::Greater
@@ -73,7 +73,7 @@ impl Bvh {
                     let box_left = a.bounding_box(0.0, 0.0).unwrap();
                     let box_right = b.bounding_box(0.0, 0.0).unwrap();
 
-                    if box_left.min().y - box_right.min().y < 0.0 {
+                    if box_left.min.y - box_right.min.y < 0.0 {
                         Ordering::Less
                     } else {
                         Ordering::Greater
@@ -85,7 +85,7 @@ impl Bvh {
                     let box_left = a.bounding_box(0.0, 0.0).unwrap();
                     let box_right = b.bounding_box(0.0, 0.0).unwrap();
 
-                    if box_left.min().z - box_right.min().z < 0.0 {
+                    if box_left.min.z - box_right.min.z < 0.0 {
                         Ordering::Less
                     } else {
                         Ordering::Greater

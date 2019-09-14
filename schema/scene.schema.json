@@ -114,6 +114,29 @@
           "properties": {
             "name": {
               "type": "string",
+              "const": "Rotate"
+            },
+            "angle": {
+              "type": "number"
+            },
+            "axis": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["X", "Y", "Z"]
+              }
+            },
+            "inner": {
+              "$ref": "#/definitions/hittable"
+            }
+          },
+          "required": ["inner", "axis", "angle"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
               "const": "Block"
             },
             "p0": {

@@ -21,44 +21,54 @@
   },
   "objects": [
     {
-      "name": "Block",
-      "p0": {
-        "x": 130,
-        "y": 0,
-        "z": 65
-      },
-      "p1": {
-        "x": 295,
-        "y": 165,
-        "z": 230
-      },
-      "material": {
-        "name": "Lambertian",
-        "albedo": {
-          "x": 0.73,
-          "y": 0.73,
-          "z": 0.73
+      "name": "Rotate",
+      "angle": -18,
+      "axis": "Y",
+      "inner": {
+        "name": "Block",
+        "p0": {
+          "x": 130,
+          "y": 0,
+          "z": 0
+        },
+        "p1": {
+          "x": 295,
+          "y": 165,
+          "z": 165
+        },
+        "material": {
+          "name": "Lambertian",
+          "albedo": {
+            "x": 0.73,
+            "y": 0.73,
+            "z": 0.73
+          }
         }
       }
     },
     {
-      "name": "Block",
-      "p0": {
-        "x": 265,
-        "y": 0,
-        "z": 295
-      },
-      "p1": {
-        "x": 430,
-        "y": 330,
-        "z": 460
-      },
-      "material": {
-        "name": "Lambertian",
-        "albedo": {
-          "x": 0.73,
-          "y": 0.73,
-          "z": 0.73
+      "name": "Rotate",
+      "angle": 15,
+      "axis": "Y",
+      "inner": {
+        "name": "Block",
+        "p0": {
+          "x": 265,
+          "y": 0,
+          "z": 295
+        },
+        "p1": {
+          "x": 430,
+          "y": 330,
+          "z": 460
+        },
+        "material": {
+          "name": "Lambertian",
+          "albedo": {
+            "x": 0.73,
+            "y": 0.73,
+            "z": 0.73
+          }
         }
       }
     },

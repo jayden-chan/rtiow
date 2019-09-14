@@ -6,7 +6,8 @@ use crate::textures::*;
 use crate::{Ray, Vector};
 
 use super::{
-    Block, HitRecord, Hittable, MovingSphere, RectPlane, Rectangle, Sphere,
+    Block, HitRecord, Hittable, MovingSphere, RectPlane, Rectangle, Rotate,
+    RotationAxis, Sphere,
 };
 
 use serde::{Deserialize, Serialize};
@@ -143,7 +144,7 @@ fn parse_material(material: SchemaMaterial) -> Box<dyn Material> {
 }
 
 fn parse_objects(
-    scene_objects: Vec<SchemaObject>,
+    scene_objects: Vec<Box<SchemaObject>>,
     t0: f32,
     t1: f32,
 ) -> Vec<Box<dyn Hittable>> {
@@ -156,6 +157,32 @@ fn parse_objects(
                 t0,
                 t1,
             ));
+            continue;
+        } else if object.name == "Rotate" {
+            let angle = object.angle.unwrap();
+
+            let inner = parse_objects(vec![object.inner.unwrap()], t0, t1)
+                .pop()
+                .unwrap();
+
+            match object.axis.unwrap().as_str() {
+                "X" => {
+                    objects.push(Box::new(Rotate::<{ RotationAxis::X }>::new(
+                        inner, angle,
+                    )));
+                }
+                "Y" => {
+                    objects.push(Box::new(Rotate::<{ RotationAxis::Y }>::new(
+                        inner, angle,
+                    )));
+                }
+                "Z" => {
+                    objects.push(Box::new(Rotate::<{ RotationAxis::Z }>::new(
+                        inner, angle,
+                    )));
+                }
+                _ => unreachable!("Unknown rotation axis found"),
+            }
             continue;
         }
 
@@ -346,10 +373,13 @@ struct SchemaObject {
     k: Option<f32>,
     flip: Option<bool>,
     plane: Option<String>,
+    angle: Option<f32>,
+    axis: Option<String>,
     p0: Option<SchemaVector>,
     p1: Option<SchemaVector>,
     material: Option<SchemaMaterial>,
-    items: Option<Vec<SchemaObject>>,
+    items: Option<Vec<Box<SchemaObject>>>,
+    inner: Option<Box<SchemaObject>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -366,6 +396,6 @@ struct SchemaCamera {
 
 #[derive(Debug, Serialize, Deserialize)]
 struct SchemaScene {
-    objects: Vec<SchemaObject>,
+    objects: Vec<Box<SchemaObject>>,
     camera: Option<SchemaCamera>,
 }

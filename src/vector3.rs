@@ -237,7 +237,19 @@ impl ops::Index<usize> for Vector {
             0 => &self.x,
             1 => &self.y,
             2 => &self.z,
-            _ => unreachable!(),
+            _ => unreachable!("Index out of bounds!"),
+        }
+    }
+}
+
+// Allow indexing into the vector's values with the v[idx] syntax
+impl ops::IndexMut<usize> for Vector {
+    fn index_mut(&mut self, idx: usize) -> &mut f32 {
+        match idx {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            2 => &mut self.z,
+            _ => unreachable!("Index out of bounds!"),
         }
     }
 }
