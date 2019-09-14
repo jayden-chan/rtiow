@@ -33,6 +33,9 @@ case $1 in
     convert)
         convert out/image.ppm img/$2.png
         ;;
+    stom)
+        echo "$1 / 60; $1 % 60" | bc
+        ;;
     gen)
         rm -f scenes/animation/*
         rm -f out/*
