@@ -83,20 +83,21 @@ impl<const A: RotationAxis> Rotate<{ A }> {
             RotationAxis::Z => (2, 0, 1),
         };
 
-        let bounding_box = hittable.bounding_box(0.0, 1.0).map(|mut b| {
+        let bounding_box = hittable.bounding_box(0.0, 1.0).map(|mut bbox| {
             let mut min = Vector::new(f32::MAX, f32::MAX, f32::MAX);
             let mut max = Vector::new(-f32::MAX, -f32::MAX, -f32::MAX);
             for i in 0..2 {
                 for j in 0..2 {
                     for k in 0..2 {
-                        let r = k as f32 * b.max[r_axis]
-                            + (1 - k) as f32 * b.min[r_axis];
-                        let a = i as f32 * b.max[a_axis]
-                            + (1 - i) as f32 * b.min[a_axis];
-                        let b = j as f32 * b.max[b_axis]
-                            + (1 - j) as f32 * b.min[b_axis];
-                        let new_a = cos_theta * a - sin_theta * b;
-                        let new_b = sin_theta * a + cos_theta * b;
+                        let b = i as f32 * bbox.max[b_axis]
+                            + (1 - i) as f32 * bbox.min[b_axis];
+                        let r = j as f32 * bbox.max[r_axis]
+                            + (1 - j) as f32 * bbox.min[r_axis];
+                        let a = k as f32 * bbox.max[a_axis]
+                            + (1 - k) as f32 * bbox.min[a_axis];
+
+                        let new_b = cos_theta * b + sin_theta * a;
+                        let new_a = -sin_theta * b + cos_theta * a;
 
                         if new_a < min[a_axis] {
                             min[a_axis] = new_a
@@ -120,9 +121,9 @@ impl<const A: RotationAxis> Rotate<{ A }> {
                     }
                 }
             }
-            b.min = min;
-            b.max = max;
-            b
+            bbox.min = min;
+            bbox.max = max;
+            bbox
         });
 
         Self {

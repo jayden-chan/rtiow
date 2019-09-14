@@ -10,6 +10,7 @@ mod rectangle;
 mod rotate;
 mod scene;
 mod sphere;
+mod translate;
 
 pub use block::*;
 pub use moving_sphere::*;
@@ -17,6 +18,7 @@ pub use rectangle::*;
 pub use rotate::*;
 pub use scene::*;
 pub use sphere::*;
+pub use translate::*;
 
 /// A HitRecord describes an interaction between an incoming [`Ray`]
 /// and an object.

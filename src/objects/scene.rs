@@ -7,7 +7,7 @@ use crate::{Ray, Vector};
 
 use super::{
     Block, HitRecord, Hittable, MovingSphere, RectPlane, Rectangle, Rotate,
-    RotationAxis, Sphere,
+    RotationAxis, Sphere, Translate,
 };
 
 use serde::{Deserialize, Serialize};
@@ -183,6 +183,18 @@ fn parse_objects(
                 }
                 _ => unreachable!("Unknown rotation axis found"),
             }
+            continue;
+        } else if object.name == "Translate" {
+            let offset = object.offset.unwrap();
+
+            let inner = parse_objects(vec![object.inner.unwrap()], t0, t1)
+                .pop()
+                .unwrap();
+
+            objects.push(Box::new(Translate {
+                offset: Vector::new(offset.x, offset.y, offset.z),
+                hittable: inner,
+            }));
             continue;
         }
 
@@ -374,6 +386,7 @@ struct SchemaObject {
     flip: Option<bool>,
     plane: Option<String>,
     angle: Option<f32>,
+    offset: Option<SchemaVector>,
     axis: Option<String>,
     p0: Option<SchemaVector>,
     p1: Option<SchemaVector>,

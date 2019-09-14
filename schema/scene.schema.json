@@ -137,6 +137,22 @@
           "properties": {
             "name": {
               "type": "string",
+              "const": "Translate"
+            },
+            "offset": {
+              "$ref": "#/definitions/vector"
+            },
+            "inner": {
+              "$ref": "#/definitions/hittable"
+            }
+          },
+          "required": ["inner", "offset"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
               "const": "Block"
             },
             "p0": {

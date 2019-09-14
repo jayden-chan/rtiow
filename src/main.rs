@@ -29,7 +29,7 @@ use util::{one_by_one, progress_bar, sixteen_by_nine, two_by_one};
 
 const IMG_WIDTH: usize = 300;
 const IMG_HEIGHT: usize = one_by_one(IMG_WIDTH);
-const SAMPLES: usize = 100;
+const SAMPLES: usize = 3000;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
 const T_MIN: f32 = 0.005;
