@@ -35,7 +35,7 @@ impl Material for Dielectric {
         &self,
         r_in: Ray,
         hit_record: HitRecord,
-    ) -> Option<(Vector, Ray)> {
+    ) -> Option<(Vector, Ray, f32)> {
         let reflected = vector_reflect(r_in.dir(), hit_record.normal);
 
         let (outward_normal, ni_over_nt, cosine) =
@@ -68,11 +68,13 @@ impl Material for Dielectric {
             Some((
                 Vector::ones(),
                 Ray::new(hit_record.p, refracted.unwrap(), r_in.time()),
+                0.0,
             ))
         } else {
             Some((
                 Vector::ones(),
                 Ray::new(hit_record.p, reflected, r_in.time()),
+                0.0,
             ))
         }
     }

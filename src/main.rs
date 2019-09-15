@@ -11,6 +11,7 @@ mod textures;
 mod util;
 mod vector3;
 
+// Crates
 use image::{gen_ppm, Pixel};
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -20,16 +21,16 @@ use std::f32;
 use std::path::Path;
 use std::time;
 
-use objects::{HitRecord, Hittable, Scene};
-use ray::Ray;
-use vector3::Vector;
+use crate::objects::{HitRecord, Hittable, Scene};
+use crate::ray::Ray;
+use crate::vector3::Vector;
 
 #[allow(unused_imports)]
 use util::{one_by_one, progress_bar, sixteen_by_nine, two_by_one};
 
 const IMG_WIDTH: usize = 300;
 const IMG_HEIGHT: usize = one_by_one(IMG_WIDTH);
-const SAMPLES: usize = 150;
+const SAMPLES: usize = 200;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
 const T_MIN: f32 = 0.005;
@@ -124,21 +125,23 @@ fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
     if let Some((hit_record, material)) = scene.hit(r, T_MIN, f32::MAX) {
         let emitted =
             material.emitted(hit_record.u, hit_record.v, hit_record.p);
+
         if depth < MAX_RECURSIVE_DEPTH {
-            if let Some((attenuation, scattered)) =
+            if let Some((attenuation, scattered, pdf)) =
                 material.scatter(r, hit_record)
             {
                 return emitted
-                    + attenuation * color(scattered, scene, depth + 1);
+                    + attenuation
+                        * material.scattering_pdf(r, hit_record, scattered)
+                        * color(scattered, scene, depth + 1)
+                        / pdf;
+                // return emitted
+                //     + attenuation * color(scattered, scene, depth + 1);
             }
         }
 
         emitted
     } else {
-        // let unit_direction = r.dir().normalize();
-        // let t = 0.5 * (unit_direction.y + 1.0);
-
-        // Vector::ones() * (1.0 - t) + Vector::new(0.5, 0.7, 1.0) * t
         Vector::zeros()
     }
 }

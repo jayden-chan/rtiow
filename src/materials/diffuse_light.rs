@@ -11,7 +11,7 @@ impl Material for DiffuseLight {
         &self,
         _r_in: Ray,
         _hit_record: HitRecord,
-    ) -> Option<(Vector, Ray)> {
+    ) -> Option<(Vector, Ray, f32)> {
         None
     }
 

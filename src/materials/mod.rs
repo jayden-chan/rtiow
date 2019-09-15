@@ -34,15 +34,26 @@ impl Clone for Box<dyn Material> {
 }
 
 pub trait Material: Debug + Send + Sync + MaterialClone {
-    /// Returns: Whether a ray was scattered, the attenuation, and scattered ray
+    /// Returns: Whether a ray was scattered, the attenuation, scattered ray, and pdf value
     fn scatter(
         &self,
         r_in: Ray,
         hit_record: HitRecord,
-    ) -> Option<(Vector, Ray)>;
+    ) -> Option<(Vector, Ray, f32)>;
 
     /// Return the amount of light emitted by this material
     fn emitted(&self, _u: f32, _v: f32, _p: Vector) -> Vector {
         Vector::zeros()
+    }
+
+    /// Returns the value of the material's scattering pdf for the given incident ray and hit
+    /// record.
+    fn scattering_pdf(
+        &self,
+        _r_in: Ray,
+        _hit_record: HitRecord,
+        _scattered: Ray,
+    ) -> f32 {
+        0.0
     }
 }
