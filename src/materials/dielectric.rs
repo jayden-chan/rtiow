@@ -68,13 +68,13 @@ impl Material for Dielectric {
             Some((
                 Vector::ones(),
                 Ray::new(hit_record.p, refracted.unwrap(), r_in.time()),
-                0.0,
+                1.0,
             ))
         } else {
             Some((
                 Vector::ones(),
                 Ray::new(hit_record.p, reflected, r_in.time()),
-                0.0,
+                1.0,
             ))
         }
     }

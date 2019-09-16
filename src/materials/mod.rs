@@ -54,6 +54,6 @@ pub trait Material: Debug + Send + Sync + MaterialClone {
         _hit_record: HitRecord,
         _scattered: Ray,
     ) -> f32 {
-        0.0
+        1.0
     }
 }

@@ -34,7 +34,7 @@ impl Material for Metal {
         );
 
         if Vector::dot(scattered.dir(), hit_record.normal) > 0.0 {
-            Some((self.albedo, scattered, 0.0))
+            Some((self.albedo, scattered, 1.0))
         } else {
             None
         }
