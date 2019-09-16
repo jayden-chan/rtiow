@@ -1,4 +1,4 @@
-use crate::util::random_in_unit_sphere;
+use crate::util::random_on_unit_sphere;
 use crate::{HitRecord, Ray, Vector};
 
 use super::Material;
@@ -23,7 +23,7 @@ impl Material for Lambertian {
         r_in: Ray,
         hit_record: HitRecord,
     ) -> Option<(Vector, Ray, f32)> {
-        let target = hit_record.p + hit_record.normal + random_in_unit_sphere();
+        let target = hit_record.p + hit_record.normal + random_on_unit_sphere();
 
         let scattered = Ray::new(
             hit_record.p,

@@ -59,6 +59,11 @@ pub fn random_in_unit_sphere() -> Vector {
 }
 
 #[inline]
+pub fn random_on_unit_sphere() -> Vector {
+    random_in_unit_sphere().normalize()
+}
+
+#[inline]
 pub fn sphere_uv(p: Vector) -> (f32, f32) {
     let phi = f32::atan2(p.z, p.x);
     let theta = f32::asin(p.y);
