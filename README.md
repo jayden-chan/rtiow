@@ -17,7 +17,9 @@ similar way to the Rectangle object.
 - Scene: [`scenes/9.json`](/scenes/9.json)
 - Render time: 00:06:00
 
-![](/img/cornell_with_blocks.png "Cornell Box with Blocks")
+<p align="center">
+<img width="650" height="650" src="/img/cornell_with_blocks.png"/>
+</p>
 
 ### Remaining Rectangle Planes - 2019-09-12
 Implemented the remaining rectangular plane objects using Rust's new `const generics`
@@ -25,7 +27,9 @@ feature. The new rectangle types are demonstrated using the famous Cornell Box.
 - Scene: [`scenes/8.json`](/scenes/8.json)
 - Render time: 00:01:00
 
-![](/img/cornell.png "Cornell Box")
+<p align="center">
+<img width="650" height="650" src="/img/cornell.png"/>
+</p>
 
 ### Lights & Rectangles - 2019-09-09
 Implemented a simple diffuse lighting material that can emit its own rays. Also
