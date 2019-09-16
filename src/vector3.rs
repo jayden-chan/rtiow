@@ -57,7 +57,6 @@ impl Vector {
 /// Vector math implementations
 impl Vector {
     /// Return a vector with the same direction but with length 1
-    #[inline]
     pub fn normalize(self) -> Self {
         let mag_inv = fast_inv_sqrt(
             (self.x * self.x) + (self.y * self.y) + (self.z * self.z),
@@ -71,25 +70,21 @@ impl Vector {
     }
 
     /// Returns the reciprocal of the square root of the vector's magnitude
-    #[inline]
     pub fn inv_mag(self) -> f32 {
         fast_inv_sqrt((self.x * self.x) + (self.y * self.y) + (self.z * self.z))
     }
 
     /// Return the length of the vector
-    #[inline]
     pub fn length(self) -> f32 {
         f32::sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
     }
 
     /// Compute the dot product of two vectors
-    #[inline]
     pub fn dot(lhs: Vector, rhs: Vector) -> f32 {
         lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
     }
 
     /// Compute the cross product of two vectors
-    #[inline]
     pub fn cross(lhs: Vector, rhs: Vector) -> Self {
         Self {
             x: lhs.y * rhs.z - lhs.z * rhs.y,

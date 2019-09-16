@@ -17,22 +17,18 @@ impl Ray {
 }
 
 impl Ray {
-    #[inline]
     pub fn origin(self) -> Vector {
         self.A
     }
 
-    #[inline]
     pub fn dir(self) -> Vector {
         self.B
     }
 
-    #[inline]
     pub fn point_at_parameter(self, t: f32) -> Vector {
         self.A + self.B * t
     }
 
-    #[inline]
     pub fn time(self) -> f32 {
         self.time
     }
