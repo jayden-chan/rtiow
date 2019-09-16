@@ -96,7 +96,6 @@ reflection properties of Lambertian and Metal materials.
 ## Feature Roadmap
 
 ### Implemented
-- [x] 3D Vector
 - [x] Image generation
 - [x] Spheres
 - [x] Lambertian, Metal, and Dielectric surfaces
@@ -107,13 +106,16 @@ reflection properties of Lambertian and Metal materials.
 - [x] Camera aperture & focal length
 - [x] BVH
 - [x] Lights
+- [x] Rectangles / Blocks
+- [x] Instances
 
-### Not Implemented
-- [ ] Planes & Triangles
-- [ ] ADC
+### Planned
+- [ ] Triangles / Polygonal Meshes
 - [ ] Spectral rays
-- [ ] Textures
-- [ ] Volumes
-- [ ] Phong Reflection (?)
-- [ ] Photon Mapping (?)
-- [ ] MLT (?)
+- [ ] Importance sampling
+- [ ] Bidirectional methods
+- [ ] Photon Mapping
+- [ ] MLT
+- [ ] Obj file loading
+- [ ] GPU acceleration
+- [ ] Multi machine rendering
