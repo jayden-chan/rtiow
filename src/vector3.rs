@@ -76,7 +76,12 @@ impl Vector {
 
     /// Return the length of the vector
     pub fn length(self) -> f32 {
-        f32::sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+        f32::sqrt(self.length_squared())
+    }
+
+    /// Return the length of the vector squared
+    pub fn length_squared(self) -> f32 {
+        self.x * self.x + self.y * self.y + self.z * self.z
     }
 
     /// Compute the dot product of two vectors

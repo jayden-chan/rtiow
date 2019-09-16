@@ -31,7 +31,7 @@ use util::{one_by_one, progress_bar, sixteen_by_nine, two_by_one};
 
 const IMG_WIDTH: usize = 300;
 const IMG_HEIGHT: usize = one_by_one(IMG_WIDTH);
-const SAMPLES: usize = 100;
+const SAMPLES: usize = 150;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
 const T_MIN: f32 = 0.005;
@@ -124,20 +124,42 @@ fn main() -> Result<(), String> {
 
 fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
     if let Some((hit_record, material)) = scene.hit(r, T_MIN, f32::MAX) {
-        let emitted =
-            material.emitted(hit_record.u, hit_record.v, hit_record.p);
+        let emitted = material.emitted(r, hit_record);
 
         if depth < MAX_RECURSIVE_DEPTH {
             if let Some((attenuation, scattered, pdf)) =
                 material.scatter(r, hit_record)
             {
+                let on_light = Vector::new(
+                    213.0 + random::<f32>() * (343.0 - 213.0),
+                    554.0,
+                    227.0 + random::<f32>() * (332.0 - 227.0),
+                );
+
+                let to_light = on_light - hit_record.p;
+
+                let dist_squared = to_light.length_squared();
+                let to_light = to_light.normalize();
+
+                if Vector::dot(to_light, hit_record.normal) < 0.0 {
+                    return emitted;
+                }
+
+                let light_area = (343.0 - 213.0) * (332.0 - 227.0);
+                let light_cosine = f32::abs(to_light.y);
+
+                if light_cosine < 0.000001 {
+                    return emitted;
+                }
+
+                let pdf = dist_squared / (light_cosine * light_area);
+                let scattered = Ray::new(hit_record.p, to_light, r.time());
+
                 return emitted
                     + attenuation
                         * material.scattering_pdf(r, hit_record, scattered)
                         * color(scattered, scene, depth + 1)
                         / pdf;
-                // return emitted
-                //     + attenuation * color(scattered, scene, depth + 1);
             }
         }
 

@@ -132,7 +132,7 @@
       "b0": 227,
       "b1": 332,
       "k": 554,
-      "flip": false,
+      "flip": true,
       "material": {
         "name": "DiffuseLight",
         "texture": {
