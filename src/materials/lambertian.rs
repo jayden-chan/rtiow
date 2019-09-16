@@ -1,7 +1,8 @@
-use crate::util::random_on_unit_sphere;
+use crate::util::{random_cosine_dir, random_on_unit_sphere};
 use crate::{HitRecord, Ray, Vector};
 
 use super::Material;
+use crate::onb::Onb;
 use crate::textures::Texture;
 use std::f32::consts::PI;
 
@@ -23,17 +24,15 @@ impl Material for Lambertian {
         r_in: Ray,
         hit_record: HitRecord,
     ) -> Option<(Vector, Ray, f32)> {
-        let target = hit_record.p + hit_record.normal + random_on_unit_sphere();
+        let uvw = Onb::build_from_w(hit_record.normal);
+        let dir = uvw.local(random_cosine_dir());
 
-        let scattered = Ray::new(
-            hit_record.p,
-            (target - hit_record.p).normalize(),
-            r_in.time(),
-        );
+        let scattered = Ray::new(hit_record.p, dir.normalize(), r_in.time());
+
         Some((
             self.texture.value(hit_record.u, hit_record.v, hit_record.p),
             scattered,
-            Vector::dot(hit_record.normal, scattered.dir()) / PI,
+            Vector::dot(uvw.w(), scattered.dir()) / PI,
         ))
     }
 

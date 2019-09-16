@@ -58,6 +58,19 @@ pub fn random_on_unit_sphere() -> Vector {
     random_in_unit_sphere().normalize()
 }
 
+pub fn random_cosine_dir() -> Vector {
+    let r1 = random::<f32>();
+    let r2 = random::<f32>();
+
+    let phi = 2.0 * PI * r1;
+    let x = f32::cos(phi) * f32::sqrt(r2);
+    let y = f32::sin(phi) * f32::sqrt(r2);
+    let z = f32::sqrt(1.0 - r2);
+
+    Vector::new(x, y, z)
+}
+
+/// Computes the u and v values for a sphere
 pub fn sphere_uv(p: Vector) -> (f32, f32) {
     let phi = f32::atan2(p.z, p.x);
     let theta = f32::asin(p.y);
@@ -80,6 +93,7 @@ pub fn vector_refract(v: Vector, n: Vector, ni_over_nt: f32) -> Option<Vector> {
     }
 }
 
+/// Renders a progress bar on the command line
 pub fn progress_bar(
     curr: usize,
     total: usize,
