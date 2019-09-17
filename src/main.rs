@@ -7,6 +7,7 @@ mod image;
 mod materials;
 mod objects;
 mod onb;
+mod pdf;
 mod ray;
 mod textures;
 mod util;
@@ -22,16 +23,18 @@ use std::f32;
 use std::path::Path;
 use std::time;
 
-use crate::objects::{HitRecord, Hittable, Scene};
+use crate::materials::Dielectric;
+use crate::objects::{HitRecord, Hittable, RectPlane, Rectangle, Scene};
+use crate::pdf::{Cosine, HittablePDF, Mixture, Pdf};
 use crate::ray::Ray;
 use crate::vector3::Vector;
 
 #[allow(unused_imports)]
 use util::{one_by_one, progress_bar, sixteen_by_nine, two_by_one};
 
-const IMG_WIDTH: usize = 300;
+const IMG_WIDTH: usize = 500;
 const IMG_HEIGHT: usize = one_by_one(IMG_WIDTH);
-const SAMPLES: usize = 150;
+const SAMPLES: usize = 1000;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
 const T_MIN: f32 = 0.005;
@@ -130,30 +133,51 @@ fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
             if let Some((attenuation, scattered, pdf)) =
                 material.scatter(r, hit_record)
             {
-                let on_light = Vector::new(
-                    213.0 + random::<f32>() * (343.0 - 213.0),
-                    554.0,
-                    227.0 + random::<f32>() * (332.0 - 227.0),
-                );
+                // let on_light = Vector::new(
+                //     213.0 + random::<f32>() * (343.0 - 213.0),
+                //     554.0,
+                //     227.0 + random::<f32>() * (332.0 - 227.0),
+                // );
 
-                let to_light = on_light - hit_record.p;
+                // let to_light = on_light - hit_record.p;
 
-                let dist_squared = to_light.length_squared();
-                let to_light = to_light.normalize();
+                // let dist_squared = to_light.length_squared();
+                // let to_light = to_light.normalize();
 
-                if Vector::dot(to_light, hit_record.normal) < 0.0 {
-                    return emitted;
-                }
+                // if Vector::dot(to_light, hit_record.normal) < 0.0 {
+                //     return emitted;
+                // }
 
-                let light_area = (343.0 - 213.0) * (332.0 - 227.0);
-                let light_cosine = f32::abs(to_light.y);
+                // let light_area = (343.0 - 213.0) * (332.0 - 227.0);
+                // let light_cosine = f32::abs(to_light.y);
 
-                if light_cosine < 0.000001 {
-                    return emitted;
-                }
+                // if light_cosine < 0.000001 {
+                //     return emitted;
+                // }
 
-                let pdf = dist_squared / (light_cosine * light_area);
-                let scattered = Ray::new(hit_record.p, to_light, r.time());
+                // let pdf = dist_squared / (light_cosine * light_area);
+                // let scattered = Ray::new(hit_record.p, to_light, r.time());
+
+                let light_shape = Rectangle::<{ RectPlane::XZ }> {
+                    a0: 213.0,
+                    a1: 343.0,
+                    b0: 227.0,
+                    b1: 332.0,
+                    k: 554.0,
+                    norm: 1.0,
+                    material: Box::new(Dielectric::new(1.52)),
+                };
+
+                let p0 = HittablePDF {
+                    inner: Box::new(light_shape),
+                    o: hit_record.p,
+                };
+
+                let p1 = Cosine::new(hit_record.normal);
+                let p = Mixture { pdf1: p0, pdf2: p1 };
+
+                let scattered = Ray::new(hit_record.p, p.generate(), r.time());
+                let pdf = p.value(scattered.dir());
 
                 return emitted
                     + attenuation

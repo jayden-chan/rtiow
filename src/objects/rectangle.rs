@@ -1,5 +1,6 @@
 use super::{HitRecord, Hittable};
 use crate::{aabb::Aabb, materials::Material, Ray, Vector};
+use rand::prelude::*;
 
 pub enum RectPlane {
     XY,
@@ -76,5 +77,42 @@ impl<const P: RectPlane> Hittable for Rectangle<{ P }> {
                 Vector::new(self.a0, self.k + 0.0001, self.b0),
             )),
         }
+    }
+
+    fn pdf_value(&self, o: Vector, v: Vector) -> f32 {
+        if let Some((hit_record, _)) =
+            self.hit(Ray::new(o, v, 0.0), 0.001, std::f32::MAX)
+        {
+            let area = (self.a1 - self.a0) * (self.b1 - self.b0);
+            let dist_squared = hit_record.t * hit_record.t * v.length_squared();
+            let cosine =
+                f32::abs(Vector::dot(v, hit_record.normal)) / v.length();
+
+            return dist_squared / (cosine * area);
+        } else {
+            return 0.0;
+        }
+    }
+
+    fn random(&self, o: Vector) -> Vector {
+        let random_point = match P {
+            RectPlane::XY => Vector::new(
+                self.a0 + random::<f32>() * (self.a1 - self.a0),
+                self.b0 + random::<f32>() * (self.b1 - self.b0),
+                self.k,
+            ),
+            RectPlane::YZ => Vector::new(
+                self.k,
+                self.a0 + random::<f32>() * (self.a1 - self.a0),
+                self.b0 + random::<f32>() * (self.b1 - self.b0),
+            ),
+            RectPlane::XZ => Vector::new(
+                self.a0 + random::<f32>() * (self.a1 - self.a0),
+                self.k,
+                self.b0 + random::<f32>() * (self.b1 - self.b0),
+            ),
+        };
+
+        random_point - o
     }
 }

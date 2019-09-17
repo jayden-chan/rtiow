@@ -56,4 +56,13 @@ pub trait Hittable: Debug + Send + Sync {
     ///
     /// [`AABB`]: trait.Aabb.html
     fn bounding_box(&self, t0: f32, t1: f32) -> Option<Aabb>;
+
+    /// Returns the value of the hittable's PDF for the given o and v vectors
+    fn pdf_value(&self, o: Vector, v: Vector) -> f32 {
+        0.0
+    }
+
+    fn random(&self, o: Vector) -> Vector {
+        Vector::new(1.0, 0.0, 0.0)
+    }
 }
