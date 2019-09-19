@@ -1,7 +1,9 @@
-# raytracer
+# Ray Tracing in One Weekend
 
 A parallel ray tracer written in Rust. Based on Peter Shirley's ["Ray Tracing in One
 Weekend"](http://www.realtimerendering.com/raytracing/Ray%20Tracing%20in%20a%20Weekend.pdf)
+book series. This implementation more or less covers all three books, with some
+exceptions.
 
 ## Progress Pictures
 
@@ -96,30 +98,3 @@ reflection properties of Lambertian and Metal materials.
 - Render time: 00:01:22
 
 ![](/img/spheres.png "Lambertian & Metal spheres")
-
-## Feature Roadmap
-
-### Implemented
-- [x] Image generation
-- [x] Spheres
-- [x] Lambertian, Metal, and Dielectric surfaces
-- [x] Multisampling
-- [x] Parallel rendering
-- [x] Loading scenes from JSON
-- [x] Positionable Camera & custom FOV
-- [x] Camera aperture & focal length
-- [x] BVH
-- [x] Lights
-- [x] Rectangles / Blocks
-- [x] Instances
-
-### Planned
-- [ ] Triangles / Polygonal Meshes
-- [ ] Spectral rays
-- [ ] Importance sampling
-- [ ] Bidirectional methods
-- [ ] Photon Mapping
-- [ ] MLT
-- [ ] Obj file loading
-- [ ] GPU acceleration
-- [ ] Multi machine rendering
