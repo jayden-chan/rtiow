@@ -1,6 +1,8 @@
-use crate::materials::Material;
-use crate::util::{vector_reflect, vector_refract};
-use crate::{HitRecord, Ray, Vector};
+use crate::{
+    materials::{Material, ScatterRecord},
+    util::{vector_reflect, vector_refract},
+    HitRecord, Ray, Vector,
+};
 
 use rand::prelude::*;
 
@@ -35,7 +37,7 @@ impl Material for Dielectric {
         &self,
         r_in: Ray,
         hit_record: HitRecord,
-    ) -> Option<(Vector, Ray, f32)> {
+    ) -> Option<ScatterRecord> {
         let reflected = vector_reflect(r_in.dir(), hit_record.normal);
 
         let (outward_normal, ni_over_nt, cosine) =
@@ -65,17 +67,21 @@ impl Material for Dielectric {
         };
 
         if random::<f32>() >= reflect_probability {
-            Some((
-                Vector::ones(),
-                Ray::new(hit_record.p, refracted.unwrap(), r_in.time()),
-                1.0,
-            ))
+            Some(ScatterRecord {
+                specular_ray: Ray::new(
+                    hit_record.p,
+                    refracted.unwrap(),
+                    r_in.time(),
+                ),
+                attenuation: Vector::ones(),
+                pdf: None,
+            })
         } else {
-            Some((
-                Vector::ones(),
-                Ray::new(hit_record.p, reflected, r_in.time()),
-                1.0,
-            ))
+            Some(ScatterRecord {
+                specular_ray: Ray::new(hit_record.p, reflected, r_in.time()),
+                attenuation: Vector::ones(),
+                pdf: None,
+            })
         }
     }
 }

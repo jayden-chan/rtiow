@@ -1,13 +1,31 @@
 //! A simple Sphere object
 
 use super::{HitRecord, Hittable};
-use crate::{aabb::Aabb, materials::Material, util::sphere_uv, Ray, Vector};
+use crate::{
+    aabb::Aabb, materials::Material, onb::Onb, util::sphere_uv, Ray, Vector,
+};
+
+use rand::prelude::*;
+use std::f32;
 
 #[derive(Debug)]
 pub struct Sphere {
     center: Vector,
     radius: f32,
     material: Box<dyn Material>,
+}
+
+fn random_to_sphere(radius: f32, dist_squared: f32) -> Vector {
+    let mut rng = rand::thread_rng();
+    let r1: f32 = rng.gen();
+    let r2: f32 = rng.gen();
+
+    let z = 1.0 + r2 * (f32::sqrt(1.0 - radius * radius / dist_squared) - 1.0);
+    let phi = 2.0 * f32::consts::PI * r1;
+    let x = f32::cos(phi) * f32::sqrt(1.0 - z * z);
+    let y = f32::sin(phi) * f32::sqrt(1.0 - z * z);
+
+    Vector::new(x, y, z)
 }
 
 impl Hittable for Sphere {
@@ -58,6 +76,27 @@ impl Hittable for Sphere {
             self.center - Vector::new(self.radius, self.radius, self.radius),
             self.center + Vector::new(self.radius, self.radius, self.radius),
         ))
+    }
+
+    fn pdf_value(&self, o: Vector, v: Vector) -> f32 {
+        if let Some((_, _)) = self.hit(Ray::new(o, v, 0.0), 0.001, f32::MAX) {
+            let cos_theta_max = f32::sqrt(
+                1.0 - self.radius * self.radius
+                    / (self.center - o).length_squared(),
+            );
+            let solid_angle = 2.0 * f32::consts::PI * (1.0 - cos_theta_max);
+
+            return 1.0 / solid_angle;
+        } else {
+            return 0.0;
+        }
+    }
+
+    fn random(&self, o: Vector) -> Vector {
+        let dir = self.center - o;
+        let dist_squared = dir.length_squared();
+        let uvw = Onb::build_from_w(dir);
+        uvw.local(random_to_sphere(self.radius, dist_squared))
     }
 }
 

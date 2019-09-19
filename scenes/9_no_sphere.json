@@ -78,12 +78,13 @@
             "z": 165
           },
           "material": {
-            "name": "Lambertian",
+            "name": "Metal",
             "albedo": {
               "x": 0.73,
               "y": 0.73,
               "z": 0.73
-            }
+            },
+            "fuzz": 0.0
           }
         }
       }

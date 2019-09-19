@@ -1,5 +1,8 @@
-use super::Material;
-use crate::{textures::Texture, HitRecord, Ray, Vector};
+use crate::{
+    materials::{Material, ScatterRecord},
+    textures::Texture,
+    HitRecord, Ray, Vector,
+};
 
 #[derive(Debug, Clone)]
 pub struct DiffuseLight {
@@ -11,9 +14,10 @@ impl Material for DiffuseLight {
         &self,
         _r_in: Ray,
         _hit_record: HitRecord,
-    ) -> Option<(Vector, Ray, f32)> {
+    ) -> Option<ScatterRecord> {
         None
     }
+
     fn emitted(&self, r_in: Ray, hit_record: HitRecord) -> Vector {
         let (u, v, p) = (hit_record.u, hit_record.v, hit_record.p);
         if Vector::dot(hit_record.normal, r_in.dir()) < 0.0 {

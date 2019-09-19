@@ -23,18 +23,20 @@ use std::f32;
 use std::path::Path;
 use std::time;
 
-use crate::materials::Dielectric;
-use crate::objects::{HitRecord, Hittable, RectPlane, Rectangle, Scene};
-use crate::pdf::{Cosine, HittablePDF, Mixture, Pdf};
-use crate::ray::Ray;
-use crate::vector3::Vector;
+use crate::{
+    materials::Dielectric,
+    objects::{HitRecord, Hittable, RectPlane, Rectangle, Scene},
+    pdf::{HittablePDF, Mixture, Pdf},
+    ray::Ray,
+    vector3::Vector,
+};
 
 #[allow(unused_imports)]
 use util::{one_by_one, progress_bar, sixteen_by_nine, two_by_one};
 
-const IMG_WIDTH: usize = 500;
+const IMG_WIDTH: usize = 300;
 const IMG_HEIGHT: usize = one_by_one(IMG_WIDTH);
-const SAMPLES: usize = 1000;
+const SAMPLES: usize = 5000;
 
 const MAX_RECURSIVE_DEPTH: usize = 50;
 const T_MIN: f32 = 0.005;
@@ -87,13 +89,23 @@ fn main() -> Result<(), String> {
         row.par_iter_mut().for_each(|pixel| {
             let mut curr_pixel = Vector::zeros();
 
+            let light_shape = Rectangle::<{ RectPlane::XZ }> {
+                a0: 213.0,
+                a1: 343.0,
+                b0: 227.0,
+                b1: 332.0,
+                k: 554.0,
+                norm: 1.0,
+                material: Box::new(Dielectric::new(1.52)),
+            };
+
             for _ in 0..SAMPLES {
                 let u = (pixel.x as f32 + random::<f32>()) / IMG_WIDTH as f32;
                 let v = (pixel.y as f32 + random::<f32>()) / IMG_HEIGHT as f32;
 
                 let r = scene.camera.get_ray(u, v);
 
-                curr_pixel += color(r, &scene, 0);
+                curr_pixel += color(r, &scene, &light_shape, 0);
             }
 
             curr_pixel /= SAMPLES as f32;
@@ -125,65 +137,61 @@ fn main() -> Result<(), String> {
     gen_ppm(image, output_file)
 }
 
-fn color(r: Ray, scene: &Scene, depth: usize) -> Vector {
+fn color(
+    r: Ray,
+    scene: &Scene,
+    light_shape: &dyn Hittable,
+    depth: usize,
+) -> Vector {
     if let Some((hit_record, material)) = scene.hit(r, T_MIN, f32::MAX) {
         let emitted = material.emitted(r, hit_record);
 
         if depth < MAX_RECURSIVE_DEPTH {
-            if let Some((attenuation, scattered, pdf)) =
-                material.scatter(r, hit_record)
-            {
-                // let on_light = Vector::new(
-                //     213.0 + random::<f32>() * (343.0 - 213.0),
-                //     554.0,
-                //     227.0 + random::<f32>() * (332.0 - 227.0),
-                // );
+            if let Some(scatter_record) = material.scatter(r, hit_record) {
+                match scatter_record.pdf {
+                    None => {
+                        return emitted
+                            + scatter_record.attenuation
+                                * material.scattering_pdf(
+                                    r,
+                                    hit_record,
+                                    scatter_record.specular_ray,
+                                )
+                                * color(
+                                    scatter_record.specular_ray,
+                                    scene,
+                                    light_shape,
+                                    depth + 1,
+                                );
+                    }
+                    Some(pdf) => {
+                        let p0 = HittablePDF {
+                            inner: light_shape,
+                            o: hit_record.p,
+                        };
 
-                // let to_light = on_light - hit_record.p;
+                        let p = Mixture {
+                            pdf1: &p0,
+                            pdf2: &pdf,
+                        };
 
-                // let dist_squared = to_light.length_squared();
-                // let to_light = to_light.normalize();
+                        let scattered =
+                            Ray::new(hit_record.p, p.generate(), r.time());
+                        let pdf = p.value(scattered.dir());
 
-                // if Vector::dot(to_light, hit_record.normal) < 0.0 {
-                //     return emitted;
-                // }
-
-                // let light_area = (343.0 - 213.0) * (332.0 - 227.0);
-                // let light_cosine = f32::abs(to_light.y);
-
-                // if light_cosine < 0.000001 {
-                //     return emitted;
-                // }
-
-                // let pdf = dist_squared / (light_cosine * light_area);
-                // let scattered = Ray::new(hit_record.p, to_light, r.time());
-
-                let light_shape = Rectangle::<{ RectPlane::XZ }> {
-                    a0: 213.0,
-                    a1: 343.0,
-                    b0: 227.0,
-                    b1: 332.0,
-                    k: 554.0,
-                    norm: 1.0,
-                    material: Box::new(Dielectric::new(1.52)),
-                };
-
-                let p0 = HittablePDF {
-                    inner: Box::new(light_shape),
-                    o: hit_record.p,
-                };
-
-                let p1 = Cosine::new(hit_record.normal);
-                let p = Mixture { pdf1: p0, pdf2: p1 };
-
-                let scattered = Ray::new(hit_record.p, p.generate(), r.time());
-                let pdf = p.value(scattered.dir());
-
-                return emitted
-                    + attenuation
-                        * material.scattering_pdf(r, hit_record, scattered)
-                        * color(scattered, scene, depth + 1)
-                        / pdf;
+                        return emitted
+                            + scatter_record.attenuation
+                                * material
+                                    .scattering_pdf(r, hit_record, scattered)
+                                * color(
+                                    scattered,
+                                    scene,
+                                    light_shape,
+                                    depth + 1,
+                                )
+                                / pdf;
+                    }
+                }
             }
         }
 

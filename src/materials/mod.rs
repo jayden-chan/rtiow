@@ -1,4 +1,4 @@
-use crate::{HitRecord, Ray, Vector};
+use crate::{pdf::Pdf, HitRecord, Ray, Vector};
 
 use std::fmt::Debug;
 
@@ -33,13 +33,22 @@ impl Clone for Box<dyn Material> {
     }
 }
 
+#[derive(Debug)]
+pub struct ScatterRecord {
+    pub specular_ray: Ray,
+    pub attenuation: Vector,
+    pub pdf: Option<Box<dyn Pdf>>,
+}
+
 pub trait Material: Debug + Send + Sync + MaterialClone {
     /// Returns: Whether a ray was scattered, the attenuation, scattered ray, and pdf value
     fn scatter(
         &self,
-        r_in: Ray,
-        hit_record: HitRecord,
-    ) -> Option<(Vector, Ray, f32)>;
+        _r_in: Ray,
+        _hit_record: HitRecord,
+    ) -> Option<ScatterRecord> {
+        None
+    }
 
     /// Return the amount of light emitted by this material
     fn emitted(&self, _r_in: Ray, _hit_record: HitRecord) -> Vector {

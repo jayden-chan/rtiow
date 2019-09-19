@@ -2,12 +2,12 @@ use super::Pdf;
 use crate::{Hittable, Vector};
 
 #[derive(Debug)]
-pub struct HittablePDF {
+pub struct HittablePDF<'a> {
     pub o: Vector,
-    pub inner: Box<dyn Hittable>,
+    pub inner: &'a dyn Hittable,
 }
 
-impl Pdf for HittablePDF {
+impl<'a> Pdf for HittablePDF<'a> {
     fn value(&self, dir: Vector) -> f32 {
         self.inner.pdf_value(self.o, dir)
     }

@@ -1,9 +1,12 @@
-use crate::util::{random_cosine_dir, random_on_unit_sphere};
-use crate::{HitRecord, Ray, Vector};
+use crate::{
+    materials::{Material, ScatterRecord},
+    onb::Onb,
+    pdf::Cosine,
+    textures::Texture,
+    util::random_cosine_dir,
+    HitRecord, Ray, Vector,
+};
 
-use super::Material;
-use crate::onb::Onb;
-use crate::textures::Texture;
 use std::f32::consts::PI;
 
 /// Lambertian material impl - an ideal diffuse reflector
@@ -23,17 +26,21 @@ impl Material for Lambertian {
         &self,
         r_in: Ray,
         hit_record: HitRecord,
-    ) -> Option<(Vector, Ray, f32)> {
+    ) -> Option<ScatterRecord> {
         let uvw = Onb::build_from_w(hit_record.normal);
         let dir = uvw.local(random_cosine_dir());
 
         let scattered = Ray::new(hit_record.p, dir.normalize(), r_in.time());
 
-        Some((
-            self.texture.value(hit_record.u, hit_record.v, hit_record.p),
-            scattered,
-            Vector::dot(uvw.w(), scattered.dir()) / PI,
-        ))
+        Some(ScatterRecord {
+            specular_ray: scattered,
+            attenuation: self.texture.value(
+                hit_record.u,
+                hit_record.v,
+                hit_record.p,
+            ),
+            pdf: Some(Box::new(Cosine::new(hit_record.normal))),
+        })
     }
 
     fn scattering_pdf(
